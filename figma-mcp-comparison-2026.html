@@ -1,0 +1,2930 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Figma MCP Servers — Interactive Comparison 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  /* =========================================================
+     shadcn/ui Design Tokens — Tailwind v4 OKLCH (Neutral)
+     Based on https://ui.shadcn.com/docs/theming
+     ========================================================= */
+  :root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --destructive-foreground: oklch(0.985 0 0);
+    --success: oklch(0.55 0.18 150);
+    --warning: oklch(0.58 0.18 75);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --radius: 0.625rem;
+    --color-update: oklch(0.52 0.22 250);
+
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+
+    color-scheme: light;
+  }
+
+  [data-theme="dark"] {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --success: oklch(0.7 0.16 150);
+    --warning: oklch(0.84 0.16 84);
+    --border: oklch(1 0 0 / 0.12);
+    --input: oklch(1 0 0 / 0.15);
+    --ring: oklch(0.556 0 0);
+    --color-update: oklch(0.58 0.22 250);
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: 'Noto Sans Thai Looped', system-ui, -apple-system, sans-serif;
+    font-feature-settings: 'cv11', 'ss01', 'rlig' 1, 'calt' 1;
+    line-height: 1.5;
+    font-size: 14px;
+    transition: background 200ms ease, color 200ms ease;
+  }
+
+  ::selection { background: var(--primary); color: var(--primary-foreground); }
+
+  /* =========================================================
+     Layout primitives
+     ========================================================= */
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+  .stack > * + * { margin-top: var(--gap, 1rem); }
+
+  /* =========================================================
+     Top App Bar (shadcn-like)
+     ========================================================= */
+  .app-bar {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in oklch, var(--background) 92%, transparent);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .app-bar-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.75rem 1.5rem; gap: 1rem;
+    max-width: 1280px; margin: 0 auto;
+  }
+  .brand { display: flex; align-items: center; gap: 0.625rem; font-weight: 600; letter-spacing: -0.01em; }
+  .brand-logo {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--chart-1), var(--chart-3));
+    display: grid; place-items: center; color: oklch(0.98 0.005 250); font-weight: 700; font-size: 13px;
+  }
+  .brand-title { font-size: 14px; }
+  .brand-sub { font-size: 12px; color: var(--muted-foreground); margin-left: 0.5rem; }
+
+  .nav-links { display: flex; gap: 0.25rem; align-items: center; }
+  .nav-link {
+    padding: 0.625rem 0.75rem; border-radius: calc(var(--radius) - 2px);
+    font-size: 13px; color: var(--muted-foreground); text-decoration: none;
+    transition: background 150ms, color 150ms;
+    min-height: 44px; display: inline-flex; align-items: center;
+  }
+  .nav-link:hover { background: var(--accent); color: var(--accent-foreground); }
+  .nav-link[aria-current="true"] { background: var(--accent); color: var(--accent-foreground); font-weight: 500; }
+  @media (max-width: 720px) {
+    .nav-links {
+      display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      gap: 0; padding: 0 0.5rem; scrollbar-width: none;
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+  }
+
+  .theme-toggle {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; border-radius: calc(var(--radius) - 2px);
+    border: 1px solid var(--border); background: var(--background);
+    cursor: pointer; color: var(--foreground);
+    transition: background 150ms;
+  }
+  .theme-toggle:hover { background: var(--accent); }
+  .theme-toggle svg { width: 16px; height: 16px; }
+  .theme-toggle .moon { display: none; }
+  [data-theme="dark"] .theme-toggle .sun { display: none; }
+  [data-theme="dark"] .theme-toggle .moon { display: block; }
+  .lang-toggle {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 44px; padding: 0 0.75rem; border-radius: calc(var(--radius) - 2px);
+    border: 1px solid var(--border); background: var(--background);
+    cursor: pointer; color: var(--foreground);
+    font-size: 13px; font-weight: 600; font-family: inherit;
+    transition: background 150ms; margin-right: 0.5rem;
+  }
+  .lang-toggle:hover { background: var(--accent); }
+
+  /* =========================================================
+     Hero / Header section
+     ========================================================= */
+  .hero {
+    padding: 4rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    font-size: 12px; font-weight: 500;
+    background: var(--secondary); color: var(--secondary-foreground);
+    border-radius: 999px; border: 1px solid var(--border);
+    margin-bottom: 1.25rem;
+  }
+  .hero-eyebrow .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--success); }
+  .hero h1 {
+    font-size: clamp(2rem, 4vw, 3rem); margin: 0 0 0.75rem;
+    letter-spacing: -0.025em; font-weight: 700; line-height: 1.1;
+  }
+  .hero p.lead {
+    font-size: 17px; color: var(--muted-foreground); max-width: 720px; margin: 0 0 1.5rem;
+    line-height: 1.6;
+  }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+
+  /* =========================================================
+     Cards
+     ========================================================= */
+  .card {
+    background: var(--card); color: var(--card-foreground);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+  .card-header { padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
+  .card-title { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; margin: 0; }
+  .card-desc { font-size: 13px; color: var(--muted-foreground); margin: 0.25rem 0 0; }
+
+  /* =========================================================
+     Stats strip (compact metrics row — not card grid)
+     ========================================================= */
+  .stats {
+    display: flex; flex-wrap: wrap; gap: 0;
+    margin: 1.75rem 0;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .stat {
+    flex: 1; min-width: 160px;
+    padding: 1rem 1.25rem;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-label {
+    font-size: 12px; color: var(--muted-foreground);
+    font-weight: 500; margin-bottom: 0.375rem;
+  }
+  .stat-value {
+    font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em;
+    line-height: 1.2; color: var(--foreground);
+  }
+  .stat-trend { font-size: 12px; color: var(--muted-foreground); margin-top: 0.25rem; }
+  .stat-trend.up { color: var(--success); }
+
+  /* =========================================================
+     Section titles
+     ========================================================= */
+  section { padding: 3rem 0; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: none; }
+  .section-eyebrow { font-size: 12px; font-weight: 500; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.08em; }
+  .section-title { font-size: clamp(1.5rem, 3vw, 2rem); margin: 0.5rem 0 0.5rem; letter-spacing: -0.02em; font-weight: 700; }
+  .section-desc { color: var(--muted-foreground); margin: 0 0 2rem; max-width: 720px; }
+
+  /* =========================================================
+     Buttons (shadcn variants)
+     ========================================================= */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    height: 36px; padding: 0 0.875rem;
+    border-radius: calc(var(--radius) - 2px);
+    font-size: 13px; font-weight: 500;
+    border: 1px solid transparent; cursor: pointer;
+    transition: background 150ms ease, border-color 150ms ease, color 150ms ease, opacity 150ms;
+    text-decoration: none; user-select: none; white-space: nowrap;
+  }
+  .btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .btn-primary { background: var(--primary); color: var(--primary-foreground); }
+  .btn-primary:hover { background: color-mix(in oklch, var(--primary) 90%, var(--background)); }
+  .btn-outline { background: var(--background); color: var(--foreground); border-color: var(--border); }
+  .btn-outline:hover { background: var(--accent); color: var(--accent-foreground); }
+  .btn-ghost { background: transparent; color: var(--foreground); }
+  .btn-ghost:hover { background: var(--accent); }
+  .btn-sm { height: 32px; padding: 0 0.625rem; font-size: 12px; }
+  .btn[aria-pressed="true"] { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+
+  /* =========================================================
+     Badges
+     ========================================================= */
+  .badge {
+    display: inline-flex; align-items: center; gap: 0.25rem;
+    padding: 0.125rem 0.5rem;
+    font-size: 11px; font-weight: 500;
+    border-radius: 999px;
+    border: 1px solid var(--border); background: var(--secondary); color: var(--secondary-foreground);
+    line-height: 1.4;
+  }
+  .badge-success { background: color-mix(in oklch, var(--success) 12%, transparent); color: var(--success); border-color: color-mix(in oklch, var(--success) 30%, transparent); }
+  .badge-warn { background: color-mix(in oklch, var(--warning) 18%, transparent); color: color-mix(in oklch, var(--warning) 30%, var(--foreground)); border-color: color-mix(in oklch, var(--warning) 35%, transparent); }
+  .badge-danger { background: color-mix(in oklch, var(--destructive) 12%, transparent); color: var(--destructive); border-color: color-mix(in oklch, var(--destructive) 30%, transparent); }
+  .badge-outline { background: transparent; }
+  .badge-solid { background: var(--primary); color: var(--primary-foreground); border-color: var(--primary); }
+
+  /* =========================================================
+     Filter Bar
+     ========================================================= */
+  .filter-bar {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;
+    padding: 1rem; background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 1rem;
+  }
+  .filter-group { display: flex; align-items: center; gap: 0.375rem; }
+  .filter-label { font-size: 12px; color: var(--muted-foreground); margin-right: 0.25rem; }
+  select.input, input.input {
+    height: 36px; padding: 0 0.625rem; font-size: 13px;
+    border-radius: calc(var(--radius) - 2px);
+    border: 1px solid var(--input); background: var(--background); color: var(--foreground);
+    font-family: inherit;
+  }
+  select.input:focus, input.input:focus { outline: 2px solid var(--ring); outline-offset: 1px; border-color: var(--ring); }
+  .filter-spacer { flex: 1; }
+
+  /* =========================================================
+     Table
+     ========================================================= */
+  .table-wrap {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .table-scroll { overflow-x: auto; }
+  table.compare {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    font-size: 13px; min-width: 980px;
+  }
+  table.compare thead th {
+    text-align: left; font-weight: 600; font-size: 11px; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--muted-foreground);
+    background: var(--muted); padding: 0.625rem 0.875rem;
+    border-bottom: 1px solid var(--border); white-space: nowrap;
+    position: sticky; top: 0; z-index: 1;
+  }
+  table.compare th[role="button"] { cursor: pointer; user-select: none; }
+  table.compare th[role="button"]:hover { color: var(--foreground); }
+  table.compare th[role="button"] .sort-ind { opacity: 0.4; margin-left: 0.25rem; }
+  table.compare th[aria-sort="ascending"] .sort-ind, table.compare th[aria-sort="descending"] .sort-ind { opacity: 1; }
+  table.compare tbody td {
+    padding: 0.875rem; border-bottom: 1px solid var(--border); vertical-align: top;
+  }
+  table.compare tbody tr:last-child td { border-bottom: none; }
+  table.compare tbody tr:hover { background: var(--muted); }
+  .row-name { font-weight: 600; letter-spacing: -0.01em; display: flex; flex-direction: column; gap: 2px; }
+  .row-name .sub { font-size: 11px; color: var(--muted-foreground); font-weight: 400; }
+  .check { color: var(--success); }
+  .x { color: var(--muted-foreground); }
+  .partial { color: var(--warning); }
+
+  /* =========================================================
+     Tabs (shadcn)
+     ========================================================= */
+  .tabs-list {
+    display: inline-flex; flex-wrap: wrap;
+    background: var(--muted); padding: 4px; border-radius: var(--radius);
+    gap: 2px;
+  }
+  .tab-trigger {
+    border: none; background: transparent; cursor: pointer;
+    padding: 0.5rem 0.875rem; border-radius: calc(var(--radius) - 4px);
+    font-size: 13px; font-weight: 500; color: var(--muted-foreground);
+    font-family: inherit;
+    transition: background 150ms, color 150ms;
+  }
+  .tab-trigger:hover { color: var(--foreground); }
+  .tab-trigger[aria-selected="true"] { background: var(--background); color: var(--foreground); box-shadow: 0 1px 2px color-mix(in oklch, var(--foreground) 4%, transparent), 0 0 0 1px var(--border); }
+  .tab-trigger:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .tab-panel { display: none; padding-top: 1.5rem; }
+  .tab-panel.active { display: block; }
+
+  .deep-grid { display: grid; gap: 1rem; grid-template-columns: 2fr 1fr; }
+  @media (max-width: 900px) { .deep-grid { grid-template-columns: 1fr; } }
+  .meta-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
+  .meta-list li { display: flex; justify-content: space-between; gap: 1rem; font-size: 13px; padding: 0.5rem 0; border-bottom: 1px dashed var(--border); }
+  .meta-list li:last-child { border-bottom: none; }
+  .meta-list .k { color: var(--muted-foreground); }
+  .meta-list .v { color: var(--foreground); font-weight: 500; text-align: right; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+  pre.snippet {
+    background: var(--muted); border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px);
+    padding: 0.875rem; font-size: 12px; overflow-x: auto;
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  }
+
+  ul.bullets { padding-left: 1.1rem; margin: 0.5rem 0; }
+  ul.bullets li { margin-bottom: 0.4rem; }
+  ul.bullets li code { background: var(--muted); padding: 0.05rem 0.35rem; border-radius: 4px; font-size: 12px; }
+
+  /* =========================================================
+     Decision Tree
+     ========================================================= */
+  .picker-grid {
+    display: grid; grid-template-columns: 320px 1fr; gap: 1.25rem;
+  }
+  @media (max-width: 900px) { .picker-grid { grid-template-columns: 1fr; } }
+  .picker-question { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+  .picker-question:last-child { border-bottom: none; }
+  .picker-question h4 { margin: 0 0 0.625rem; font-size: 13px; font-weight: 600; }
+  .options { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+  .option-pill {
+    padding: 0.375rem 0.75rem; font-size: 12px; cursor: pointer;
+    border-radius: 999px; border: 1px solid var(--border); background: var(--background);
+    transition: background 150ms, border-color 150ms, color 150ms;
+  }
+  .option-pill:hover { background: var(--accent); }
+  .option-pill:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .option-pill[aria-pressed="true"] {
+    background: var(--primary); color: var(--primary-foreground); border-color: var(--primary);
+  }
+  .picker-result {
+    background: linear-gradient(180deg, var(--card), color-mix(in oklch, var(--secondary) 50%, var(--card)));
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 1.5rem;
+  }
+  .picker-result h3 { margin: 0; letter-spacing: -0.01em; }
+  .recommend-card {
+    margin-top: 1rem; background: var(--background); border: 1px solid var(--border);
+    border-radius: calc(var(--radius) - 2px); padding: 1.25rem;
+  }
+  .reason-list { font-size: 13px; color: var(--muted-foreground); margin: 0.75rem 0 0; padding-left: 1.1rem; }
+  .reason-list li { margin-bottom: 0.3rem; }
+  .alt-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem; }
+  .alt-item { display: flex; justify-content: space-between; align-items: center; padding: 0.625rem 0.875rem; border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px); background: var(--background); }
+  .alt-item .name { font-weight: 500; font-size: 13px; }
+  .alt-item .why { font-size: 12px; color: var(--muted-foreground); }
+
+  /* =========================================================
+     Charts
+     ========================================================= */
+  .chart-grid { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 900px) { .chart-grid { grid-template-columns: 1fr; } }
+  .chart-card { padding: 1.25rem; }
+  .chart-card .canvas-wrap { height: 360px; position: relative; }
+  .legend-toggle { display: flex; gap: 0.375rem; flex-wrap: wrap; margin-top: 0.75rem; }
+  .legend-toggle button {
+    font-size: 12px; padding: 0.25rem 0.625rem; border-radius: 999px;
+    background: var(--secondary); border: 1px solid var(--border); cursor: pointer; color: var(--foreground);
+    display: inline-flex; align-items: center; gap: 0.375rem;
+  }
+  .legend-toggle button:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .legend-toggle button[aria-pressed="false"] { opacity: 0.4; text-decoration: line-through; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* =========================================================
+     Footer
+     ========================================================= */
+  footer { padding: 2.5rem 0; color: var(--muted-foreground); font-size: 13px; }
+  footer a { color: var(--foreground); text-decoration: underline; text-decoration-color: var(--border); }
+  .ref-grid { display: grid; gap: 0.5rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top: 1rem; }
+  .ref-grid a { display: block; padding: 0.5rem 0.75rem; border-radius: calc(var(--radius) - 2px); border: 1px solid var(--border); text-decoration: none; color: var(--foreground); font-size: 12px; }
+  .ref-grid a:hover { background: var(--accent); }
+
+  /* small utils */
+  .row { display: flex; gap: 0.625rem; align-items: center; flex-wrap: wrap; }
+  .between { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+  .muted { color: var(--muted-foreground); }
+  .grow { flex: 1; }
+  .w-full { width: 100%; }
+  .mt-1 { margin-top: 0.5rem; } .mt-2 { margin-top: 1rem; } .mt-3 { margin-top: 1.5rem; } .mt-4 { margin-top: 2rem; }
+  .mb-1 { margin-bottom: 0.5rem; } .mb-2 { margin-bottom: 1rem; } .mb-3 { margin-bottom: 1.5rem; }
+
+  .icon { width: 14px; height: 14px; flex: none; }
+
+  /* =========================================================
+     Live data badge
+     ========================================================= */
+  /* =========================================================
+     Commands Matrix Section
+     ========================================================= */
+  .surface-section { margin-bottom:2.5rem; }
+  .surface-heading {
+    display:flex; align-items:center; gap:0.625rem;
+    font-size:15px; font-weight:600; color:var(--foreground);
+    margin-bottom:1.25rem; padding-bottom:0.625rem;
+    border-bottom:2px solid var(--border);
+  }
+  .surface-heading-icon { font-size:18px; line-height:1; }
+  .cat-row .cat-cell {
+    background: var(--muted); color: var(--muted-foreground);
+    font-size: 12px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; padding: 0.5rem 0.75rem;
+    border-top: 1px solid var(--border);
+    position: sticky; left: 0; z-index: 1;
+  }
+  .cat-row:first-child .cat-cell { border-top: none; }
+  .cat-header {
+    font-size:12px; font-weight:700; text-transform:uppercase;
+    letter-spacing:0.06em; color:var(--muted-foreground);
+    padding:0.5rem 0.25rem; border-bottom:2px solid var(--border); margin-bottom:0;
+  }
+  /* No scroll container ancestor — sticky <th> in <thead> anchors to the viewport.
+     border-collapse:separate is required for position:sticky to work on table cells. */
+  .matrix-scroll-outer { /* outer kept for future horizontal-scroll media query if needed */ }
+  .matrix-table-wrap {
+    border: 1px solid var(--border);
+  }
+  .matrix-table { width:100%; border-collapse:separate; border-spacing:0; font-size:12px; --feature-col-w: 260px; }
+  @media (max-width: 820px) {
+    .matrix-scroll-outer { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .matrix-table-wrap { min-width: 820px; }
+  }
+  .matrix-table .head-row th {
+    padding:0.5rem 0.75rem; text-align:center; font-weight:600; font-size:12px;
+    background:var(--muted); color:var(--muted-foreground);
+    border-bottom:1px solid var(--border); white-space:nowrap;
+    position:sticky; top:var(--app-bar-h, 64px); z-index:20;
+  }
+  .th-head { display:inline-flex; align-items:center; justify-content:center; gap:0.4rem; }
+  .th-count {
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:1.5rem; padding:0.1rem 0.45rem; border-radius:999px;
+    background:var(--background); color:var(--foreground);
+    font-size:12px; font-weight:700; line-height:1.4;
+    border:1px solid var(--border);
+    font-variant-numeric:tabular-nums;
+  }
+  .matrix-table .head-row th.col-feature {
+    text-align:left; width:var(--feature-col-w); min-width:var(--feature-col-w);
+    position:sticky; left:0; top:var(--app-bar-h, 64px); z-index:21; background:var(--muted);
+  }
+  .matrix-table td {
+    padding:0.5rem 0.625rem; border-bottom:1px solid var(--border);
+    vertical-align:top; text-align:center;
+  }
+  .matrix-table td.col-feature {
+    text-align:left; font-size:12px; color:var(--foreground);
+    background:var(--background); position:sticky; left:0; z-index:1;
+    width:var(--feature-col-w); min-width:var(--feature-col-w); max-width:var(--feature-col-w);
+  }
+  .col-feature .feat-label { display:block; font-weight:600; font-size:12px; color:var(--foreground); line-height:1.35; }
+  .col-feature .feat-desc { display:block; font-weight:400; font-size:12px; color:var(--muted-foreground); line-height:1.45; margin-top:0.3rem; }
+  .col-feature .feat-eg {
+    display:block; font-size:12px; color:var(--muted-foreground);
+    line-height:1.45; margin-top:0.2rem;
+  }
+  .col-feature .feat-eg::before {
+    content:'เช่น'; display:inline-block; margin-right:0.35rem;
+    font-weight:600; color:var(--color-update);
+  }
+  html[lang="en"] .col-feature .feat-eg::before { content:'e.g.'; }
+  /* Horizontal cell layout when ≤3 MCP columns visible */
+  .matrix-table[data-few-cols] .matrix-td { text-align:center; vertical-align:middle; }
+  .matrix-table[data-few-cols] .cmd-cell-top {
+    display:flex; justify-content:center; margin-bottom:0.25rem;
+  }
+  .matrix-table[data-few-cols] .cmd-list {
+    display:flex; flex-direction:row; flex-wrap:wrap; justify-content:center;
+    gap:0.25rem; margin-top:0; margin-left:0; align-items:center;
+  }
+  .matrix-table tr:last-child td { border-bottom:none; }
+  .matrix-table tr:not(.surf-row):not(.cat-row):hover td { background:var(--accent); }
+  .matrix-table tr:not(.surf-row):not(.cat-row):hover td.col-feature { background:var(--accent); }
+  /* Surface separator row */
+  .surf-row .surf-cell {
+    background:var(--primary); color:var(--primary-foreground);
+    font-size:12px; font-weight:700; padding:0.5rem 0.75rem;
+    letter-spacing:0.03em; border-top:none;
+    position:sticky; left:0; z-index:1;
+  }
+  .surf-row:first-child .surf-cell { border-top:none; }
+  .surf-product-icon {
+    width: 18px !important; height: 18px !important;
+    vertical-align: middle; margin-right: 5px;
+    display: inline-block; flex-shrink: 0;
+    border-radius: 4px; position: relative; top: -1px;
+  }
+  .cmd-yes { color:var(--success); font-size:14px; line-height:1; display:block; font-family:'Segoe UI Symbol','Apple Symbols','Noto Sans Symbols',sans-serif; font-style:normal; }
+  .cmd-partial {
+    color:var(--warning); font-size:14px; line-height:1; display:block;
+    position: relative; cursor: help;
+    font-family:'Segoe UI Symbol','Apple Symbols','Noto Sans Symbols',sans-serif; font-style:normal;
+  }
+  .cmd-partial::after {
+    content: 'บางส่วน / มีเงื่อนไข';
+    position: absolute;
+    /* en variant below */
+    bottom: calc(100% + 6px);
+    left: 50%; transform: translateX(-50%);
+    background: var(--foreground); color: var(--background);
+    font-size: 12px; font-weight: 500; line-height: 1.4;
+    padding: 0.3rem 0.6rem; border-radius: 4px;
+    white-space: nowrap; pointer-events: none;
+    opacity: 0; transition: opacity 120ms ease;
+    z-index: 100;
+  }
+  html[lang="en"] .cmd-partial::after { content: 'partial / conditional'; }
+  .cmd-partial:hover::after { opacity: 1; }
+  .cmd-none { color:var(--muted-foreground); font-size:16px; line-height:1; display:block; font-family:'Segoe UI Symbol','Apple Symbols','Noto Sans Symbols',sans-serif; font-style:normal; }
+  .cmd-list {
+    display:flex; flex-direction:column; gap:0.2rem;
+    margin-top:0.3rem; align-items:center;
+  }
+  .cmd-since {
+    display: inline-flex; align-items: center;
+    font-size: 12px; font-weight: 700; line-height: 1;
+    padding: 0.2rem 0.5rem; border-radius: 999px;
+    background: var(--color-update); color: #fff;
+    letter-spacing: 0.06em; flex-shrink: 0;
+  }
+  [data-theme="dark"] .cmd-since {
+    box-shadow: 0 1px 6px color-mix(in oklch, var(--color-update) 50%, transparent);
+  }
+  .cmd-cell-top {
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+  }
+  .cmd-cell-top .cmd-yes,
+  .cmd-cell-top .cmd-partial { display: inline; }
+
+  /* Column visibility toggles */
+  .matrix-table[data-hide-official]   [data-col="official"]   { display: none; }
+  .matrix-table[data-hide-framelink]  [data-col="framelink"]  { display: none; }
+  .matrix-table[data-hide-console]    [data-col="console"]    { display: none; }
+  .matrix-table[data-hide-claudetalk] [data-col="claudetalk"] { display: none; }
+  .matrix-table[data-hide-sunnyside]  [data-col="sunnyside"]  { display: none; }
+
+  .matrix-toolbar {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 0.625rem 1rem; margin-bottom: 1rem;
+  }
+  .matrix-controls {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 0.375rem;
+    flex: 1 1 auto; min-width: 0;
+  }
+  .matrix-search {
+    position: relative; display: flex; align-items: center;
+    flex: 0 0 auto; width: 300px; max-width: 100%;
+  }
+  .matrix-search-icon {
+    position: absolute; left: 0.75rem; color: var(--muted-foreground);
+    pointer-events: none;
+  }
+  .matrix-search-input {
+    width: 100%; padding: 0.5rem 0.875rem 0.5rem 2.25rem;
+    font-size: 13px; font-family: inherit;
+    color: var(--foreground); background: var(--background);
+    border: 1px solid var(--input); border-radius: var(--radius);
+    transition: border-color 120ms, box-shadow 120ms;
+  }
+  .matrix-search-input::placeholder { color: var(--muted-foreground); }
+  .matrix-search-input:focus-visible {
+    outline: none; border-color: var(--ring);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--ring) 25%, transparent);
+  }
+  .matrix-search-count {
+    position: absolute; right: 2.1rem;
+    font-size: 12px; font-weight: 600; color: var(--muted-foreground);
+    font-variant-numeric: tabular-nums; pointer-events: none;
+    background: var(--background); padding-left: 0.35rem;
+  }
+  .matrix-no-results {
+    padding: 2rem 1rem; text-align: center; color: var(--muted-foreground);
+    font-size: 13px;
+  }
+  .matrix-controls-label {
+    font-size: 13px; font-weight: 600; color: var(--foreground);
+    margin-right: 0.25rem;
+  }
+  .col-toggle-label {
+    position: relative; cursor: pointer; user-select: none;
+  }
+  .col-toggle-label input[type="checkbox"] {
+    position: absolute; opacity: 0; width: 0; height: 0; pointer-events: none;
+  }
+  .col-toggle-pill {
+    display: inline-flex; align-items: center;
+    padding: 0.3rem 0.875rem; border-radius: 999px;
+    border: 1.5px solid var(--border);
+    background: var(--background); color: var(--muted-foreground);
+    font-size: 13px; font-weight: 500;
+    transition: background 120ms, color 120ms, border-color 120ms;
+  }
+  .col-toggle-label input:checked + .col-toggle-pill {
+    background: var(--primary); color: var(--primary-foreground);
+    border-color: var(--primary);
+  }
+  .col-toggle-label input:focus-visible + .col-toggle-pill {
+    outline: 2px solid var(--ring); outline-offset: 2px;
+  }
+  .cmd-tag {
+    display:inline-block; font-family:'JetBrains Mono',monospace;
+    font-size:12px; padding:0.1rem 0.35rem; border-radius:3px;
+    background:var(--secondary); border:1px solid var(--border);
+    color:var(--muted-foreground); max-width:155px;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    cursor:help;
+  }
+  .cmd-more { font-size:12px; color:var(--muted-foreground); cursor:help; }
+  .matrix-legend {
+    display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;
+    font-size:12px; color:var(--muted-foreground);
+  }
+  .matrix-legend span { display:flex; align-items:center; gap:0.375rem; }
+
+  /* =========================================================
+     Live data badge
+     ========================================================= */
+  .live-badge {
+    display: inline-flex; align-items: center; gap: 0.375rem;
+    font-size: 11px; color: var(--muted-foreground);
+    padding: 0.25rem 0.625rem; border-radius: 999px;
+    background: var(--secondary); border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .live-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--success); flex: none;
+  }
+  .live-dot.pulse { animation: livePulse 1.4s ease-in-out infinite; }
+  @keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  /* =========================================================
+     Reduced Motion — respect user preference (WCAG 2.3.3)
+     ========================================================= */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ── MCP Auto-update Diff Banner + Panel ── */
+  #mcpDiffBanner {
+    display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+    padding: 0.625rem 0.875rem; margin-bottom: 0.75rem;
+    background: oklch(0.97 0.02 250); border: 1px solid color-mix(in oklch, var(--color-update) 30%, transparent);
+    border-radius: var(--radius); font-size: 12px;
+  }
+  #mcpDiffBanner[hidden] { display: none; }
+  [data-theme="dark"] #mcpDiffBanner {
+    background: oklch(0.22 0.04 250); border-color: color-mix(in oklch, var(--color-update) 40%, transparent);
+  }
+  .mcp-diff-banner-warn {
+    background: oklch(0.97 0.04 60) !important; border-color: oklch(0.78 0.16 75 / 0.4) !important;
+  }
+  [data-theme="dark"] .mcp-diff-banner-warn {
+    background: oklch(0.22 0.04 60) !important;
+  }
+  .mcp-diff-summary { flex: 1; font-weight: 500; }
+  .mcp-diff-force-refresh {
+    font-size: 11px; cursor: pointer; text-decoration: underline;
+    color: var(--muted-foreground); background: none; border: none; padding: 0;
+  }
+  .mcp-diff-force-refresh:hover { color: var(--foreground); }
+
+  #mcpDiffPanel { margin-bottom: 0.75rem; }
+  #mcpDiffPanel[hidden] { display: none; }
+  #mcpDiffPanel > summary {
+    cursor: pointer; list-style: none; padding: 0.5rem 0.875rem;
+    font-size: 12px; font-weight: 600;
+    background: var(--secondary); border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  #mcpDiffPanel > summary::-webkit-details-marker { display: none; }
+  #mcpDiffPanel[open] > summary {
+    border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+  }
+  #mcpDiffPanel > summary::after {
+    content: '▸'; margin-left: auto; transition: transform 150ms ease;
+    color: var(--muted-foreground);
+  }
+  #mcpDiffPanel[open] > summary::after { transform: rotate(90deg); }
+  #mcpDiffPanelBody {
+    border: 1px solid var(--border); border-top: none;
+    border-bottom-left-radius: var(--radius); border-bottom-right-radius: var(--radius);
+    padding: 0.875rem; display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  .mcp-diff-section { display: flex; flex-direction: column; gap: 0.35rem; }
+  .mcp-diff-section-title {
+    font-size: 12px; font-weight: 700; color: var(--muted-foreground);
+    text-transform: uppercase; letter-spacing: 0.07em;
+  }
+  .mcp-diff-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .mcp-diff-chip {
+    display: inline-flex; align-items: center;
+    font-size: 12px; padding: 0.2rem 0.5rem; border-radius: 999px;
+    cursor: pointer; border: 1px solid transparent;
+    font-family: 'JetBrains Mono', monospace;
+    transition: opacity 100ms;
+  }
+  .mcp-diff-chip:hover { opacity: 0.75; }
+  .mcp-diff-chip:active { transform: scale(0.96); }
+  .mcp-diff-added {
+    background: oklch(0.93 0.06 150); color: oklch(0.32 0.12 150);
+    border-color: oklch(0.78 0.1 150);
+  }
+  [data-theme="dark"] .mcp-diff-added {
+    background: oklch(0.22 0.06 150); color: oklch(0.78 0.12 150);
+    border-color: oklch(0.35 0.1 150);
+  }
+  /* Skip to content */
+  .skip-link {
+    position: absolute; top: -100%; left: 0.5rem;
+    background: var(--primary); color: var(--primary-foreground);
+    padding: 0.5rem 1rem; border-radius: var(--radius);
+    font-size: 14px; font-weight: 600; z-index: 9999;
+    transition: top 150ms ease; text-decoration: none;
+  }
+  .skip-link:focus { top: 0.5rem; }
+
+  .mcp-diff-removed {
+    background: oklch(0.95 0.03 27); color: oklch(0.45 0.15 27);
+    border-color: oklch(0.85 0.08 27); text-decoration: line-through;
+  }
+  [data-theme="dark"] .mcp-diff-removed {
+    background: oklch(0.22 0.04 27); color: oklch(0.75 0.15 27);
+    border-color: oklch(0.4 0.1 27);
+  }
+</style>
+</head>
+<body>
+<!-- =========================================================
+     APP BAR
+     ========================================================= -->
+<a href="#overview" class="skip-link">ข้ามไปเนื้อหาหลัก</a>
+<header class="app-bar" role="banner">
+  <div class="app-bar-inner">
+    <div class="brand">
+      <div class="brand-logo">F</div>
+      <div>
+        <div class="brand-title">Figma MCP — Comparison 2026</div>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <a class="nav-link" href="#overview">Overview</a>
+      <a class="nav-link" href="#compare">Compare</a>
+      <a class="nav-link" href="#deep-dive">Deep dive</a>
+      <a class="nav-link" href="#commands">Commands</a>
+      <a class="nav-link" href="#picker">Picker</a>
+      <a class="nav-link" href="#charts">Charts</a>
+    </nav>
+    <span id="liveBadge" class="live-badge" style="display:none;" aria-live="polite">
+      <span id="liveDot" class="live-dot"></span><span id="liveText"></span>
+    </span>
+    <button class="lang-toggle" id="langToggle" aria-label="Switch language" title="Switch language / สลับภาษา"><span id="langLabel">EN</span></button>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <svg class="sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg>
+      <svg class="moon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+<section class="hero" id="overview">
+  <div class="container">
+    <div class="hero-eyebrow" data-i18n="hero.eyebrow"><span class="dot"></span> Updated May 2026 · For BCIF Design Team</div>
+    <h1 data-i18n="hero.h1">เปรียบเทียบ Figma MCP Servers ปี 2026</h1>
+    <p class="lead" data-i18n="hero.lead">
+      วิเคราะห์เชิงลึก 5 Figma MCP servers หลัก ครอบคลุม features, tools commands, update cadence,
+      community feedback, ความเข้ากันได้กับ design system และ DesignOps workflow —
+      ออกแบบเพื่อช่วยพี่นนและทีม BCIF ตัดสินใจเลือก stack ที่ใช่
+    </p>
+    <div class="hero-meta">
+      <span class="badge">5 MCP servers</span>
+      <span class="badge">Free to Enterprise tier</span>
+      <span class="badge">Read · Write · Debug</span>
+    </div>
+
+    <div class="stats" aria-label="ภาพรวมตลาด">
+      <div class="stat">
+        <div class="stat-label">Top server by stars</div>
+        <div class="stat-value" id="heroStars">14.5K</div>
+        <div class="stat-trend up">▲ Framelink (Apr 2026)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Most tools</div>
+        <div class="stat-value">101+</div>
+        <div class="stat-trend">Figma Console MCP v1.23</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">npm weekly downloads</div>
+        <div class="stat-value" id="heroNpm">53.4K</div>
+        <div class="stat-trend up">▲ 4.6× vs Jan 2026</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label" data-i18n="hero.stat4label">First-party (write canvas beta)</div>
+        <div class="stat-value">Mar 24</div>
+        <div class="stat-trend" data-i18n="hero.stat4trend">Figma Official ปล่อย use_figma</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     COMPARE TABLE
+     ========================================================= -->
+<section id="compare">
+  <div class="container">
+    <div class="section-eyebrow">Comparison Matrix</div>
+    <h2 class="section-title" data-i18n="compare.title">ตารางเปรียบเทียบแบบ filter + sort</h2>
+    <p class="section-desc" data-i18n="compare.desc">
+      กรองตาม Figma plan ที่ทีมใช้ ความสามารถในการเขียนกลับ canvas และมุมมองที่สนใจ
+      คลิกที่หัวคอลัมน์เพื่อจัดเรียงใหม่
+    </p>
+
+    <div class="filter-bar" id="filters">
+      <div class="filter-group">
+        <span class="filter-label" data-i18n="filter.plan">Figma plan:</span>
+        <select id="planFilter" class="input" aria-label="Filter by Figma plan">
+          <option value="all" data-i18n="filter.plan.all">ทุก plan</option>
+          <option value="free">Free / Starter</option>
+          <option value="pro">Professional+</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label" data-i18n="filter.write">Write canvas:</span>
+        <select id="writeFilter" class="input" aria-label="Filter by write capability">
+          <option value="all" data-i18n="filter.write.all">ทุกประเภท</option>
+          <option value="yes" data-i18n="filter.write.yes">ต้องเขียนได้</option>
+          <option value="no" data-i18n="filter.write.no">Read-only ก็พอ</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label" data-i18n="filter.setup">Setup:</span>
+        <select id="setupFilter" class="input" aria-label="Filter by setup complexity">
+          <option value="all" data-i18n="filter.setup.all">ทุกระดับ</option>
+          <option value="easy" data-i18n="filter.setup.easy">ง่าย</option>
+          <option value="medium" data-i18n="filter.setup.medium">ปานกลาง</option>
+          <option value="complex" data-i18n="filter.setup.complex">ซับซ้อน</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label" data-i18n="filter.view">View:</span>
+        <select id="viewMode" class="input" aria-label="Toggle column view">
+          <option value="features">Features</option>
+          <option value="ops">DesignOps fit</option>
+          <option value="community">Community</option>
+          <option value="cost">Cost & Setup</option>
+        </select>
+      </div>
+      <div class="filter-spacer"></div>
+      <button class="btn btn-outline btn-sm" id="resetFilters" data-i18n="filter.reset">รีเซ็ต filter</button>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table class="compare" id="compareTable" aria-label="Figma MCP comparison table">
+          <thead>
+            <tr id="theadRow"></tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <p class="muted mt-2" style="font-size:12px;" data-i18n="compare.note">
+      <strong>หมายเหตุ:</strong> ✓ = รองรับ, ⚠ = บางส่วน/มีเงื่อนไข, — = ไม่รองรับ
+      สลับ <em>View</em> เพื่อดูชุดคอลัมน์อื่น (Features, DesignOps, Community, Cost)
+    </p>
+  </div>
+</section>
+
+<!-- =========================================================
+     DEEP DIVE TABS
+     ========================================================= -->
+<section id="deep-dive">
+  <div class="container">
+    <div class="section-eyebrow">Deep dive</div>
+    <h2 class="section-title" data-i18n="deepdive.title">เจาะลึกแต่ละ MCP</h2>
+    <p class="section-desc" data-i18n="deepdive.desc">
+      แต่ละ tab รวม overview, key tools, install snippet, community feedback และข้อสังเกตเฉพาะตัว
+    </p>
+
+    <div class="tabs-list" role="tablist" id="tabsList"></div>
+    <div id="tabPanels"></div>
+  </div>
+</section>
+
+<!-- =========================================================
+     COMMANDS & FEATURES MATRIX
+     ========================================================= -->
+<section id="commands">
+  <div class="container">
+    <div class="section-eyebrow">Commands &amp; Features</div>
+    <h2 class="section-title" data-i18n="commands.title">เปรียบเทียบ Commands ทุก MCP แบบ grouped</h2>
+    <p class="section-desc" data-i18n="commands.desc">
+      จัดกลุ่มตาม Figma product surface — คลิก tab เพื่อสลับระหว่าง Figma Design, FigJam และ Figma Slides
+      แต่ละ cell แสดงชื่อ command จริงที่ใช้เรียก
+    </p>
+    <div class="matrix-legend">
+      <span><span class="cmd-yes" style="display:inline">✓</span> <span data-i18n="legend.yes">รองรับ</span></span>
+      <span><span class="cmd-partial" style="display:inline">⚠</span> <span data-i18n="legend.partial">บางส่วน / มีเงื่อนไข</span></span>
+      <span><span class="cmd-none" style="display:inline">—</span> <span data-i18n="legend.none">ไม่รองรับ</span></span>
+    </div>
+    <div id="mcpDiffBanner" hidden></div>
+    <details id="mcpDiffPanel" hidden>
+      <summary>🔍 Checking for tool updates…</summary>
+      <div id="mcpDiffPanelBody"></div>
+    </details>
+    <div class="matrix-toolbar">
+      <div class="matrix-controls">
+        <span class="matrix-controls-label" data-i18n="commands.show">แสดง:</span>
+        <label class="col-toggle-label"><input type="checkbox" id="col-toggle-official" checked><span class="col-toggle-pill">Official</span></label>
+        <label class="col-toggle-label"><input type="checkbox" id="col-toggle-console" checked><span class="col-toggle-pill">Console MCP</span></label>
+        <label class="col-toggle-label"><input type="checkbox" id="col-toggle-claudetalk" checked><span class="col-toggle-pill">ClaudeTalk</span></label>
+        <label class="col-toggle-label"><input type="checkbox" id="col-toggle-sunnyside" checked><span class="col-toggle-pill">Sunnyside</span></label>
+        <label class="col-toggle-label"><input type="checkbox" id="col-toggle-framelink" checked><span class="col-toggle-pill">Framelink</span></label>
+      </div>
+      <div class="matrix-search">
+        <svg class="matrix-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <input type="search" id="matrixSearch" class="matrix-search-input" data-i18n-ph="commands.search" placeholder="ค้นหา feature หรือ command (เช่น export, variable, slide)…" aria-label="ค้นหา feature หรือ command">
+        <span class="matrix-search-count" id="matrixSearchCount" hidden></span>
+      </div>
+    </div>
+    <div id="matrixPanels"></div>
+  </div>
+</section>
+
+<!-- =========================================================
+     DECISION TREE PICKER
+     ========================================================= -->
+<section id="picker">
+  <div class="container">
+    <div class="section-eyebrow">Use-case Picker</div>
+    <h2 class="section-title" data-i18n="picker.title">Decision tree: เลือก MCP ที่ใช่ภายใน 30 วินาที</h2>
+    <p class="section-desc" data-i18n="picker.desc">
+      ตอบ 4 คำถามเกี่ยวกับ context ทีม ระบบจะแนะนำ MCP ที่เหมาะที่สุด
+      พร้อมเหตุผลและตัวเลือกสำรอง
+    </p>
+
+    <div class="picker-grid">
+      <div class="card">
+        <div id="pickerQuestions"></div>
+      </div>
+      <div class="picker-result" id="pickerResult" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     CHARTS
+     ========================================================= -->
+<section id="charts">
+  <div class="container">
+    <div class="section-eyebrow">Visual comparison</div>
+    <h2 class="section-title" data-i18n="charts.title">เปรียบเทียบเชิงภาพ: Radar &amp; Bar</h2>
+    <p class="section-desc" data-i18n="charts.desc">
+      เปรียบเทียบ 6 มิติหลักของแต่ละ MCP คลิก legend เพื่อซ่อน/แสดงแต่ละ MCP
+    </p>
+
+    <div class="chart-grid">
+      <div class="card chart-card">
+        <div class="card-header">
+          <h3 class="card-title" data-i18n="charts.radarTitle">Capability Radar (6 มิติ)</h3>
+          <p class="card-desc" data-i18n="charts.radarDesc">เปรียบเทียบ 6 มิติ (สเกล 0–10), คลิก legend เพื่อซ่อน/แสดง</p>
+        </div>
+        <div class="canvas-wrap"><canvas id="radarChart" aria-label="Radar chart comparing 6 capability dimensions across Figma MCP servers" role="img"></canvas></div>
+        <div class="legend-toggle" id="radarLegend"></div>
+        <details style="margin-top:0.75rem;font-size:11px;color:var(--muted-foreground);">
+          <summary style="cursor:pointer;font-weight:600;list-style:none;display:flex;align-items:center;gap:0.25rem;" data-i18n="radar.summary">▸ คำอธิบายแต่ละมิติ</summary>
+          <dl style="display:grid;grid-template-columns:1fr 1fr;gap:0.25rem 1rem;margin:0.5rem 0 0;line-height:1.5;">
+            <dt style="font-weight:600;color:var(--foreground);">Token efficiency</dt><dd style="margin:0;" data-i18n="radar.tokenEff">ประหยัด context window ก่อนส่ง LLM (0=ส่งดิบ, 10=compress ~90%)</dd>
+            <dt style="font-weight:600;color:var(--foreground);">Tool depth</dt><dd style="margin:0;" data-i18n="radar.toolDepth">จำนวน + ความครบของ tools ที่ให้ (0=น้อย, 10=ครบมาก)</dd>
+            <dt style="font-weight:600;color:var(--foreground);">Write capability</dt><dd style="margin:0;" data-i18n="radar.write">สามารถเขียนกลับ Figma canvas ได้มากแค่ไหน</dd>
+            <dt style="font-weight:600;color:var(--foreground);">DesignOps fit</dt><dd style="margin:0;" data-i18n="radar.ops">เหมาะกับ workflow ทีม DesignOps / Handoff</dd>
+            <dt style="font-weight:600;color:var(--foreground);">Maturity</dt><dd style="margin:0;" data-i18n="radar.maturity">ความสมบูรณ์, stability, เอกสาร, community</dd>
+            <dt style="font-weight:600;color:var(--foreground);">Free-tier access</dt><dd style="margin:0;" data-i18n="radar.freeTier">ใช้ได้บน Figma Free/Starter plan หรือไม่</dd>
+          </dl>
+        </details>
+      </div>
+      <div class="card chart-card">
+        <div class="card-header">
+          <h3 class="card-title">Community Signals</h3>
+          <p class="card-desc">GitHub stars / npm weekly downloads / tools count (log-normalized)</p>
+        </div>
+        <div class="canvas-wrap"><canvas id="barChart" aria-label="Bar chart showing community signals: GitHub stars, npm weekly downloads, and tool count per MCP server" role="img"></canvas></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="between">
+      <div data-i18n="footer.credit">
+        <strong>Figma MCP — Comparison 2026</strong> · Built for BCIF Design Team · พ.ศ. 2569
+      </div>
+      <div class="muted">Design tokens: shadcn/ui (Tailwind v4 OKLCH) · Charts: Chart.js</div>
+    </div>
+    <div class="ref-grid mt-3">
+      <a href="https://developers.figma.com/docs/figma-mcp-server/" target="_blank" rel="noopener">Figma Developer Docs</a>
+      <a href="https://github.com/GLips/Figma-Context-MCP" target="_blank" rel="noopener">Framelink GitHub</a>
+      <a href="https://docs.figma-console-mcp.southleft.com/" target="_blank" rel="noopener">Figma Console MCP Docs</a>
+      <a href="https://github.com/arinspunk/claude-talk-to-figma-mcp" target="_blank" rel="noopener">Claude Talk to Figma</a>
+      <a href="https://github.com/tercumantanumut/sunnysideFigma-Context-MCP" target="_blank" rel="noopener">Sunnyside Figma Context</a>
+      <a href="https://ui.shadcn.com/docs/theming" target="_blank" rel="noopener">shadcn/ui Theming</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Language state — set FIRST so all initial renders read the correct language
+  window.LANG = (function(){ try { return localStorage.getItem('mcp-lang') || 'th'; } catch(e){ return 'th'; } })();
+  document.documentElement.lang = window.LANG;
+
+  // =========================================================
+  // Data layer — single source of truth
+  // =========================================================
+  const MCPS = [
+    {
+      id: 'official',
+      githubRepo: null,
+      npmPkg: null,
+      name: 'Figma Official MCP',
+      sub: 'First-party · Figma + Anthropic',
+      maintainer: 'Figma',
+      logoColor: 'oklch(0.6 0.18 250)',
+      latestVersion: 'Active (Apr 2026)',
+      lastUpdated: '2026-04-30',
+      stars: 1069,
+      starsLabel: '~1,069 (guide repo)',
+      npmWeekly: null,
+      tools: 13,
+      toolsList: [
+        'get_design_context',
+        'get_variable_defs',
+        'get_code_connect_map',
+        'get_screenshot',
+        'get_metadata',
+        'get_figjam',
+        'use_figma (write canvas, beta)',
+        'generate_diagram (Mermaid → FigJam)',
+        'send_code_connect_mappings'
+      ],
+      planRequired: 'pro',
+      planLabel: 'Starter (6 calls/mo) → Professional+ (Dev/Full seat)',
+      devSeat: true,
+      writeCapability: 'yes',
+      readCapability: true,
+      debug: false,
+      codeConnect: true,
+      tokenMgmt: 'partial',
+      pluginDebug: false,
+      tokenEfficiency: 6,
+      maturity: 9,
+      freeTier: 3,
+      opsFit: 8,
+      depth: 7,
+      setupComplexity: 'easy',
+      setupSteps: [
+        'Remote: เพิ่ม URL https://mcp.figma.com/mcp ใน MCP client + OAuth',
+        'หรือ Desktop: Figma → Dev Mode → Enable MCP Server (port 3845)'
+      ],
+      setupSteps_en: [
+        'Remote: add URL https://mcp.figma.com/mcp in your MCP client + OAuth',
+        'Or Desktop: Figma → Dev Mode → Enable MCP Server (port 3845)'
+      ],
+      community: 'Big & official',
+      pros: [
+        'Code Connect ผูก components ↔ codebase ได้',
+        'Write to Canvas (use_figma) เปิด beta ตั้งแต่ 24 มี.ค. 2026',
+        'รองรับ Mermaid → FigJam diagram generation',
+        'Setup ผ่าน OAuth ใน 5 นาที'
+      ],
+      pros_en: [
+        'Code Connect links components ↔ codebase',
+        'Write to Canvas (use_figma) in beta since Mar 24, 2026',
+        'Supports Mermaid → FigJam diagram generation',
+        'Setup via OAuth in 5 minutes'
+      ],
+      cons: [
+        'Starter plan ได้แค่ 6 tool calls/เดือน → ไม่พอใช้จริง',
+        'ต้อง Dev/Full seat บน Pro+ สำหรับ Desktop server',
+        'ใช้ tokens เยอะกว่า community alternatives'
+      ],
+      cons_en: [
+        'Starter plan allows only 6 tool calls/month → not enough in practice',
+        'Needs a Dev/Full seat on Pro+ for the Desktop server',
+        'Uses more tokens than community alternatives'
+      ],
+      install: 'mcp.figma.com (Remote, OAuth)\nหรือ\nFigma Desktop → Dev Mode → Enable MCP server',
+      install_en: 'mcp.figma.com (Remote, OAuth)\nor\nFigma Desktop → Dev Mode → Enable MCP server',
+      bestFor: 'ทีมที่จ่าย Professional+ และต้องการ Code Connect + Write canvas แบบ first-party',
+      bestFor_en: 'Teams on Professional+ who want first-party Code Connect + Write canvas',
+      links: [
+        { label: 'Developer Docs', url: 'https://developers.figma.com/docs/figma-mcp-server/' },
+        { label: 'Plans & Permissions', url: 'https://developers.figma.com/docs/figma-mcp-server/plans-access-and-permissions/' }
+      ]
+    },
+    {
+      id: 'framelink',
+      githubRepo: 'GLips/Figma-Context-MCP',
+      npmPkg: 'figma-developer-mcp',
+      name: 'Framelink',
+      sub: 'figma-developer-mcp · GLips',
+      maintainer: 'Graham Lipsman',
+      logoColor: 'oklch(0.7 0.16 50)',
+      latestVersion: 'v0.11.0 (Apr 2026)',
+      lastUpdated: '2026-04-30',
+      stars: 14500,
+      starsLabel: '~14,500',
+      npmWeekly: 53400,
+      tools: 2,
+      toolsList: ['get_figma_data', 'download_figma_images'],
+      planRequired: 'free',
+      planLabel: 'Free Figma plan (Personal Access Token)',
+      devSeat: false,
+      writeCapability: 'no',
+      readCapability: true,
+      debug: false,
+      codeConnect: false,
+      tokenMgmt: 'no',
+      pluginDebug: false,
+      tokenEfficiency: 10,
+      maturity: 8,
+      freeTier: 10,
+      opsFit: 5,
+      depth: 5,
+      setupComplexity: 'easy',
+      setupSteps: [
+        'Generate Figma Personal Access Token',
+        'ใส่ใน MCP config: npx -y figma-developer-mcp --figma-api-key=YOUR-KEY --stdio',
+        'Paste link Figma frame → ขอให้ AI implement'
+      ],
+      setupSteps_en: [
+        'Generate a Figma Personal Access Token',
+        'Add to MCP config: npx -y figma-developer-mcp --figma-api-key=YOUR-KEY --stdio',
+        'Paste a Figma frame link → ask the AI to implement'
+      ],
+      community: 'ใหญ่ที่สุดในกลุ่ม community-built',
+      community_en: 'Largest among community-built MCPs',
+      pros: [
+        'Token efficiency สูงสุด — compress ~90% ก่อนส่ง LLM',
+        'รองรับทุก client: Cursor, Claude Code, VS Code, Zed, Codex, Antigravity',
+        '53,400 npm weekly downloads (Mar 2026, ▲ 4.6× จาก ม.ค.)',
+        'Descriptive JSON ทำให้ AI ใช้ component เดิมในโปรเจกต์'
+      ],
+      pros_en: [
+        'Highest token efficiency — compresses ~90% before sending to the LLM',
+        'Works with every client: Cursor, Claude Code, VS Code, Zed, Codex, Antigravity',
+        '53,400 npm weekly downloads (Mar 2026, ▲ 4.6× vs Jan)',
+        'Descriptive JSON helps the AI reuse existing project components'
+      ],
+      cons: [
+        'Read-only — เขียนกลับ Figma ไม่ได้',
+        'มีแค่ 2 tools',
+        'เคยมี Critical RCE ใน <0.6.3 (ต.ค. 2025) — ใช้ ≥0.11.0 เท่านั้น',
+        'macOS ARM ผ่าน npx เคยมี sharp/libvips dlopen issue'
+      ],
+      cons_en: [
+        'Read-only — cannot write back to Figma',
+        'Only 2 tools',
+        'Had a Critical RCE in <0.6.3 (Oct 2025) — use ≥0.11.0 only',
+        'macOS ARM via npx had a sharp/libvips dlopen issue'
+      ],
+      install: 'npx -y figma-developer-mcp --figma-api-key=YOUR-KEY --stdio',
+      bestFor: 'Design-to-code workflow ที่ต้องการ code quality สูง + ต้นทุน token ต่ำ',
+      bestFor_en: 'Design-to-code workflows that want high code quality + low token cost',
+      links: [
+        { label: 'GitHub', url: 'https://github.com/GLips/Figma-Context-MCP' },
+        { label: 'Framelink Quickstart', url: 'https://www.framelink.ai/docs/quickstart' }
+      ]
+    },
+    {
+      id: 'console',
+      githubRepo: 'southleft/figma-console-mcp',
+      npmPkg: null,
+      name: 'Figma Console MCP',
+      sub: 'southleft · Plugin debugging + DS audit',
+      maintainer: 'TJ Pitre / SouthLeft',
+      logoColor: 'oklch(0.62 0.2 145)',
+      latestVersion: 'v1.23.0 (May 2026)',
+      lastUpdated: '2026-05-23',
+      stars: 1200,
+      starsLabel: '~1,200+',
+      npmWeekly: null,
+      tools: 101,
+      toolsList: [
+        'figma_get_console_logs',
+        'figma_watch_console',
+        'figma_take_screenshot',
+        'figma_audit_component_accessibility',
+        'figma_check_design_parity',
+        'figma_batch_create_variables',
+        'figma_setup_design_tokens',
+        'figma_lint_design',
+        'figma_generate_component_doc',
+        'figma_export_tokens ✦',
+        'figma_import_tokens ✦',
+        'figma_get_library_component_by_key ✦',
+        'figma_get_library_variables ✦',
+        'figma_import_library_variable ✦',
+        'figma_diagnose ✦',
+        'figma_pair_plugin ✦'
+      ],
+      planRequired: 'free',
+      planLabel: 'Free, Pro, Enterprise — ทุก plan',
+      planLabel_en: 'Free, Pro, Enterprise — every plan',
+      devSeat: false,
+      writeCapability: 'yes',
+      readCapability: true,
+      debug: true,
+      codeConnect: false,
+      tokenMgmt: 'yes',
+      pluginDebug: true,
+      tokenEfficiency: 6,
+      maturity: 8,
+      freeTier: 9,
+      opsFit: 10,
+      depth: 10,
+      setupComplexity: 'medium',
+      setupSteps: [
+        'Remote: เชื่อม SSE + OAuth ผ่าน Figma Console MCP',
+        'หรือ Local: ติดตั้ง Desktop Bridge plugin + รัน local MCP server',
+        'เรียก audit/debug/parity ผ่าน AI client'
+      ],
+      setupSteps_en: [
+        'Remote: connect SSE + OAuth via Figma Console MCP',
+        'Or Local: install the Desktop Bridge plugin + run a local MCP server',
+        'Call audit/debug/parity from your AI client'
+      ],
+      community: 'กำลังโต — design system practitioners แนะนำเยอะ',
+      community_en: 'Growing — widely recommended by design-system practitioners',
+      pros: [
+        '101+ tools ครอบคลุมที่สุด',
+        'Plugin debugging ผ่าน Chrome DevTools Protocol — unique feature',
+        'Design System Dashboard (Lighthouse-style scorecard 0-100)',
+        'Accessibility scanning v1.22: 13 design lint rules + 104 axe-core rules + color-blind simulation',
+        'จัดการ variables/tokens ได้บน Free plan'
+      ],
+      pros_en: [
+        '101+ tools — the most comprehensive coverage',
+        'Plugin debugging via Chrome DevTools Protocol — a unique feature',
+        'Design System Dashboard (Lighthouse-style scorecard 0-100)',
+        'Accessibility scanning v1.22: 13 design lint rules + 104 axe-core rules + color-blind simulation',
+        'Manage variables/tokens on the Free plan'
+      ],
+      cons: [
+        'Tools เยอะ → ต้องเรียนรู้ command shape',
+        'Local Mode ต้องติด Bridge plugin เพิ่ม',
+        'Token usage ปานกลาง'
+      ],
+      cons_en: [
+        'Many tools → a learning curve for command shapes',
+        'Local Mode requires installing the Bridge plugin',
+        'Moderate token usage'
+      ],
+      install: 'Remote (OAuth) หรือ\nDesktop Bridge plugin + local MCP server',
+      install_en: 'Remote (OAuth) or\nDesktop Bridge plugin + local MCP server',
+      bestFor: 'Design System governance, audit, accessibility, plugin debugging',
+      links: [
+        { label: 'Docs', url: 'https://docs.figma-console-mcp.southleft.com/' },
+        { label: 'GitHub', url: 'https://github.com/southleft/figma-console-mcp' }
+      ]
+    },
+    {
+      id: 'claudetalk',
+      githubRepo: 'arinspunk/claude-talk-to-figma-mcp',
+      npmPkg: null,
+      name: 'Claude Talk to Figma',
+      sub: 'arinspunk · WebSocket bridge',
+      maintainer: 'arinspunk',
+      logoColor: 'oklch(0.65 0.2 25)',
+      latestVersion: 'v1.0.0 (Apr 2026)',
+      lastUpdated: '2026-04-18',
+      stars: 584,
+      starsLabel: '~584',
+      npmWeekly: null,
+      tools: 50,
+      toolsList: [
+        'rotate_node',
+        'reorder_node',
+        'convert_to_frame',
+        'set_node_properties',
+        'set_gradient',
+        'boolean_operation',
+        'set_svg / get_svg',
+        'set_image',
+        'set_grid / get_grid',
+        'set_guide / get_guide',
+        'duplicate_page',
+        'analyze_document',
+        'export_node_as_image'
+      ],
+      planRequired: 'free',
+      planLabel: 'Free Figma plan',
+      devSeat: false,
+      writeCapability: 'yes',
+      readCapability: true,
+      debug: false,
+      codeConnect: false,
+      tokenMgmt: 'partial',
+      pluginDebug: false,
+      tokenEfficiency: 6,
+      maturity: 7,
+      freeTier: 9,
+      opsFit: 7,
+      depth: 8,
+      setupComplexity: 'complex',
+      setupSteps: [
+        'Clone repo → npx claude-talk-to-figma-mcp',
+        'Figma Desktop → Plugins → Import plugin from manifest → เลือก manifest.json',
+        'รัน WebSocket server: bun socket (localhost:3055)',
+        'Claude Desktop → เลือก "ClaudeTalkToFigma" ใน MCP selector'
+      ],
+      setupSteps_en: [
+        'Clone repo → npx claude-talk-to-figma-mcp',
+        'Figma Desktop → Plugins → Import plugin from manifest → select manifest.json',
+        'Run the WebSocket server: bun socket (localhost:3055)',
+        'Claude Desktop → choose "ClaudeTalkToFigma" in the MCP selector'
+      ],
+      community: 'Security Score 85/100 (SkillsIndex)',
+      pros: [
+        'Bidirectional real-time ผ่าน WebSocket',
+        'พูดภาษาธรรมชาติเปลี่ยน design ทั้ง file ได้ ("เปลี่ยนสีปุ่ม primary")',
+        'เพิ่ม 20 tools ใหม่ใน v1.0: gradient, boolean ops, grids, guides',
+        'Generate React/Vue/SwiftUI handoff โดยตรง',
+        'Accessibility automation ตรวจ contrast/WCAG'
+      ],
+      pros_en: [
+        'Bidirectional real-time via WebSocket',
+        'Change a whole file in natural language ("make the primary button blue")',
+        'Added 20 new tools in v1.0: gradient, boolean ops, grids, guides',
+        'Generate React/Vue/SwiftUI handoff directly',
+        'Accessibility automation checks contrast/WCAG'
+      ],
+      cons: [
+        'Setup ซับซ้อน — ต้องรัน WebSocket server + ติด plugin เอง',
+        'ยังไม่มี HTTP transport native',
+        'เป็น fork ที่ adapt จาก cursor-talk-to-figma-mcp'
+      ],
+      cons_en: [
+        'Complex setup — run a WebSocket server + install the plugin yourself',
+        'No native HTTP transport yet',
+        'A fork adapted from cursor-talk-to-figma-mcp'
+      ],
+      install: 'git clone + npx + bun socket + Figma plugin manifest',
+      bestFor: 'ใช้ Claude Desktop คุยกับ Figma แบบ conversational + ทีมที่ไม่อยากจ่าย Dev seat',
+      bestFor_en: 'Conversational Figma editing from Claude Desktop + teams who would rather not pay for a Dev seat',
+      links: [
+        { label: 'GitHub', url: 'https://github.com/arinspunk/claude-talk-to-figma-mcp' },
+        { label: 'Releases', url: 'https://github.com/arinspunk/claude-talk-to-figma-mcp/releases' }
+      ]
+    },
+    {
+      id: 'sunnyside',
+      githubRepo: 'tercumantanumut/sunnysideFigma-Context-MCP',
+      npmPkg: null,
+      name: 'Sunnyside Figma Context',
+      sub: 'tercumantanumut · Multi-framework fork',
+      maintainer: 'Umut TAN (Sunnyside Software)',
+      logoColor: 'oklch(0.78 0.15 95)',
+      latestVersion: 'Active (May 2026)',
+      lastUpdated: '2026-05-23',
+      stars: 36,
+      starsLabel: '~36',
+      npmWeekly: null,
+      tools: 31,
+      toolsList: [
+        'get_react_component ✦',
+        'analyze_app_structure ✦',
+        'map_app_flow ✦',
+        'batch_extract_frames ✦',
+        'get_figma_assets ✦',
+        'get_figma_variable_definitions ✦',
+        'generate_codegen_plugin ✦',
+        'get_plugin_project_overview ✦',
+        'get_figma_dev_history ✦',
+        'check_figma_dev_connection ✦',
+        'simulate_token_change',
+        'analyze_token_change_impact',
+        'generate_migration_code',
+        'track_design_system_health',
+        'build_dependency_graph',
+        'get_styled_component',
+        'get_tailwind_component',
+        'get_figma_dev_mode_code'
+      ],
+      planRequired: 'partial',
+      planLabel: 'Free + บางฟีเจอร์ใช้ Dev seat',
+      planLabel_en: 'Free + some features need a Dev seat',
+      devSeat: false,
+      writeCapability: 'no',
+      readCapability: true,
+      debug: false,
+      codeConnect: false,
+      tokenMgmt: 'partial',
+      pluginDebug: false,
+      tokenEfficiency: 7,
+      maturity: 5,
+      freeTier: 7,
+      opsFit: 6,
+      depth: 7,
+      setupComplexity: 'medium',
+      setupSteps: [
+        'Node.js 18+ และ Figma API key',
+        'ติดตั้ง Figma Plugin (real-time mode) หรือ Dev Mode Bridge',
+        'Configure MCP client'
+      ],
+      setupSteps_en: [
+        'Node.js 18+ and a Figma API key',
+        'Install the Figma Plugin (real-time mode) or Dev Mode Bridge',
+        'Configure your MCP client'
+      ],
+      community: 'เล็กที่สุด (~36 stars) — ผู้ดูแลเองยอมรับว่ายัง buggy',
+      community_en: 'Smallest (~36 stars) — the maintainer admits it is still buggy',
+      pros: [
+        'Multi-framework code gen ครบ React/Vue/Angular/TS',
+        'Styling options: CSS Modules, Tailwind, inline, styled-components',
+        '3 connection modes ยืดหยุ่น',
+        'Token-aware (ตรวจ conflict + suggest fixes)'
+      ],
+      pros_en: [
+        'Full multi-framework code gen: React/Vue/Angular/TS',
+        'Styling options: CSS Modules, Tailwind, inline, styled-components',
+        '3 flexible connection modes',
+        'Token-aware (detects conflicts + suggests fixes)'
+      ],
+      cons: [
+        'Community เล็กที่สุด — feedback ยังจำกัด',
+        'License เป็น proprietary (commercial ต้องติดต่อ Umut TAN)',
+        'ผู้ดูแลระบุว่ายัง buggy + อยู่ระหว่างพัฒนา',
+        'ไม่มี write capability'
+      ],
+      cons_en: [
+        'Smallest community — limited feedback so far',
+        'Proprietary license (commercial use requires contacting Umut TAN)',
+        'Maintainer notes it is still buggy + under active development',
+        'No write capability'
+      ],
+      install: 'Node.js 18+ + Figma API key + Plugin install',
+      bestFor: 'ทีมที่อยากได้ multi-framework code gen + แค่ explore ตัวเลือก',
+      bestFor_en: 'Teams wanting multi-framework code gen + just exploring options',
+      links: [
+        { label: 'GitHub', url: 'https://github.com/tercumantanumut/sunnysideFigma-Context-MCP' }
+      ]
+    }
+  ];
+
+  // =========================================================
+  // Theme toggle (persist via localStorage in static mode)
+  // =========================================================
+  (function initTheme() {
+    const root = document.documentElement;
+    const saved = localStorage.getItem('mcp-theme');
+    const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (saved === 'dark' || (!saved && sysDark)) root.setAttribute('data-theme', 'dark');
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!localStorage.getItem('mcp-theme')) {
+        if (e.matches) root.setAttribute('data-theme', 'dark'); else root.removeAttribute('data-theme');
+      }
+    });
+    document.getElementById('themeToggle').addEventListener('click', () => {
+      const curr = root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      const next = curr === 'dark' ? 'light' : 'dark';
+      if (next === 'dark') root.setAttribute('data-theme', 'dark'); else root.removeAttribute('data-theme');
+      localStorage.setItem('mcp-theme', next);
+      // re-render charts to pick up new colors
+      if (window._charts) {
+        window._charts.radar?.destroy();
+        window._charts.bar?.destroy();
+        renderRadar(); renderBar();
+      }
+    });
+  })();
+
+  // =========================================================
+  // Compare table — column views
+  // =========================================================
+  const COLUMN_VIEWS = {
+    features: [
+      { key: 'name', label: 'MCP Server', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
+      { key: 'tools', label: 'Tools', sortable: true, render: row => `<strong>${row.tools}+</strong>` },
+      { key: 'writeCapability', label: 'Write canvas', sortable: true, render: row => row.writeCapability === 'yes' ? '<span class="check">✓</span>' : '<span class="x">—</span>' },
+      { key: 'codeConnect', label: 'Code Connect', sortable: true, render: row => row.codeConnect ? '<span class="check">✓</span>' : '<span class="x">—</span>' },
+      { key: 'pluginDebug', label: 'Plugin debug', sortable: true, render: row => row.pluginDebug ? '<span class="check">✓</span>' : '<span class="x">—</span>' },
+      { key: 'tokenMgmt', label: 'Token mgmt', sortable: true, render: row => row.tokenMgmt === 'yes' ? '<span class="check">✓</span>' : (row.tokenMgmt === 'partial' ? '<span class="partial">⚠</span>' : '<span class="x">—</span>') }
+    ],
+    ops: [
+      { key: 'name', label: 'MCP Server', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
+      { key: 'opsFit', label: 'DesignOps fit', sortable: true, render: row => `<span class="badge ${row.opsFit >= 9 ? 'badge-success' : (row.opsFit >= 7 ? '' : 'badge-warn')}">${row.opsFit}/10</span>` },
+      { key: 'codeConnect', label: 'Code Connect', sortable: true, render: row => row.codeConnect ? '<span class="check">✓</span>' : '<span class="x">—</span>' },
+      { key: 'tokenMgmt', label: 'Variable / Token mgmt', sortable: true, render: row => row.tokenMgmt === 'yes' ? '<span class="check">✓</span>' : (row.tokenMgmt === 'partial' ? '<span class="partial">⚠</span>' : '<span class="x">—</span>') },
+      { key: 'pluginDebug', label: 'Plugin debug + parity', sortable: true, render: row => row.pluginDebug ? '<span class="check">✓</span>' : '<span class="x">—</span>' },
+      { key: 'depth', label: 'Tool depth', sortable: true, render: row => `<span class="badge">${row.depth}/10</span>` }
+    ],
+    community: [
+      { key: 'name', label: 'MCP Server', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
+      { key: 'stars', label: 'GitHub stars', sortable: true, render: row => `<strong>${row.starsLabel}</strong>` },
+      { key: 'npmWeekly', label: 'npm weekly', sortable: true, render: row => row.npmWeekly ? `${(row.npmWeekly/1000).toFixed(1)}K` : '<span class="muted">—</span>' },
+      { key: 'lastUpdated', label: 'Last updated', sortable: true, render: row => row.lastUpdated },
+      { key: 'maturity', label: 'Maturity', sortable: true, render: row => `<span class="badge">${row.maturity}/10</span>` },
+      { key: 'community', label: 'Signal', sortable: false, render: row => `<span class="muted" style="font-size:12px;">${(window.LANG === 'en' && row.community_en) ? row.community_en : row.community}</span>` }
+    ],
+    cost: [
+      { key: 'name', label: 'MCP Server', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
+      { key: 'planRequired', label: 'Figma plan', sortable: true, render: row => `<span class="badge ${row.planRequired === 'free' ? 'badge-success' : (row.planRequired === 'pro' ? 'badge-warn' : '')}">${(window.LANG === 'en' && row.planLabel_en) ? row.planLabel_en : row.planLabel}</span>` },
+      { key: 'devSeat', label: 'Dev seat', sortable: true, render: row => { const en = window.LANG === 'en'; return row.devSeat ? `<span class="partial">⚠ ${en ? 'required' : 'ต้องใช้'}</span>` : `<span class="check">✕ ${en ? 'not needed' : 'ไม่จำเป็น'}</span>`; } },
+      { key: 'setupComplexity', label: 'Setup', sortable: true, render: row => {
+        const en = window.LANG === 'en';
+        const map = en
+          ? { easy: ['Easy', 'badge-success'], medium: ['Medium', ''], complex: ['Complex', 'badge-warn'] }
+          : { easy: ['ง่าย', 'badge-success'], medium: ['ปานกลาง', ''], complex: ['ซับซ้อน', 'badge-warn'] };
+        const [l, cls] = map[row.setupComplexity];
+        return `<span class="badge ${cls}">${l}</span>`;
+      } },
+      { key: 'tokenEfficiency', label: 'Token efficiency', sortable: true, render: row => `<span class="badge">${row.tokenEfficiency}/10</span>` },
+      { key: 'freeTier', label: 'Free-tier fit', sortable: true, render: row => `<span class="badge">${row.freeTier}/10</span>` }
+    ]
+  };
+
+  let currentView = 'features';
+  let sortKey = 'name';
+  let sortDir = 'asc';
+  let filterPlan = 'all', filterWrite = 'all', filterSetup = 'all';
+
+  function planMatches(row, sel) {
+    if (sel === 'all') return true;
+    if (sel === 'free') return row.planRequired === 'free' || row.planRequired === 'partial';
+    if (sel === 'pro') return row.planRequired === 'pro';
+    return true;
+  }
+  function writeMatches(row, sel) {
+    if (sel === 'all') return true;
+    if (sel === 'yes') return row.writeCapability === 'yes';
+    if (sel === 'no') return true; // anything works for read-only need
+    return true;
+  }
+  function setupMatches(row, sel) { return sel === 'all' ? true : row.setupComplexity === sel; }
+
+  function compareRows(a, b, key, dir) {
+    const av = a[key]; const bv = b[key];
+    let cmp = 0;
+    if (typeof av === 'number' && typeof bv === 'number') cmp = av - bv;
+    else if (av == null && bv != null) cmp = -1;
+    else if (bv == null && av != null) cmp = 1;
+    else cmp = String(av).localeCompare(String(bv), 'th');
+    return dir === 'asc' ? cmp : -cmp;
+  }
+
+  function renderTable() {
+    const cols = COLUMN_VIEWS[currentView];
+    const headRow = document.getElementById('theadRow');
+    headRow.innerHTML = cols.map(c => {
+      const ariaSort = c.key === sortKey ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none';
+      const ind = c.key === sortKey ? (sortDir === 'asc' ? '↑' : '↓') : '↕';
+      return `<th role="${c.sortable ? 'button' : ''}" aria-sort="${ariaSort}" data-key="${c.key}">${c.label}${c.sortable ? `<span class="sort-ind">${ind}</span>` : ''}</th>`;
+    }).join('');
+
+    const filtered = MCPS
+      .filter(r => planMatches(r, filterPlan) && writeMatches(r, filterWrite) && setupMatches(r, filterSetup))
+      .sort((a,b) => compareRows(a, b, sortKey, sortDir));
+
+    const tbody = document.getElementById('tbody');
+    if (filtered.length === 0) {
+      var emptyMsg = window.LANG === 'en' ? 'No MCP matches the selected filters' : 'ไม่พบ MCP ที่ตรงกับ filter ที่เลือก';
+      var resetTxt = window.LANG === 'en' ? 'Reset filter' : 'รีเซ็ต filter';
+      tbody.innerHTML = `<tr><td colspan="${cols.length}" style="text-align:center;padding:2rem 1rem;color:var(--muted-foreground);">${emptyMsg} &mdash; <button onclick="document.getElementById('resetFilters').click()" style="background:none;border:none;color:var(--primary);text-decoration:underline;cursor:pointer;font-size:inherit;">${resetTxt}</button></td></tr>`;
+    } else {
+      tbody.innerHTML = filtered.map(row => {
+        return `<tr data-id="${row.id}">${cols.map(c => `<td>${c.render(row)}</td>`).join('')}</tr>`;
+      }).join('');
+    }
+
+    // attach sort handlers
+    headRow.querySelectorAll('th[role="button"]').forEach(th => {
+      th.addEventListener('click', () => {
+        const k = th.dataset.key;
+        if (sortKey === k) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+        else { sortKey = k; sortDir = 'asc'; }
+        renderTable();
+      });
+    });
+  }
+
+  document.getElementById('planFilter').addEventListener('change', e => { filterPlan = e.target.value; renderTable(); });
+  document.getElementById('writeFilter').addEventListener('change', e => { filterWrite = e.target.value; renderTable(); });
+  document.getElementById('setupFilter').addEventListener('change', e => { filterSetup = e.target.value; renderTable(); });
+  document.getElementById('viewMode').addEventListener('change', e => {
+    currentView = e.target.value; sortKey = 'name'; sortDir = 'asc'; renderTable();
+  });
+  document.getElementById('resetFilters').addEventListener('click', () => {
+    filterPlan = filterWrite = filterSetup = 'all'; currentView = 'features';
+    document.getElementById('planFilter').value = 'all';
+    document.getElementById('writeFilter').value = 'all';
+    document.getElementById('setupFilter').value = 'all';
+    document.getElementById('viewMode').value = 'features';
+    sortKey = 'name'; sortDir = 'asc';
+    renderTable();
+  });
+  renderTable();
+
+  // =========================================================
+  // Tabs (deep dive)
+  // =========================================================
+  function renderTabs() {
+    const en = window.LANG === 'en';
+    const pick = (m, k) => (en && m[k + '_en'] != null) ? m[k + '_en'] : m[k];
+    const list = document.getElementById('tabsList');
+    const panels = document.getElementById('tabPanels');
+    list.innerHTML = MCPS.map((m, i) =>
+      `<button class="tab-trigger" role="tab" aria-selected="${i === 0}" data-tab="${m.id}">${m.name}</button>`
+    ).join('');
+    panels.innerHTML = MCPS.map((m, i) => `
+      <div class="tab-panel ${i === 0 ? 'active' : ''}" id="panel-${m.id}" role="tabpanel">
+        <div class="deep-grid">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">${m.name}</h3>
+              <p class="card-desc">${m.sub} · maintained by <strong>${m.maintainer}</strong></p>
+            </div>
+            <div class="chips mb-2">
+              <span class="badge">${m.tools}+ tools</span>
+              <span class="badge ${m.planRequired === 'free' ? 'badge-success' : 'badge-warn'}">${pick(m,'planLabel')}</span>
+              ${m.writeCapability === 'yes' ? '<span class="badge badge-success">Write canvas</span>' : '<span class="badge">Read-only</span>'}
+              ${m.codeConnect ? '<span class="badge badge-success">Code Connect</span>' : ''}
+              ${m.pluginDebug ? '<span class="badge badge-success">Plugin debug</span>' : ''}
+            </div>
+            <h4 class="mt-2" style="margin:0 0 0.5rem;font-size:13px;font-weight:600;">Pros</h4>
+            <ul class="bullets">${pick(m,'pros').map(p => `<li>${p}</li>`).join('')}</ul>
+            <h4 class="mt-2" style="margin:0 0 0.5rem;font-size:13px;font-weight:600;">Cons / Risks</h4>
+            <ul class="bullets">${pick(m,'cons').map(p => `<li>${p}</li>`).join('')}</ul>
+            <h4 class="mt-2" style="margin:0 0 0.5rem;font-size:13px;font-weight:600;">Install snippet</h4>
+            <pre class="snippet">${pick(m,'install')}</pre>
+            <h4 class="mt-2" style="margin:0 0 0.5rem;font-size:13px;font-weight:600;">Setup steps</h4>
+            <ul class="bullets">${pick(m,'setupSteps').map((s, idx) => `<li><strong>${idx+1}.</strong> ${s}</li>`).join('')}</ul>
+          </div>
+          <div class="stack" style="--gap:1rem;">
+            <div class="card">
+              <h4 style="margin:0 0 0.75rem;font-size:13px;font-weight:600;">Quick facts</h4>
+              <ul class="meta-list">
+                <li><span class="k">Latest version</span><span class="v">${m.latestVersion}</span></li>
+                <li><span class="k">Last updated</span><span class="v">${m.lastUpdated}</span></li>
+                <li><span class="k">GitHub stars</span><span class="v">${m.starsLabel}</span></li>
+                <li><span class="k">npm weekly</span><span class="v">${m.npmWeekly ? (m.npmWeekly.toLocaleString() + ' /wk') : '—'}</span></li>
+                <li><span class="k">Dev seat</span><span class="v">${m.devSeat ? (en ? '⚠ required' : '⚠ ต้องใช้') : (en ? '— not needed' : '— ไม่ต้องใช้')}</span></li>
+                <li><span class="k">Setup</span><span class="v">${m.setupComplexity}</span></li>
+                <li><span class="k">Community signal</span><span class="v">${pick(m,'community')}</span></li>
+              </ul>
+            </div>
+            <div class="card">
+              <h4 style="margin:0 0 0.75rem;font-size:13px;font-weight:600;">Key tools / commands</h4>
+              <div class="chips">${m.toolsList.map(t => {
+                const isNew = t.endsWith(' ✦');
+                const name = isNew ? t.slice(0, -2) : t;
+                return `<span class="badge badge-outline" style="font-family:'JetBrains Mono', monospace; font-size:12px; ${isNew ? 'border-color:var(--color-update);color:var(--color-update);' : ''}">${name}${isNew ? '<span style="font-family:sans-serif;margin-left:3px;font-size:10px;vertical-align:middle;opacity:0.85">✦</span>' : ''}</span>`;
+              }).join('')}</div>
+              <p class="mt-2" style="font-size:12px;color:var(--muted-foreground);margin:0.75rem 0 0;">Best for: <strong style="color:var(--foreground);">${pick(m,'bestFor')}</strong></p>
+            </div>
+            <div class="card">
+              <h4 style="margin:0 0 0.5rem;font-size:13px;font-weight:600;">References</h4>
+              <div class="chips">${m.links.map(l => `<a class="badge" target="_blank" rel="noopener" href="${l.url}">${l.label} ↗</a>`).join('')}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    list.querySelectorAll('.tab-trigger').forEach(t => {
+      t.addEventListener('click', () => {
+        const id = t.dataset.tab;
+        list.querySelectorAll('.tab-trigger').forEach(x => x.setAttribute('aria-selected', x === t));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + id));
+      });
+    });
+  }
+  renderTabs();
+
+  // =========================================================
+  // Commands & Features Matrix
+  // =========================================================
+  const MCP_KEYS = ['official','console','claudetalk','sunnyside','framelink'];
+  const MCP_SHORT = { official:'Official', framelink:'Framelink', console:'Console MCP', claudetalk:'ClaudeTalk', sunnyside:'Sunnyside' };
+
+  // Convention for cmds arrays:
+  //   []            → not supported
+  //   ['partial']   → partial / conditional support
+  //   ['yes']       → supported (no specific command to surface)
+  //   ['cmd1',...]  → supported with listed commands
+  const FEATURE_MATRIX = {
+    figma: {
+      label: 'Figma Design', icon: '◆', iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20" aria-hidden="true"><rect width="20" height="20" fill="#E5F4FF" rx="4"></rect><path fill="#0D99FF" d="M5.39 4.207a1 1 0 0 1 .84-.181l5.058 1.189.227.06a4.87 4.87 0 0 1 3.522 4.845l.672.672a1 1 0 0 1 0 1.414l-3.5 3.5a1 1 0 0 1-1.414 0l-.673-.673a4.87 4.87 0 0 1-4.845-3.52l-.06-.227-1.19-5.057a1 1 0 0 1 .267-.937l1-1zm.464.938 3.132 3.132a2 2 0 1 1-.707.707L5.147 5.852l-.146.147 1.19 5.058a3.867 3.867 0 0 0 4.31 2.941l1 1.001 3.5-3.5-1-1a3.87 3.87 0 0 0-2.942-4.31l-5.058-1.19zm4.147 3.853a1 1 0 1 0 0 2 1 1 0 0 0 0-2"></path></svg>',
+      groups: [
+        { cat: 'Read Design', features: [
+          { label: 'โครงสร้าง layout / nodes', label_en:'Layout structure / nodes', desc:'อ่านโครงสร้างทั้งไฟล์เป็น tree ของ frame/group/layer ให้ AI เข้าใจ hierarchy ก่อนแก้หรือ gen code', eg:'ดึง node หน้า Login มาดูว่ามี input/button ซ้อนกันยังไง แล้วสั่งแปลงเป็น React', official:['get_design_context'], framelink:['get_figma_data'], console:['figma_get_file_data','figma_get_selection'], claudetalk:['get_document_info','read_my_design'], sunnyside:['get_figma_data','get_figma_page_structure'] },
+          { label: 'Screenshot / export image',   desc:'แคปภาพ node หรือ export เป็นไฟล์รูป ใช้ตรวจงานจริงหรือแนบให้ AI ดู visual', eg:'export ปุ่ม CTA เป็น PNG @2x ไปแปะใน PR หรือให้ AI ตรวจ alignment', official:['get_screenshot'],    framelink:['download_figma_images'],console:['figma_take_screenshot','figma_capture_screenshot'], claudetalk:['export_node_as_image'], sunnyside:['download_figma_images'] },
+          { label: 'Metadata (file / node)',       desc:'ดึงข้อมูลย่อของ node เช่น ขนาด ตำแหน่ง ชื่อ ชนิด โดยไม่ต้องโหลด tree ทั้งก้อน', eg:'เช็กว่า frame กว้าง 375px ตรง spec มือถือไหม ก่อนส่งต่อ dev', official:['get_metadata'],      framelink:['get_figma_data'],       console:['figma_get_file_data'],    claudetalk:['get_node_info','get_nodes_info'],  sunnyside:['get_figma_project_overview'] },
+          { label: 'Components & library',         since:'2026-05', desc:'อ่าน component และ library ที่ผูกไว้ ดูว่ามี variant/instance อะไรใช้ได้บ้าง', eg:'list ปุ่มทุก variant ใน design system แล้วเลือก Primary/Large มาวาง', official:['get_libraries'],      framelink:['get_figma_data'],       console:['figma_get_component','figma_get_library_components','figma_search_components'], claudetalk:['get_local_components'], sunnyside:['analyze_figma_components'] },
+          { label: 'Styles (color / text)',        desc:'อ่าน color/text style ที่ define ไว้ในไฟล์ ดูค่าจริงของแต่ละ style', eg:'ดึงสี Primary/500 กับ Heading style มาเทียบกับ token ใน code', official:[],                    framelink:['get_figma_data'],       console:['figma_get_styles','figma_get_text_styles'], claudetalk:['get_styles'], sunnyside:[] },
+          { label: 'Create new Figma file',        since:'2026-05', desc:'สร้างไฟล์ Figma ใหม่จาก AI โดยไม่ต้องเปิด app เอง', eg:'สั่งสร้างไฟล์เปล่าชื่อ Landing v2 แล้วเริ่ม gen layout ต่อ', official:['create_new_file'],    framelink:[],                       console:[],          claudetalk:[], sunnyside:[] },
+          { label: 'Design changes log',           since:'2026-05', desc:'ดู forensic ว่าใน session มีการแก้ property อะไรบ้างราย node', eg:'เช็กว่าใครเปลี่ยนสี background ของ Hero จากอะไรเป็นอะไร', official:[],                    framelink:[],                       console:['figma_get_design_changes'], claudetalk:[], sunnyside:[] },
+          { label: 'List open files',              since:'2026-05', desc:'ดูรายการไฟล์ที่เปิดอยู่ใน Figma Desktop ตอนนี้', eg:'เลือกไฟล์ที่กำลังทำงานก่อนสั่ง audit หรือ debug', official:[],                    framelink:[],                       console:['figma_list_open_files'],   claudetalk:[], sunnyside:[] },
+          { label: 'Get current selection',         since:'2026-05', desc:'อ่าน node ที่ผู้ใช้เลือกค้างไว้บน canvas ตอนนี้', eg:'เลือก frame บน Figma แล้วสั่ง AI ว่าแก้เฉพาะอันที่เลือก', official:[],                    framelink:[],                       console:[],                          claudetalk:['get_selection'], sunnyside:[] },
+          { label: 'Library component by key',      since:'2026-05', desc:'ดึง component จาก library ด้วย key ตรงๆ แม้ไม่ได้อยู่ในไฟล์', eg:'ดึง Button หลักจาก shared library มาใช้ในไฟล์ใหม่', official:[],                    framelink:[],                       console:['figma_get_library_component_by_key'], claudetalk:[], sunnyside:[] },
+          { label: 'Library variables (shared lib)',since:'2026-05', desc:'อ่าน variable/token ที่แชร์จาก library กลาง', eg:'ดึง spacing/color token จาก DS library มาใช้ข้ามไฟล์', official:[],                    framelink:[],                       console:['figma_get_library_variables'], claudetalk:[], sunnyside:[] },
+          { label: 'Import library variable',       since:'2026-05', desc:'นำ variable จาก library เข้ามาผูกใน collection ของไฟล์ปัจจุบัน', eg:'import token color/brand เข้าไฟล์นี้เพื่อใช้ binding', official:[],                    framelink:[],                       console:['figma_import_library_variable'], claudetalk:[], sunnyside:[] },
+          { label: 'Batch extract frames',          since:'2026-05', desc:'ดึงหลาย frame พร้อมกันในครั้งเดียว ประหยัดเวลา', eg:'ดึงทุก screen ของ flow checkout มา gen code รวดเดียว', official:[],                    framelink:[],                       console:[],                          claudetalk:[], sunnyside:['batch_extract_frames'] },
+          { label: 'Get all assets',                since:'2026-05', desc:'ดึง asset ทั้งหมด (รูป/ไอคอน/SVG) ในไฟล์ออกมา', eg:'export ไอคอนทุกตัวเป็น SVG ไปใส่โปรเจกต์', official:[],                    framelink:[],                       console:[],                          claudetalk:[], sunnyside:['get_figma_assets'] },
+          { label: 'App structure & flow mapping',  since:'2026-05', desc:'วิเคราะห์โครงสร้างแอปและ map การเชื่อมต่อระหว่างหน้า', eg:'สร้างแผนผัง flow จาก Home ไป Cart ไป Checkout อัตโนมัติ', official:[],                    framelink:[],                       console:[],                          claudetalk:[], sunnyside:['analyze_app_structure','map_app_flow'] },
+          { label: 'Dev mode history',              since:'2026-05', desc:'ดูประวัติการดึง code ใน Dev Mode ที่ผ่านมา', eg:'ย้อนดูว่าเคย gen component ไหนไปแล้วบ้าง', official:[],                    framelink:[],                       console:[],                          claudetalk:[], sunnyside:['get_figma_dev_history'] },
+          { label: 'Plugin project overview',       since:'2026-05', desc:'สรุปภาพรวมโปรเจกต์ผ่าน plugin bridge', eg:'ดูจำนวนหน้า/component/ขนาดไฟล์ก่อนเริ่มงาน', official:[],                    framelink:[],                       console:[],                          claudetalk:[], sunnyside:['get_plugin_project_overview'] },
+        ]},
+        { cat: 'Variables & Design Tokens', features: [
+          { label: 'Read variables / tokens',      desc:'อ่านค่า variable/token ทั้งหมดในไฟล์ ทั้งสี ระยะ ตัวเลข', eg:'ดึง color/spacing token ออกมาเทียบกับตัวแปรใน CSS', official:['get_variable_defs'], framelink:[], console:['figma_get_variables','figma_browse_tokens','figma_get_token_values'], claudetalk:[], sunnyside:['extract_design_tokens'] },
+          { label: 'Create / update variable',     desc:'สร้าง แก้ เปลี่ยนชื่อ หรือลบ variable ทีละตัว', eg:'สร้าง token color/brand = #0D99FF แล้วแก้ค่าทีหลังได้', official:[],                    framelink:[], console:['figma_create_variable','figma_update_variable','figma_rename_variable','figma_delete_variable'], claudetalk:[], sunnyside:[] },
+          { label: 'Batch create variables (10+)', desc:'สร้าง variable จำนวนมากพร้อมกันรอบเดียว ไม่ติด rate limit', eg:'นำเข้า scale สี 50 ค่าจาก JSON มาสร้างเป็น token รวดเดียว', official:[],                    framelink:[], console:['figma_batch_create_variables'], claudetalk:[], sunnyside:[] },
+          { label: 'Batch update variables',       since:'2026-05', desc:'แก้ค่า variable หลายตัวพร้อมกันในครั้งเดียว', eg:'ปรับ spacing ทุกค่าให้ +2px ทีเดียวทั้ง collection', official:[],                    framelink:[], console:['figma_batch_update_variables'], claudetalk:[], sunnyside:[] },
+          { label: 'Variable collection & modes',  desc:'จัดการ collection และ mode เช่น light/dark ของ variable', eg:'สร้าง mode Dark แล้ว map สีพื้นหลังให้สลับอัตโนมัติ', official:[],                    framelink:[], console:['figma_create_variable_collection','figma_delete_variable_collection','figma_add_mode','figma_rename_mode'], claudetalk:[], sunnyside:[] },
+          { label: 'Design token setup',           desc:'ตั้งโครงสร้าง design token ทั้งระบบให้พร้อมใช้', eg:'gen ชุด token color/space/radius ครบตามมาตรฐาน DS', official:[],                    framelink:[], console:['figma_setup_design_tokens'], claudetalk:[], sunnyside:[] },
+          { label: 'Token conflict detection',     desc:'ตรวจหา token ที่ชนกันหรือซ้ำซ้อน พร้อมแนะวิธีแก้', eg:'เจอว่า color/primary กับ color/brand ชี้สีเดียวกัน เตือนให้รวม', official:[],                    framelink:[], console:[], claudetalk:[], sunnyside:['partial'] },
+          { label: 'Token simulation & rollback',  since:'2026-05', desc:'ลองเปลี่ยน token แบบ preview ก่อนใช้จริง และย้อนกลับได้', eg:'ลองเปลี่ยน radius เป็น 12px ดูผลทั้งไฟล์ ไม่ชอบก็ rollback', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['simulate_token_change','apply_token_change','rollback_token_change'] },
+          { label: 'Token change impact analysis', since:'2026-05', desc:'วิเคราะห์ว่าถ้าแก้ token นี้จะกระทบ component ไหนบ้าง', eg:'ดูว่าเปลี่ยน color/primary แล้วกระทบ 38 component', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['analyze_token_change_impact','list_token_simulations'] },
+          { label: 'Generate migration code',      since:'2026-05', desc:'สร้าง code สำหรับย้าย token เก่าไปค่าใหม่ใน codebase', eg:'gen find-replace script เปลี่ยนชื่อ token ทั้งโปรเจกต์', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['generate_migration_code'] },
+          { label: 'Export tokens (CSS/SCSS/JSON/Tailwind)', since:'2026-05', desc:'ส่งออก token เป็นไฟล์หลายฟอร์แมตให้ dev ใช้ต่อ', eg:'export เป็น CSS variables + Tailwind config พร้อมใช้', official:[], framelink:[], console:['figma_export_tokens'], claudetalk:[], sunnyside:[] },
+          { label: 'Import tokens from file',      since:'2026-05', desc:'นำเข้า token จากไฟล์ภายนอกเข้าสู่ Figma', eg:'import tokens.json จาก repo เข้ามาสร้างเป็น variable', official:[], framelink:[], console:['figma_import_tokens'], claudetalk:[], sunnyside:[] },
+          { label: 'Variable definitions (full schema)', since:'2026-05', desc:'ดึงนิยาม variable แบบเต็มทั้ง type/scope/alias', eg:'ดู schema ของ token เพื่อ gen TypeScript type ที่ตรง', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['get_figma_variable_definitions'] },
+        ]},
+        { cat: 'Write Canvas', features: [
+          { label: 'Create element (rect/frame/text)',since:'2026-05', desc:'สร้าง element ใหม่บน canvas เช่น สี่เหลี่ยม frame หรือ text', eg:'สั่ง AI สร้าง frame การ์ดสินค้า พร้อม text ราคาข้างใน', official:['partial'],        framelink:[], console:['figma_create_child'], claudetalk:['create_rectangle','create_frame','create_text'], sunnyside:[] },
+          { label: 'Create instance node',        since:'2026-05', desc:'วาง instance ของ component ที่มีอยู่ลงบน canvas', eg:'วางปุ่ม Primary จาก DS ลง 3 จุดในหน้า form', official:['partial'],           framelink:[], console:['figma_instantiate_component'], claudetalk:['create_component_instance'], sunnyside:[] },
+          { label: 'Resize / move node',           since:'2026-05', desc:'ปรับขนาดหรือย้ายตำแหน่ง node', eg:'ย้าย CTA ไปกึ่งกลางและขยายกว้างเป็น 320px', official:['partial'],           framelink:[], console:['figma_resize_node','figma_move_node'], claudetalk:['resize_node','move_node'], sunnyside:[] },
+          { label: 'Clone / delete node',          since:'2026-05', desc:'ทำสำเนาหรือลบ node ทีละตัว/หลายตัว', eg:'clone การ์ดตัวอย่างไป 5 ใบ แล้วลบใบที่เกิน', official:['partial'],           framelink:[], console:['figma_clone_node','figma_delete_node'], claudetalk:['clone_node','delete_node','delete_multiple_nodes'], sunnyside:[] },
+          { label: 'Set fills / colors',           since:'2026-05', desc:'กำหนดสีพื้น/fill ให้ node', eg:'เปลี่ยนสีพื้น Hero เป็น token color/brand', official:['partial'],           framelink:[], console:['figma_set_fills'], claudetalk:['set_fill_color'], sunnyside:[] },
+          { label: 'Set strokes',                  since:'2026-05', desc:'กำหนดเส้นขอบ สี และความหนาของ stroke', eg:'ใส่ขอบ 1px สีเทาให้ input field ทุกอัน', official:['partial'],           framelink:[], console:['figma_set_strokes'], claudetalk:['set_stroke_color'], sunnyside:[] },
+          { label: 'Set text content',             since:'2026-05', desc:'แก้ข้อความใน text node ทีละจุดหรือหลายจุด', eg:'แทนที่ Lorem ipsum ทั้งหน้าด้วย copy จริง', official:['partial'],           framelink:[], console:['figma_set_text'], claudetalk:['set_text_content','set_multiple_text_contents'], sunnyside:[] },
+          { label: 'Scan text nodes',              since:'2026-05', desc:'สแกนหา text node ทั้งหมดในขอบเขตที่เลือก', eg:'หาทุก text ในหน้าเพื่อทำ i18n รวดเดียว', official:[],                  framelink:[], console:[], claudetalk:['scan_text_nodes'], sunnyside:[] },
+          { label: 'Set corner radius',            since:'2026-05', desc:'ปรับความโค้งมุมของ node', eg:'ตั้ง radius การ์ดทุกใบเป็น 12px ให้เท่ากัน', official:['partial'],          framelink:[], console:[], claudetalk:['set_corner_radius'], sunnyside:[] },
+          { label: 'Image fill',                   desc:'ใส่รูปเป็น fill ของ node', eg:'วางรูปสินค้าเป็นพื้นหลังของ thumbnail frame', official:[],                    framelink:[], console:['figma_set_image_fill'], claudetalk:['set_image'], sunnyside:[] },
+          { label: 'SVG import / export',          desc:'นำเข้า/ส่งออก vector เป็น SVG', eg:'import โลโก้ SVG เข้า canvas หรือ export ไอคอนออก', official:[],                    framelink:['download_figma_images'], console:[], claudetalk:['set_svg','get_svg'], sunnyside:['partial'] },
+          { label: 'Boolean operations',           desc:'รวม/ตัด/ซ้อน vector ด้วย union, subtract ฯลฯ', eg:'subtract วงกลมออกจากสี่เหลี่ยมเพื่อทำไอคอนแหวน', official:[],                    framelink:[], console:[], claudetalk:['boolean_operation'], sunnyside:[] },
+          { label: 'Grid / guides',                desc:'ตั้ง layout grid และเส้น guide ช่วยจัดวาง', eg:'วาง 12-column grid ให้หน้า desktop', official:[],                    framelink:[], console:[], claudetalk:['set_grid','get_grid','set_guide'], sunnyside:[] },
+          { label: 'Convert to frame',             desc:'แปลง group/element เป็น frame เพื่อใช้ auto layout', eg:'แปลง group การ์ดเป็น frame ก่อนเปิด auto layout', official:[],                    framelink:[], console:[], claudetalk:['convert_to_frame'], sunnyside:[] },
+          { label: 'Rename node',                  desc:'เปลี่ยนชื่อ layer/node ให้สื่อความ', eg:'เปลี่ยน Frame 12 เป็น CardProduct ให้ handoff อ่านง่าย', official:[],                    framelink:[], console:['figma_rename_node'], claudetalk:[], sunnyside:[] },
+          { label: 'Upload assets',                since:'2026-05', desc:'อัปโหลดรูป/asset เข้าไฟล์ Figma', eg:'อัปรูป hero จากเครื่องเข้ามาใช้บน canvas', official:['upload_assets'],     framelink:[], console:[], claudetalk:[], sunnyside:[] },
+          { label: 'Set instance properties',      since:'2026-05', desc:'ตั้งค่า property/override ของ instance เช่น text, variant', eg:'ตั้งปุ่ม instance ให้เป็น variant Danger + label ลบ', official:[],framelink:[], console:['figma_set_instance_properties'], claudetalk:['set_instance_overrides'], sunnyside:[] },
+        ]},
+        { cat: 'Component Properties', features: [
+          { label: 'Add component property',    since:'2026-05', desc:'เพิ่ม property ให้ component เช่น variant, boolean, text', eg:'เพิ่ม prop hasIcon (boolean) ให้ปุ่มสลับมีไอคอน', official:[], framelink:[], console:['figma_add_component_property'],    claudetalk:[], sunnyside:[] },
+          { label: 'Edit component property',   since:'2026-05', desc:'แก้ไขนิยาม property ของ component', eg:'เปลี่ยนค่า default ของ prop size จาก M เป็น L', official:[], framelink:[], console:['figma_edit_component_property'],   claudetalk:[], sunnyside:[] },
+          { label: 'Delete component property', since:'2026-05', desc:'ลบ property ที่ไม่ใช้ออกจาก component', eg:'ลบ prop legacy ที่เลิกใช้แล้วออกจาก Button', official:[], framelink:[], console:['figma_delete_component_property'], claudetalk:[], sunnyside:[] },
+          { label: 'Arrange component set',     since:'2026-05', desc:'จัดเรียง variant ใน component set ให้เป็นระเบียบ', eg:'เรียง variant เป็นตาราง size × state อัตโนมัติ', official:[], framelink:[], console:['figma_arrange_component_set'],     claudetalk:[], sunnyside:[] },
+          { label: 'Get component details',     since:'2026-05', desc:'ดึงรายละเอียดเต็มของ component', eg:'ดู prop/variant/description ทั้งหมดของ Input', official:[], framelink:[], console:['figma_get_component_details'],     claudetalk:[], sunnyside:[] },
+          { label: 'Get component image',       since:'2026-05', desc:'render รูป preview ของ component', eg:'ดึงภาพ Button ทุก variant ไปทำ doc', official:[], framelink:[], console:['figma_get_component_image'],       claudetalk:[], sunnyside:[] },
+          { label: 'Get / set instance overrides', since:'2026-05', desc:'อ่านหรือเขียน override ของ instance', eg:'copy override จาก card ต้นแบบไปทุก instance', official:[], framelink:[], console:[], claudetalk:['get_instance_overrides','set_instance_overrides'], sunnyside:[] },
+        ]},
+        { cat: 'Auto Layout', features: [
+          { label: 'Set layout mode',           since:'2026-05', desc:'เปิด auto layout แนวตั้ง/แนวนอนให้ frame', eg:'ตั้ง frame เมนูให้เรียง item แนวนอนอัตโนมัติ', official:[], framelink:[], console:[], claudetalk:['set_layout_mode'],  sunnyside:[] },
+          { label: 'Set padding',               since:'2026-05', desc:'ตั้งระยะ padding ภายใน frame', eg:'ใส่ padding 16px รอบเนื้อหาในการ์ด', official:[], framelink:[], console:[], claudetalk:['set_padding'],      sunnyside:[] },
+          { label: 'Set axis alignment',        since:'2026-05', desc:'จัด alignment ของ item ตามแกน', eg:'จัด item ให้ชิดกลางทั้งแนวตั้งและนอน', official:[], framelink:[], console:[], claudetalk:['set_axis_align'],   sunnyside:[] },
+          { label: 'Set layout sizing',         since:'2026-05', desc:'ตั้ง sizing เป็น fixed/hug/fill ให้ item', eg:'ตั้ง input ให้ fill กว้างเต็ม container', official:[], framelink:[], console:[], claudetalk:['set_layout_sizing'],sunnyside:[] },
+          { label: 'Set item spacing',          since:'2026-05', desc:'ตั้งระยะห่างระหว่าง item ใน auto layout', eg:'ตั้ง gap ระหว่างปุ่มเป็น 8px', official:[], framelink:[], console:[], claudetalk:['set_item_spacing'], sunnyside:[] },
+        ]},
+        { cat: 'Design System & Audit', features: [
+          { label: 'Design system audit (scorecard)', since:'2026-05', desc:'ประเมินสุขภาพ design system เป็นคะแนน 0-100 แบบ Lighthouse', eg:'รัน audit แล้วได้ 72/100 พร้อมจุดที่ควรแก้', official:[],                 framelink:[], console:['figma_audit_design_system','figma_get_design_system_summary'], claudetalk:[], sunnyside:[] },
+          { label: 'Component accessibility scan',    since:'2026-05', desc:'สแกน a11y ของ component เช่น contrast, touch target', eg:'เตือนว่าปุ่มเล็กกว่า 44px และ contrast ต่ำกว่า 4.5:1', official:[],                 framelink:[], console:['figma_audit_component_accessibility'], claudetalk:['partial'], sunnyside:[] },
+          { label: 'Design parity check (code↔design)', since:'2026-05', desc:'เทียบ design กับ code ว่าตรงกันไหม หา drift', eg:'พบว่า Button ใน code radius 8px แต่ design 12px', official:[],              framelink:[], console:['figma_check_design_parity'], claudetalk:[], sunnyside:[] },
+          { label: 'Design lint',                     since:'2026-05', desc:'ตรวจ design ตามกฎ เช่น สีนอก token, spacing ไม่ตรง grid', eg:'flag layer ที่ใช้สี hardcode แทน token', official:[],                 framelink:[], console:['figma_lint_design'], claudetalk:[], sunnyside:[] },
+          { label: 'WCAG / axe-core scan (104 rules)',since:'2026-05', desc:'สแกน accessibility ด้วยกฎ axe-core 104 ข้อ + จำลองตาบอดสี', eg:'ตรวจทั้งหน้าแล้วได้ list ปัญหา WCAG พร้อมระดับ', official:[],                 framelink:[], console:['figma_scan_code_accessibility'], claudetalk:['partial'], sunnyside:[] },
+          { label: 'Generate component doc',          since:'2026-05', desc:'สร้างเอกสารประกอบ component อัตโนมัติ', eg:'gen doc ของ Input พร้อม prop table และตัวอย่าง', official:[],                 framelink:[], console:['figma_generate_component_doc'], claudetalk:[], sunnyside:[] },
+          { label: 'Component details for dev',       since:'2026-05', desc:'ดึงข้อมูล component เชิงลึกสำหรับ dev นำไป implement', eg:'ดึง spec + token + structure ของการ์ดไปเขียน code', official:[],                 framelink:[], console:['figma_get_component_for_development','figma_get_component_for_development_deep'], claudetalk:[], sunnyside:[] },
+          { label: 'Analyze component set',           since:'2026-05', desc:'วิเคราะห์ component set ว่ามี variant ครบ/ขาดอะไร', eg:'ตรวจว่า Button ขาด variant Disabled', official:[],                 framelink:[], console:['figma_analyze_component_set'], claudetalk:[], sunnyside:[] },
+          { label: 'Get design system kit',           since:'2026-05', desc:'ดึงชุด design system ทั้งก้อน (token+component+style)', eg:'ดึง DS kit ทั้งหมดไปตั้งต้นโปรเจกต์ใหม่', official:[],                 framelink:[], console:['figma_get_design_system_kit'], claudetalk:[], sunnyside:[] },
+          { label: 'Create design system rules',      since:'2026-05', desc:'สร้างกฎ DS ให้ AI ยึดตามตอน gen code', eg:'gen rule ว่าให้ใช้ component จาก library เท่านั้น', official:['create_design_system_rules'], framelink:[], console:[], claudetalk:[], sunnyside:[] },
+          { label: 'Search design system',            since:'2026-05', desc:'ค้นหา component/token ใน design system', eg:'ค้นหา token ที่ชื่อมี spacing เพื่อเลือกใช้', official:['search_design_system'],       framelink:[], console:[], claudetalk:[], sunnyside:[] },
+          { label: 'Analyze figma components',        since:'2026-05', desc:'วิเคราะห์ component ในไฟล์ว่าใช้งานยังไง', eg:'ดูว่าการ์ดไหนถูกใช้ซ้ำมากที่สุด', official:[],                framelink:[], console:[], claudetalk:[], sunnyside:['analyze_figma_components'] },
+          { label: 'Track design system health',      since:'2026-05', desc:'ติดตามสุขภาพ DS และสร้าง dependency graph', eg:'ดูว่าแก้ token นี้กระทบ component ลูกตัวไหนบ้าง', official:[],                framelink:[], console:[], claudetalk:[], sunnyside:['track_design_system_health','build_dependency_graph'] },
+        ]},
+        { cat: 'Plugin Debugging', features: [
+          { label: 'Get console logs',             desc:'อ่าน log จาก plugin/console ของ Figma เพื่อ debug', eg:'ดู error ที่ plugin โยนออกมาตอน run script', official:[], framelink:[], console:['figma_get_console_logs'], claudetalk:[], sunnyside:[] },
+          { label: 'Watch console (live stream)',  desc:'สตรีม log แบบ real-time ขณะ plugin ทำงาน', eg:'ดู log ไหลสดตอนทดสอบ flow ใน plugin', official:[], framelink:[], console:['figma_watch_console'],    claudetalk:[], sunnyside:[] },
+          { label: 'Clear console',               desc:'ล้าง log เก่าออกก่อนเริ่มทดสอบรอบใหม่', eg:'เคลียร์ console ก่อน reproduce bug ให้เห็นชัด', official:[], framelink:[], console:['figma_clear_console'],    claudetalk:[], sunnyside:[] },
+          { label: 'Reload plugin',               desc:'รีโหลด plugin โดยไม่ต้องปิดเปิด Figma', eg:'reload หลังแก้ code plugin เพื่อเห็นผลทันที', official:[], framelink:[], console:['figma_reload_plugin'],    claudetalk:[], sunnyside:[] },
+          { label: 'Execute arbitrary plugin code',desc:'รัน script ใดๆ ใน context ของ Figma plugin', eg:'รัน snippet หาทุก node ที่ซ่อนอยู่แล้วลบ', official:[], framelink:[], console:['figma_execute'],         claudetalk:[], sunnyside:[] },
+          { label: 'Get plugin status',           desc:'เช็กสถานะการเชื่อมต่อ plugin/bridge', eg:'ดูว่า bridge ยังต่ออยู่ไหมก่อนสั่ง debug', official:[], framelink:[], console:['figma_get_status'],           claudetalk:[], sunnyside:[] },
+          { label: 'Reconnect to Figma',          since:'2026-05', desc:'เชื่อมต่อ Figma ใหม่เมื่อ session หลุด', eg:'reconnect หลัง console ถูก clear แล้ว monitor หลุด', official:[], framelink:[], console:['figma_reconnect'],        claudetalk:[], sunnyside:[] },
+          { label: 'Get file for plugin',         since:'2026-05', desc:'ดึงข้อมูลไฟล์ในรูปแบบที่ plugin ใช้ต่อได้', eg:'ดึง file data ดิบไปประมวลผลใน plugin เอง', official:[], framelink:[], console:['figma_get_file_for_plugin'], claudetalk:[], sunnyside:[] },
+          { label: 'Diagnose plugin health',       since:'2026-05', desc:'ตรวจสุขภาพการเชื่อมต่อ plugin/dev bridge', eg:'รัน diagnose เจอว่า bridge plugin ไม่ได้เปิด', official:[], framelink:[], console:['figma_diagnose'], claudetalk:[], sunnyside:['check_figma_dev_connection'] },
+          { label: 'Pair plugin (Desktop auth)',   since:'2026-05', desc:'จับคู่/ยืนยันตัวตนกับ Figma Desktop plugin', eg:'pair ครั้งแรกเพื่อให้ MCP คุย Desktop ได้', official:[], framelink:[], console:['figma_pair_plugin'], claudetalk:[], sunnyside:[] },
+        ]},
+        { cat: 'Version History', features: [
+          { label: 'List file versions',          since:'2026-05', desc:'ดูรายการ version history ทั้งหมดของไฟล์', eg:'ดูว่าไฟล์ถูก save เป็น named version ตอนไหนบ้าง', official:[], framelink:[], console:['figma_get_file_versions'],        claudetalk:[], sunnyside:[] },
+          { label: 'Get file at version',         since:'2026-05', desc:'ดึงไฟล์ ณ version ที่ระบุย้อนหลัง', eg:'เปิดดูดีไซน์เมื่อ 2 สัปดาห์ก่อนเทียบกับตอนนี้', official:[], framelink:[], console:['figma_get_file_at_version'],      claudetalk:[], sunnyside:[] },
+          { label: 'Changes since version',       since:'2026-05', desc:'ดูว่ามีอะไรเปลี่ยนตั้งแต่ version หนึ่งจนถึงปัจจุบัน', eg:'สรุปสิ่งที่แก้ตั้งแต่ส่ง dev รอบที่แล้ว', official:[], framelink:[], console:['figma_get_changes_since_version'], claudetalk:[], sunnyside:[] },
+          { label: 'Diff two versions',           since:'2026-05', desc:'เทียบความต่างระหว่าง 2 version แบบ side-by-side', eg:'diff v3 กับ v5 ดูว่า component ไหนเปลี่ยน', official:[], framelink:[], console:['figma_diff_versions'],            claudetalk:[], sunnyside:[] },
+          { label: 'Generate changelog',          since:'2026-05', desc:'สร้าง changelog อัตโนมัติจาก version history', eg:'gen changelog สำหรับ release note ของดีไซน์', official:[], framelink:[], console:['figma_generate_changelog'],        claudetalk:[], sunnyside:[] },
+          { label: 'Blame node (last editor)',    since:'2026-05', desc:'ดูว่าใครแก้ node นี้ล่าสุด คล้าย git blame', eg:'เช็กว่าใครเปลี่ยนสีปุ่มนี้และเมื่อไหร่', official:[], framelink:[], console:['figma_blame_node'],               claudetalk:[], sunnyside:[] },
+        ]},
+        { cat: 'Code Connect', features: [
+          { label: 'Get code connect map',        desc:'อ่าน mapping ที่ผูก component Figma กับ component ใน code', eg:'ดูว่า Button ใน Figma ผูกกับ <Button> ไฟล์ไหน', official:['get_code_connect_map'],         framelink:[], console:[], claudetalk:[], sunnyside:[] },
+          { label: 'Send mappings to Figma',      desc:'ส่ง mapping code↔design กลับขึ้น Figma', eg:'อัปเดต Code Connect ให้ dev เห็น snippet ใน Dev Mode', official:['send_code_connect_mappings'],   framelink:[], console:[], claudetalk:[], sunnyside:[] },
+          { label: 'Code connect suggestions',    since:'2026-05', desc:'แนะนำว่า component Figma ควรผูกกับไฟล์ code ไหน', eg:'AI เดาว่า Card น่าจะ map กับ Card.tsx', official:['get_code_connect_suggestions'], framelink:[], console:[], claudetalk:[], sunnyside:[] },
+          { label: 'Context for code connect',    since:'2026-05', desc:'ดึง context ที่จำเป็นก่อนทำ Code Connect mapping', eg:'ดึง prop/variant ของ component ไปช่วยเขียน mapping', official:['get_context_for_code_connect'], framelink:[], console:[], claudetalk:[], sunnyside:[] },
+          { label: 'Add code connect map',        since:'2026-05', desc:'เพิ่ม mapping ใหม่ระหว่าง component Figma กับ code', eg:'ผูก Input ใน Figma เข้ากับ Input.tsx ใหม่', official:['add_code_connect_map'],         framelink:[], console:[], claudetalk:[], sunnyside:[] },
+        ]},
+        { cat: 'Collaboration', features: [
+          { label: 'Post / get / delete comments', desc:'อ่าน เขียน หรือลบ comment บนไฟล์', eg:'โพสต์ comment ฝาก dev ว่าปุ่มนี้ต้องลิงก์ไปหน้าไหน', official:[], framelink:[], console:['figma_post_comment','figma_get_comments','figma_delete_comment'], claudetalk:[], sunnyside:[] },
+          { label: 'Annotations',                  since:'2026-05', desc:'จัดการ annotation บอก spec ติดกับ node สำหรับ handoff', eg:'แปะ annotation บอกว่า input นี้ required + max 50 ตัว', official:[], framelink:[], console:['figma_get_annotations','figma_set_annotations','figma_get_annotation_categories'], claudetalk:['get_annotations','set_annotation','set_multiple_annotations'], sunnyside:[] },
+          { label: 'Scan nodes by type',           since:'2026-05', desc:'ค้นหา node ตามชนิด เช่น text, frame, instance', eg:'หา instance ทั้งหมดในหน้าเพื่อเช็ก override', official:[], framelink:[], console:[], claudetalk:['scan_nodes_by_types'], sunnyside:[] },
+          { label: 'Focus / select node',          since:'2026-05', desc:'เลื่อนไปโฟกัสหรือเลือก node บน canvas', eg:'สั่งให้ Figma เลื่อนไปที่ปุ่ม CTA แล้วเลือกไว้', official:[], framelink:[], console:['figma_navigate'], claudetalk:['set_focus','set_selections'], sunnyside:[] },
+          { label: 'Set node description',         desc:'ตั้งคำอธิบายให้ node/component', eg:'ใส่ description บอกวิธีใช้ Badge component', official:[], framelink:[], console:['figma_set_description'], claudetalk:[], sunnyside:[] },
+          { label: 'Navigate to node',             desc:'พา view ไปยัง node ที่ระบุ', eg:'jump ไปที่ frame Checkout ทันทีจาก AI', official:[], framelink:[], console:['figma_navigate'], claudetalk:[], sunnyside:[] },
+        ]},
+        { cat: 'Code Generation', features: [
+          { label: 'Design → code (general)',      desc:'แปลงดีไซน์เป็น code ทั่วไปให้ AI นำไปต่อ', eg:'ดึงหน้า Pricing มาเป็นโครง markup พร้อม style', official:['get_design_context'], framelink:['get_figma_data'], console:['partial'], claudetalk:['yes'], sunnyside:['yes'] },
+          { label: 'React',                        desc:'gen เป็น React component', eg:'แปลงการ์ดสินค้าเป็น ProductCard.tsx พร้อม props', official:['yes'],                framelink:['yes'],            console:['partial'], claudetalk:['yes'], sunnyside:['get_react_component'] },
+          { label: 'Vue',                          desc:'gen เป็น Vue component', eg:'แปลง navbar เป็น .vue SFC พร้อม template', official:[],                     framelink:[],                 console:[],          claudetalk:['yes'], sunnyside:['yes'] },
+          { label: 'Angular',                      desc:'gen เป็น Angular component', eg:'แปลง form เป็น component + template ของ Angular', official:[],                     framelink:[],                 console:[],          claudetalk:[],      sunnyside:['yes'] },
+          { label: 'SwiftUI',                      desc:'gen เป็น SwiftUI สำหรับ iOS', eg:'แปลงหน้า profile เป็น View ของ SwiftUI', official:[],                     framelink:[],                 console:[],          claudetalk:['yes'], sunnyside:[] },
+          { label: 'CSS Modules / Tailwind',       desc:'gen style เป็น CSS Modules หรือ Tailwind class', eg:'แปลงการ์ดเป็น JSX + Tailwind class ครบ', official:[],                     framelink:['yes'],            console:[],          claudetalk:[],      sunnyside:['get_tailwind_component'] },
+          { label: 'Styled-components',            since:'2026-05', desc:'gen style เป็น styled-components', eg:'แปลงปุ่มเป็น const Button = styled.button', official:[],framelink:[],               console:[],          claudetalk:[],      sunnyside:['get_styled_component'] },
+          { label: 'Dev mode code',                since:'2026-05', desc:'ดึง code จาก Dev Mode ของ Figma โดยตรง', eg:'ดึง CSS/measurement จาก Dev Mode มาใช้เลย', official:[],framelink:[],               console:[],          claudetalk:[],      sunnyside:['get_figma_dev_mode_code'] },
+          { label: 'Token-efficient output (~90%)',desc:'ส่ง output ที่ย่อ token ลง ~90% ให้ AI อ่านประหยัด', eg:'ดึงไฟล์ใหญ่โดยใช้ token น้อยลงมากตอน gen', official:[],                     framelink:['yes'],            console:[],          claudetalk:[],      sunnyside:[] },
+          { label: 'Generate codegen plugin',      since:'2026-05', desc:'สร้าง plugin codegen เฉพาะทางให้โปรเจกต์', eg:'gen plugin ที่ output ตาม convention ทีมเอง', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['generate_codegen_plugin'] },
+        ]},
+        { cat: 'Prototype / Connections', features: [
+          { label: 'Get prototype reactions',  since:'2026-05', desc:'อ่าน interaction/reaction ของ prototype', eg:'ดูว่าปุ่มนี้ตั้ง on tap ไปหน้าไหน', official:[], framelink:[], console:[], claudetalk:['get_reactions'],          sunnyside:[] },
+          { label: 'Create connections',       since:'2026-05', desc:'สร้างเส้นเชื่อม flow ระหว่าง frame', eg:'เชื่อม Login → Home เมื่อกดปุ่ม Sign in', official:[], framelink:[], console:[], claudetalk:['create_connections'],      sunnyside:[] },
+          { label: 'Set default connector',    since:'2026-05', desc:'ตั้งรูปแบบเส้น connector เริ่มต้น', eg:'ตั้ง connector เป็นเส้นโค้งหัวลูกศรทุกอัน', official:[], framelink:[], console:[], claudetalk:['set_default_connector'],   sunnyside:[] },
+        ]},
+        { cat: 'Web Capture', features: [
+          { label: 'Capture webpage to Figma', since:'2026-05', desc:'ดึงหน้าเว็บจริงเข้ามาเป็น layer ใน Figma', eg:'capture หน้า landing คู่แข่งมาเป็น frame แก้ต่อ', official:['use_figma'], framelink:[], console:[], claudetalk:[], sunnyside:[] },
+        ]},
+      ]
+    },
+    figjam: {
+      label: 'FigJam', icon: '◈', iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20" aria-hidden="true"><rect width="20" height="20" fill="#F1E5FF" rx="4"></rect><path fill="#8638E5" d="M14 5a1 1 0 0 1 1 1v4.586l-.005.099a1 1 0 0 1-.288.608l-3.414 3.414-.073.066a1 1 0 0 1-.634.227H6l-.103-.005A1 1 0 0 1 5 14V6a1 1 0 0 1 1-1zm-8 9h4v-3a1 1 0 0 1 1-1h3V6H6zm5-.414L13.586 11H11z"></path></svg>',
+      groups: [
+        { cat: 'Read', features: [
+          { label: 'Get board contents',     desc:'อ่านสิ่งที่อยู่บนบอร์ด FigJam ทั้งหมด', eg:'ดึง sticky ทุกใบจาก brainstorm board มาสรุป', official:['get_figjam'], framelink:['partial'], console:['figjam_get_board_contents'], claudetalk:[], sunnyside:[] },
+          { label: 'Get connections / edges',since:'2026-05', desc:'อ่านเส้นเชื่อมระหว่าง object บนบอร์ด', eg:'ดูว่า node ไหนเชื่อมหา node ไหนใน flow chart', official:[],             framelink:[],          console:['figjam_get_connections'],   claudetalk:[], sunnyside:[] },
+        ]},
+        { cat: 'Write', features: [
+          { label: 'Create sticky note(s)',   desc:'สร้าง sticky note ทีละใบหรือหลายใบ', eg:'gen sticky 10 ใบจาก list ideas ที่พิมพ์มา', official:[], framelink:[], console:['figjam_create_sticky','figjam_create_stickies'], claudetalk:[], sunnyside:[] },
+          { label: 'Create connector',        desc:'ลากเส้นเชื่อมระหว่าง object บนบอร์ด', eg:'เชื่อม sticky A → B แสดงลำดับขั้นตอน', official:[], framelink:[], console:['figjam_create_connector'],       claudetalk:[], sunnyside:[] },
+          { label: 'Create section',          desc:'สร้าง section จัดกลุ่ม object บนบอร์ด', eg:'สร้าง section To do / Doing / Done สำหรับ kanban', official:[], framelink:[], console:['figjam_create_section'],         claudetalk:[], sunnyside:[] },
+          { label: 'Create shape with text',  desc:'สร้างรูปทรงพร้อมข้อความข้างใน', eg:'สร้างกล่อง process มีข้อความ Validate input', official:[], framelink:[], console:['figjam_create_shape_with_text'], claudetalk:[], sunnyside:[] },
+          { label: 'Create code block',       since:'2026-05', desc:'สร้าง code block พร้อม syntax highlight บนบอร์ด', eg:'แปะ snippet API ตัวอย่างไว้อธิบายทีม', official:[], framelink:[], console:['figjam_create_code_block'],      claudetalk:[], sunnyside:[] },
+          { label: 'Create table',            since:'2026-05', desc:'สร้างตารางบนบอร์ด FigJam', eg:'สร้างตารางเปรียบเทียบ option A/B/C', official:[], framelink:[], console:['figjam_create_table'],           claudetalk:[], sunnyside:[] },
+          { label: 'Auto arrange items',      since:'2026-05', desc:'จัดเรียง object บนบอร์ดให้เป็นระเบียบอัตโนมัติ', eg:'จัด sticky ที่กระจัดกระจายให้เป็น grid', official:[], framelink:[], console:['figjam_auto_arrange'],           claudetalk:[], sunnyside:[] },
+          { label: 'Generate diagram (Mermaid → FigJam)', since:'2026-05', desc:'แปลง Mermaid syntax เป็น diagram บน FigJam', eg:'พิมพ์ flowchart Mermaid แล้วได้ diagram จริง', official:['generate_diagram'], framelink:[], console:[], claudetalk:[], sunnyside:[] },
+        ]},
+      ]
+    },
+    slides: {
+      label: 'Figma Slides', icon: '▤', iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20" aria-hidden="true"><rect width="20" height="20" fill="#FFDFCC" rx="4"></rect><path fill="#FF5C16" d="M14.204 5.01A2 2 0 0 1 16 7v5l-.01.204a2 2 0 0 1-1.786 1.785L14 14h-.434l.412 1.354.02.1a.5.5 0 0 1-.937.285l-.04-.094-.5-1.645H7.479l-.5 1.646a.5.5 0 0 1-.958-.292L6.434 14H6l-.204-.01a2 2 0 0 1-1.785-1.786L4 12V7a2 2 0 0 1 1.796-1.99L6 5h8zM6 6a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V7a1 1 0 0 0-.898-.995L14 6zm1 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2m0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2"></path></svg>',
+      groups: [
+        { cat: 'Read', features: [
+          { label: 'List all slides',          since:'2026-05', desc:'ดูรายการ slide ทั้งหมดในเด็ค', eg:'ดูว่าเด็คมีกี่สไลด์ ชื่ออะไรบ้างก่อนแก้', official:[], framelink:[], console:['figma_list_slides'],      claudetalk:[], sunnyside:[] },
+          { label: 'Get slide content',        since:'2026-05', desc:'อ่านเนื้อหาในสไลด์ที่ระบุ', eg:'ดึง text และรูปจากสไลด์ที่ 3 มาแก้', official:[], framelink:[], console:['figma_get_slide_content'],claudetalk:[], sunnyside:[] },
+          { label: 'Get focused slide',        since:'2026-05', desc:'ดูว่ากำลังโฟกัสสไลด์ไหนอยู่ตอนนี้', eg:'ทำงานต่อจากสไลด์ที่ผู้ใช้เปิดค้างไว้', official:[], framelink:[], console:['figma_get_focused_slide'],claudetalk:[], sunnyside:[] },
+          { label: 'Get grid / transition',    since:'2026-05', desc:'อ่าน layout grid และ transition ของสไลด์', eg:'เช็กว่าสไลด์ใช้ transition แบบ fade ไหม', official:[], framelink:[], console:['figma_get_slide_grid','figma_get_slide_transition'], claudetalk:[], sunnyside:[] },
+        ]},
+        { cat: 'Write', features: [
+          { label: 'Create slide',             since:'2026-05', desc:'สร้างสไลด์ใหม่ในเด็ค', eg:'เพิ่มสไลด์ Agenda ต่อจากหน้าปก', official:[], framelink:[], console:['figma_create_slide'],    claudetalk:[], sunnyside:[] },
+          { label: 'Delete slide',             since:'2026-05', desc:'ลบสไลด์ที่ไม่ต้องการ', eg:'ลบสไลด์ซ้ำที่ท้ายเด็ค', official:[], framelink:[], console:['figma_delete_slide'],    claudetalk:[], sunnyside:[] },
+          { label: 'Duplicate slide',          since:'2026-05', desc:'ทำสำเนาสไลด์เป็น template', eg:'copy สไลด์ section header ไปใช้ทุกบท', official:[], framelink:[], console:['figma_duplicate_slide'], claudetalk:[], sunnyside:[] },
+          { label: 'Reorder slides',           since:'2026-05', desc:'จัดลำดับสไลด์ใหม่', eg:'ย้ายสไลด์สรุปไปไว้ก่อน Q&A', official:[], framelink:[], console:['figma_reorder_slides'],  claudetalk:[], sunnyside:[] },
+          { label: 'Add shape to slide',       since:'2026-05', desc:'เพิ่มรูปทรงลงในสไลด์', eg:'ใส่กล่องไฮไลต์ตัวเลขสำคัญในสไลด์', official:[], framelink:[], console:['figma_add_shape_to_slide'], claudetalk:[], sunnyside:[] },
+          { label: 'Add text to slide',        since:'2026-05', desc:'เพิ่มข้อความลงในสไลด์', eg:'เติม bullet points จาก outline ที่ให้มา', official:[], framelink:[], console:['figma_add_text_to_slide'], claudetalk:[], sunnyside:[] },
+          { label: 'Set background',           since:'2026-05', desc:'ตั้งพื้นหลังของสไลด์', eg:'เปลี่ยนพื้นหลังหน้าปกเป็นสีแบรนด์', official:[], framelink:[], console:['figma_set_slide_background'], claudetalk:[], sunnyside:[] },
+          { label: 'Set transition',           since:'2026-05', desc:'ตั้ง transition ระหว่างสไลด์', eg:'ตั้ง slide push เวลาเปลี่ยนหน้า', official:[], framelink:[], console:['figma_set_slide_transition'], claudetalk:[], sunnyside:[] },
+          { label: 'Focus / skip slide',       since:'2026-05', desc:'โฟกัสหรือข้ามสไลด์ตอนนำเสนอ', eg:'ตั้งให้ข้ามสไลด์ backup ตอน present', official:[], framelink:[], console:['figma_focus_slide','figma_skip_slide'], claudetalk:[], sunnyside:[] },
+          { label: 'Set slides view mode',     since:'2026-05', desc:'สลับโหมดมุมมองของเด็ค เช่น grid/present', eg:'เปลี่ยนเป็น grid view เพื่อจัดลำดับเร็วๆ', official:[], framelink:[], console:['figma_set_slides_view_mode'], claudetalk:[], sunnyside:[] },
+        ]},
+      ]
+    }
+  };
+
+  // English translations for feature desc/eg, keyed by (unique) label
+  const FEAT_TR = {
+    'โครงสร้าง layout / nodes': { d:"Read the whole file as a tree of frames/groups/layers so the AI grasps the hierarchy before editing or gen code", e:"Pull the Login screen nodes to see how inputs/buttons nest, then convert to React" },
+    'Screenshot / export image': { d:"Capture a node or export it as an image — for QA or attaching visuals for the AI", e:"Export the CTA button as PNG @2x for a PR, or have the AI check alignment" },
+    'Metadata (file / node)': { d:"Pull lightweight node info (size, position, name, type) without loading the whole tree", e:"Check a frame is 375px wide per the mobile spec before handoff" },
+    'Components & library': { d:"Read components and linked libraries — see which variants/instances are available", e:"List every button variant in the design system, then place Primary/Large" },
+    'Styles (color / text)': { d:"Read color/text styles defined in the file and their actual values", e:"Pull Primary/500 and the Heading style to compare with code tokens" },
+    'Create new Figma file': { d:"Create a new Figma file from the AI without opening the app", e:"Create an empty file named Landing v2, then start gen layout" },
+    'Design changes log': { d:"Forensic view of which properties changed per node during a session", e:"Check who changed the Hero background color and from what" },
+    'List open files': { d:"List files currently open in Figma Desktop", e:"Pick the file you are working on before running audit or debug" },
+    'Get current selection': { d:"Read the node the user currently has selected on the canvas", e:"Select a frame in Figma, then tell the AI to edit only that one" },
+    'Library component by key': { d:"Fetch a component from a library by key, even if not in the file", e:"Pull the main Button from a shared library into a new file" },
+    'Library variables (shared lib)': { d:"Read variables/tokens shared from a central library", e:"Pull spacing/color tokens from the DS library to use across files" },
+    'Import library variable': { d:"Bring a library variable into the current file's collection", e:"Import the color/brand token into this file for binding" },
+    'Batch extract frames': { d:"Pull many frames at once in a single call to save time", e:"Pull every screen in the checkout flow to gen code in one go" },
+    'Get all assets': { d:"Export all assets (images/icons/SVG) from the file", e:"Export every icon as SVG to drop into the project" },
+    'App structure & flow mapping': { d:"Analyze the app structure and map connections between screens", e:"Auto-build a flow map from Home to Cart to Checkout" },
+    'Dev mode history': { d:"View the history of code pulled in Dev Mode", e:"Look back at which components were already gen'd" },
+    'Plugin project overview': { d:"Summarize the project via the plugin bridge", e:"See page/component counts and file size before starting" },
+    'Read variables / tokens': { d:"Read all variables/tokens in the file — colors, spacing, numbers", e:"Pull color/spacing tokens to compare with CSS variables" },
+    'Create / update variable': { d:"Create, edit, rename or delete a variable one at a time", e:"Create token color/brand = #0D99FF and tweak it later" },
+    'Batch create variables (10+)': { d:"Create many variables at once in one pass, no rate limit", e:"Import a 50-value color scale from JSON into tokens at once" },
+    'Batch update variables': { d:"Update many variables at once in a single call", e:"Bump every spacing value by +2px across the collection at once" },
+    'Variable collection & modes': { d:"Manage collections and modes (e.g. light/dark) for variables", e:"Create a Dark mode and map backgrounds to swap automatically" },
+    'Design token setup': { d:"Set up a full design-token structure ready to use", e:"Gen a complete color/space/radius token set per DS standards" },
+    'Token conflict detection': { d:"Find clashing or duplicate tokens, with fix suggestions", e:"Spot color/primary and color/brand pointing to the same color and suggest merging" },
+    'Token simulation & rollback': { d:"Preview a token change before applying, with rollback", e:"Try radius 12px across the file, roll back if you don't like it" },
+    'Token change impact analysis': { d:"Analyze which components a token change would affect", e:"See that changing color/primary affects 38 components" },
+    'Generate migration code': { d:"Generate code to migrate old tokens to new values in the codebase", e:"Gen a find-replace script to rename tokens project-wide" },
+    'Export tokens (CSS/SCSS/JSON/Tailwind)': { d:"Export tokens to multiple file formats for devs", e:"Export to CSS variables + a ready-to-use Tailwind config" },
+    'Import tokens from file': { d:"Import tokens from an external file into Figma", e:"Import tokens.json from the repo to create variables" },
+    'Variable definitions (full schema)': { d:"Pull full variable definitions including type/scope/alias", e:"Inspect the token schema to gen matching TypeScript types" },
+    'Create element (rect/frame/text)': { d:"Create new elements on the canvas like a rectangle, frame or text", e:"Ask the AI to make a product-card frame with a price text inside" },
+    'Create instance node': { d:"Place an instance of an existing component on the canvas", e:"Place the Primary button from the DS at 3 spots in a form" },
+    'Resize / move node': { d:"Resize or reposition a node", e:"Move the CTA to center and widen it to 320px" },
+    'Clone / delete node': { d:"Duplicate or delete nodes, one or many", e:"Clone the sample card 5 times, then delete the extras" },
+    'Set fills / colors': { d:"Set a node's fill/background color", e:"Change the Hero background to the color/brand token" },
+    'Set strokes': { d:"Set stroke border color and weight", e:"Add a 1px gray border to every input field" },
+    'Set text content': { d:"Edit text in text nodes, one spot or many", e:"Replace all Lorem ipsum on the page with real copy" },
+    'Scan text nodes': { d:"Scan for all text nodes within a selected scope", e:"Find every text on the page to do i18n in one go" },
+    'Set corner radius': { d:"Adjust a node's corner radius", e:"Set every card radius to 12px so they match" },
+    'Image fill': { d:"Use an image as a node's fill", e:"Place a product photo as the thumbnail frame background" },
+    'SVG import / export': { d:"Import/export vectors as SVG", e:"Import an SVG logo onto the canvas, or export an icon" },
+    'Boolean operations': { d:"Combine/subtract/intersect vectors with union, subtract, etc.", e:"Subtract a circle from a square to make a ring icon" },
+    'Grid / guides': { d:"Set layout grids and guides to aid alignment", e:"Lay a 12-column grid on the desktop page" },
+    'Convert to frame': { d:"Convert a group/element into a frame to use auto layout", e:"Convert a card group to a frame before enabling auto layout" },
+    'Rename node': { d:"Rename a layer/node to something meaningful", e:"Rename Frame 12 to CardProduct so handoff reads clearly" },
+    'Upload assets': { d:"Upload images/assets into the Figma file", e:"Upload a hero image from your machine onto the canvas" },
+    'Set instance properties': { d:"Set instance properties/overrides like text or variant", e:"Set a button instance to the Danger variant + a Delete label" },
+    'Add component property': { d:"Add a property to a component, e.g. variant, boolean, text", e:"Add a hasIcon (boolean) prop to toggle the button icon" },
+    'Edit component property': { d:"Edit a component's property definition", e:"Change the size prop default from M to L" },
+    'Delete component property': { d:"Remove an unused property from a component", e:"Delete a legacy prop no longer used from Button" },
+    'Arrange component set': { d:"Tidy up variants in a component set", e:"Auto-arrange variants into a size × state grid" },
+    'Get component details': { d:"Pull a component's full details", e:"View all props/variants/description of Input" },
+    'Get component image': { d:"Render a preview image of a component", e:"Pull images of every Button variant for docs" },
+    'Get / set instance overrides': { d:"Read or write an instance's overrides", e:"Copy overrides from a master card to every instance" },
+    'Set layout mode': { d:"Enable vertical/horizontal auto layout on a frame", e:"Set a menu frame to lay items out horizontally" },
+    'Set padding': { d:"Set padding inside a frame", e:"Add 16px padding around card content" },
+    'Set axis alignment': { d:"Align items along the axis", e:"Center items both vertically and horizontally" },
+    'Set layout sizing': { d:"Set sizing to fixed/hug/fill for an item", e:"Set an input to fill the container width" },
+    'Set item spacing': { d:"Set the gap between items in auto layout", e:"Set the gap between buttons to 8px" },
+    'Design system audit (scorecard)': { d:"Score design-system health 0-100, Lighthouse-style", e:"Run an audit and get 72/100 with what to fix" },
+    'Component accessibility scan': { d:"Scan component a11y like contrast and touch target", e:"Warn that a button is under 44px and contrast below 4.5:1" },
+    'Design parity check (code↔design)': { d:"Compare design vs code for drift", e:"Find Button radius is 8px in code but 12px in design" },
+    'Design lint': { d:"Lint the design against rules, e.g. off-token colors, off-grid spacing", e:"Flag layers using hardcoded colors instead of tokens" },
+    'WCAG / axe-core scan (104 rules)': { d:"Scan accessibility with 104 axe-core rules + color-blind simulation", e:"Scan the page for a list of WCAG issues with severity" },
+    'Generate component doc': { d:"Auto-generate documentation for a component", e:"Gen Input docs with a prop table and examples" },
+    'Component details for dev': { d:"Pull deep component info for devs to implement", e:"Pull a card's spec + tokens + structure to write code" },
+    'Analyze component set': { d:"Analyze a component set for complete/missing variants", e:"Check that Button is missing a Disabled variant" },
+    'Get design system kit': { d:"Pull the whole DS kit (tokens + components + styles)", e:"Pull the full DS kit to bootstrap a new project" },
+    'Create design system rules': { d:"Create DS rules for the AI to follow during gen code", e:"Gen a rule to only use components from the library" },
+    'Search design system': { d:"Search components/tokens in the design system", e:"Search for tokens named spacing to pick one" },
+    'Analyze figma components': { d:"Analyze how components in the file are used", e:"See which card is reused the most" },
+    'Track design system health': { d:"Track DS health and build a dependency graph", e:"See which child components a token change affects" },
+    'Get console logs': { d:"Read logs from the Figma plugin/console to debug", e:"See errors the plugin throws while running a script" },
+    'Watch console (live stream)': { d:"Stream logs in real time while the plugin runs", e:"Watch logs live while testing a plugin flow" },
+    'Clear console': { d:"Clear old logs before a fresh test run", e:"Clear the console before reproducing a bug for clarity" },
+    'Reload plugin': { d:"Reload the plugin without restarting Figma", e:"Reload after editing plugin code to see results instantly" },
+    'Execute arbitrary plugin code': { d:"Run any script in the Figma plugin context", e:"Run a snippet to find every hidden node and delete it" },
+    'Get plugin status': { d:"Check the plugin/bridge connection status", e:"Check the bridge is still connected before debugging" },
+    'Reconnect to Figma': { d:"Reconnect to Figma when the session drops", e:"Reconnect after clearing the console drops the monitor" },
+    'Get file for plugin': { d:"Pull file data in a form the plugin can process", e:"Pull raw file data to process inside your own plugin" },
+    'Diagnose plugin health': { d:"Check the plugin/dev-bridge connection health", e:"Run diagnose and find the bridge plugin isn't open" },
+    'Pair plugin (Desktop auth)': { d:"Pair/authenticate with the Figma Desktop plugin", e:"Pair once so the MCP can talk to Desktop" },
+    'List file versions': { d:"List the file's full version history", e:"See when the file was saved as named versions" },
+    'Get file at version': { d:"Pull the file at a specified past version", e:"View the design from 2 weeks ago vs now" },
+    'Changes since version': { d:"See what changed from one version to now", e:"Summarize edits since the last dev handoff" },
+    'Diff two versions': { d:"Compare two versions side-by-side", e:"Diff v3 vs v5 to see which components changed" },
+    'Generate changelog': { d:"Auto-generate a changelog from version history", e:"Gen a changelog for the design release notes" },
+    'Blame node (last editor)': { d:"See who last edited a node, like git blame", e:"Check who changed this button color and when" },
+    'Get code connect map': { d:"Read the mapping linking Figma components to code components", e:"See which file the Figma Button maps to (<Button>)" },
+    'Send mappings to Figma': { d:"Push code↔design mappings back to Figma", e:"Update Code Connect so devs see the snippet in Dev Mode" },
+    'Code connect suggestions': { d:"Suggest which code file a Figma component should map to", e:"AI guesses Card likely maps to Card.tsx" },
+    'Context for code connect': { d:"Pull the context needed before doing a Code Connect mapping", e:"Pull a component's props/variants to help write the mapping" },
+    'Add code connect map': { d:"Add a new mapping between a Figma component and code", e:"Link Figma Input to a new Input.tsx" },
+    'Post / get / delete comments': { d:"Read, write or delete comments on the file", e:"Post a comment telling the dev where this button links" },
+    'Annotations': { d:"Manage annotations that pin spec to a node for handoff", e:"Pin an annotation: this input is required + max 50 chars" },
+    'Scan nodes by type': { d:"Find nodes by type, e.g. text, frame, instance", e:"Find all instances on the page to check overrides" },
+    'Focus / select node': { d:"Scroll to focus or select a node on the canvas", e:"Tell Figma to jump to the CTA button and select it" },
+    'Set node description': { d:"Set a description for a node/component", e:"Add a description explaining how to use the Badge component" },
+    'Navigate to node': { d:"Move the view to a specified node", e:"Jump straight to the Checkout frame from the AI" },
+    'Design → code (general)': { d:"Convert a design to general code for the AI to build on", e:"Pull the Pricing page as a markup scaffold with styles" },
+    'React': { d:"Gen a React component", e:"Convert a product card to ProductCard.tsx with props" },
+    'Vue': { d:"Gen a Vue component", e:"Convert a navbar to a .vue SFC with a template" },
+    'Angular': { d:"Gen an Angular component", e:"Convert a form to an Angular component + template" },
+    'SwiftUI': { d:"Gen SwiftUI for iOS", e:"Convert a profile page to a SwiftUI View" },
+    'CSS Modules / Tailwind': { d:"Gen styles as CSS Modules or Tailwind classes", e:"Convert a card to JSX + full Tailwind classes" },
+    'Styled-components': { d:"Gen styles as styled-components", e:"Convert a button to const Button = styled.button" },
+    'Dev mode code': { d:"Pull code directly from Figma Dev Mode", e:"Pull CSS/measurements from Dev Mode to use directly" },
+    'Token-efficient output (~90%)': { d:"Send output trimmed by ~90% tokens so the AI reads cheaply", e:"Pull a large file using far fewer tokens during gen" },
+    'Generate codegen plugin': { d:"Create a project-specific codegen plugin", e:"Gen a plugin that outputs to your team's convention" },
+    'Get prototype reactions': { d:"Read prototype interactions/reactions", e:"See where this button's on-tap navigates" },
+    'Create connections': { d:"Create flow connections between frames", e:"Connect Login to Home when Sign in is tapped" },
+    'Set default connector': { d:"Set the default connector style", e:"Set connectors to curved arrow-headed lines everywhere" },
+    'Capture webpage to Figma': { d:"Pull a real webpage into Figma as layers", e:"Capture a competitor's landing page as a frame to edit" },
+    'Get board contents': { d:"Read everything on a FigJam board", e:"Pull every sticky from a brainstorm board to summarize" },
+    'Get connections / edges': { d:"Read the connections between objects on the board", e:"See which node links to which in a flowchart" },
+    'Create sticky note(s)': { d:"Create sticky notes, one or many", e:"Gen 10 stickies from a list of ideas you typed" },
+    'Create connector': { d:"Draw a connector between objects on the board", e:"Connect sticky A to B to show the sequence" },
+    'Create section': { d:"Create a section to group objects on the board", e:"Create To do / Doing / Done sections for a kanban" },
+    'Create shape with text': { d:"Create a shape with text inside", e:"Make a process box with the text Validate input" },
+    'Create code block': { d:"Create a syntax-highlighted code block on the board", e:"Drop a sample API snippet to explain to the team" },
+    'Create table': { d:"Create a table on a FigJam board", e:"Make a table comparing options A/B/C" },
+    'Auto arrange items': { d:"Auto-tidy objects on the board", e:"Arrange scattered stickies into a grid" },
+    'Generate diagram (Mermaid → FigJam)': { d:"Convert Mermaid syntax into a FigJam diagram", e:"Type a Mermaid flowchart and get a real diagram" },
+    'List all slides': { d:"List all slides in the deck", e:"See how many slides and their names before editing" },
+    'Get slide content': { d:"Read the content of a given slide", e:"Pull text and images from slide 3 to edit" },
+    'Get focused slide': { d:"See which slide is currently focused", e:"Continue from the slide the user has open" },
+    'Get grid / transition': { d:"Read a slide's layout grid and transition", e:"Check whether a slide uses a fade transition" },
+    'Create slide': { d:"Create a new slide in the deck", e:"Add an Agenda slide after the cover" },
+    'Delete slide': { d:"Delete an unwanted slide", e:"Delete a duplicate slide at the end of the deck" },
+    'Duplicate slide': { d:"Duplicate a slide as a template", e:"Copy a section-header slide to use in every chapter" },
+    'Reorder slides': { d:"Reorder slides", e:"Move the summary slide before Q&A" },
+    'Add shape to slide': { d:"Add a shape to a slide", e:"Add a box highlighting a key number on the slide" },
+    'Add text to slide': { d:"Add text to a slide", e:"Fill in bullet points from the given outline" },
+    'Set background': { d:"Set a slide's background", e:"Change the cover background to the brand color" },
+    'Set transition': { d:"Set the transition between slides", e:"Set a slide push when changing slides" },
+    'Focus / skip slide': { d:"Focus or skip a slide during presentation", e:"Set a backup slide to be skipped while presenting" },
+    'Set slides view mode': { d:"Switch the deck's view mode, e.g. grid/present", e:"Switch to grid view to reorder quickly" }
+  };
+
+  function renderMatrix() {
+    function esc(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    function buildCell(cmds, since, mk) {
+      const colAttr = mk ? ' data-col="' + mk + '"' : '';
+      if (!cmds || !cmds.length) return '<td class="matrix-td"' + colAttr + '><span class="cmd-none">—</span></td>';
+      const isPartial = cmds[0] === 'partial';
+      const isYes     = cmds[0] === 'yes';
+      const icon = isPartial ? '<span class="cmd-partial">⚠</span>' : '<span class="cmd-yes">✓</span>';
+      const sinceBadge = since ? '<span class="cmd-since">' + esc(since) + '</span>' : '';
+      const list = (isPartial || isYes) ? cmds.slice(1) : cmds;
+      const shown = list.slice(0, 2);
+      const more  = list.length > 2 ? list.length - 2 : 0;
+      let inner = '<div class="cmd-cell-top">' + sinceBadge + icon + '</div>';
+      if (shown.length) {
+        var moreNames = more ? list.slice(2).join(', ') : '';
+        inner += '<div class="cmd-list">'
+          + shown.map(function(c){ return '<code class="cmd-tag" title="' + esc(c) + '">' + esc(c) + '</code>'; }).join('')
+          + (more ? '<span class="cmd-more" title="' + esc(moreNames) + '">+' + more + '</span>' : '')
+          + '</div>';
+      }
+      return '<td class="matrix-td"' + colAttr + '>' + inner + '</td>';
+    }
+
+    const panelsEl = document.getElementById('matrixPanels');
+    const surfKeys = Object.keys(FEATURE_MATRIX);
+    const cols = MCP_KEYS.length + 1;
+
+    var featureCounts = {};
+    MCP_KEYS.forEach(function(mk){ featureCounts[mk] = 0; });
+    surfKeys.forEach(function(k){
+      FEATURE_MATRIX[k].groups.forEach(function(g){
+        g.features.forEach(function(f){
+          MCP_KEYS.forEach(function(mk){
+            if (f[mk] && f[mk].length) featureCounts[mk]++;
+          });
+        });
+      });
+    });
+    var headRow = '<tr class="head-row"><th class="col-feature">Feature / Command</th>'
+      + MCP_KEYS.map(function(mk){
+          var cnt = featureCounts[mk];
+          var cntTitle = (window.LANG === 'en') ? (cnt + ' features supported') : (cnt + ' features รองรับ');
+          var badge = (cnt != null) ? '<span class="th-count" title="' + cntTitle + '">' + cnt + '</span>' : '';
+          return '<th data-col="' + mk + '"><span class="th-head">' + MCP_SHORT[mk] + badge + '</span></th>';
+        }).join('') + '</tr>';
+
+    var allRows = surfKeys.map(function(k) {
+      var s = FEATURE_MATRIX[k];
+      var surfIcon = s.iconSvg
+        ? s.iconSvg.replace('<svg ', '<svg class="surf-product-icon" ')
+        : esc(s.icon);
+      var surfRow = '<tr class="surf-row"><td class="surf-cell" colspan="' + cols + '">'
+        + surfIcon + ' ' + esc(s.label) + '</td></tr>';
+      var groupRows = s.groups.map(function(g) {
+        var catRow = '<tr class="cat-row"><td class="col-feature cat-cell" colspan="' + cols + '">'
+          + esc(g.cat) + '</td></tr>';
+        var featureRows = g.features.map(function(f) {
+          var en = window.LANG === 'en';
+          var tr = en ? (FEAT_TR[f.label] || null) : null;
+          var lbl = (en && f.label_en) ? f.label_en : f.label;
+          var dsc = (tr && tr.d) ? tr.d : f.desc;
+          var egv = (tr && tr.e) ? tr.e : f.eg;
+          var featCell = '<span class="feat-label">' + esc(lbl) + '</span>'
+            + (dsc ? '<span class="feat-desc">' + esc(dsc) + '</span>' : '')
+            + (egv ? '<span class="feat-eg">' + esc(egv) + '</span>' : '');
+          var searchText = (f.label + ' ' + (f.label_en||'') + ' ' + (f.desc||'') + ' ' + (f.eg||'') + ' '
+            + MCP_KEYS.map(function(mk){ return (f[mk]||[]).join(' '); }).join(' ')).toLowerCase();
+          return '<tr class="m-feat-row" data-search="' + esc(searchText) + '"><td class="col-feature">' + featCell + '</td>'
+            + MCP_KEYS.map(function(mk){ return buildCell(f[mk], f.since || null, mk); }).join('') + '</tr>';
+        }).join('');
+        return catRow + featureRows;
+      }).join('');
+      return surfRow + groupRows;
+    }).join('');
+
+    panelsEl.innerHTML = '<div class="matrix-scroll-outer"><div class="matrix-table-wrap"><table class="matrix-table">'
+      + '<thead>' + headRow + '</thead>'
+      + '<tbody>' + allRows + '</tbody>'
+      + '</table></div></div>';
+
+  }
+
+  // ── MCP Auto-update ──────────────────────────────────────────────
+  function escTop(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function extractBaseline(matrix) {
+    var result = {};
+    MCP_KEYS.forEach(function(mk) { result[mk] = new Set(); });
+    Object.values(matrix).forEach(function(surface) {
+      surface.groups.forEach(function(group) {
+        group.features.forEach(function(feature) {
+          MCP_KEYS.forEach(function(mk) {
+            var cmds = feature[mk];
+            if (!cmds || !cmds.length) return;
+            cmds.forEach(function(c) {
+              if (c !== 'partial' && c !== 'yes') result[mk].add(c);
+            });
+          });
+        });
+      });
+    });
+    return result;
+  }
+
+  function extractTS(text) {
+    var set = new Set();
+    for (var m of text.matchAll(/server\.(?:tool|registerTool)\([^,'"]*['"]([a-z_]+)['"]/g)) set.add(m[1]);
+    return set;
+  }
+  function extractConsole(text) {
+    var set = new Set();
+    for (var m of text.matchAll(/['"]((figma|figjam)_[a-z_]+)['"]/g)) set.add(m[1]);
+    return set;
+  }
+  function extractPython(text) {
+    var set = new Set();
+    for (var m of text.matchAll(/@mcp\.tool\(\)\s*\n\s*(?:async\s+)?def\s+([a-z_]+)/g)) set.add(m[1]);
+    return set;
+  }
+  function extractDocs(text) {
+    var set = new Set();
+    for (var m of text.matchAll(/`([a-z_]{4,50})`/g)) {
+      var n = m[1];
+      if (n.indexOf('_') !== -1 || /^(get|set|create|update|delete|list|search|generate|upload|use|whoami|add|send)/.test(n))
+        set.add(n);
+    }
+    return set;
+  }
+
+  var SOURCES = {
+    framelink:  { urls: ['https://raw.githubusercontent.com/GLips/Figma-Context-MCP/main/src/mcp/index.ts'],             extract: extractTS },
+    console:    { urls: ['https://raw.githubusercontent.com/southleft/figma-console-mcp/main/src/server.ts'],            extract: extractConsole },
+    claudetalk: { urls: ['https://raw.githubusercontent.com/grab/cursor-talk-to-figma-mcp/main/src/talk_to_figma_mcp/server.py',
+                         'https://raw.githubusercontent.com/sonnylazuardi/cursor-talk-to-figma-mcp/main/src/talk_to_figma_mcp/server.py'], extract: extractPython },
+    sunnyside:  { urls: ['https://raw.githubusercontent.com/tercumantanumut/sunnysideFigma-Context-MCP/main/src/index.ts'], extract: extractTS },
+    official:   { urls: ['https://api.allorigins.win/raw?url=' + encodeURIComponent('https://developers.figma.com/docs/figma-mcp-server/'),
+                         'https://developers.figma.com/docs/figma-mcp-server/'], extract: extractDocs }
+  };
+
+  var OFFICIAL_FALLBACK = new Set([
+    'get_design_context','get_screenshot','get_metadata','get_variable_defs',
+    'get_code_connect_suggestions','get_context_for_code_connect',
+    'add_code_connect_map','get_code_connect_map','send_code_connect_mappings',
+    'create_design_system_rules','search_design_system','get_libraries',
+    'get_figjam','generate_diagram','create_new_file','upload_assets',
+    'whoami','use_figma','get_page'
+  ]);
+
+  async function fetchSource(key) {
+    var src = SOURCES[key];
+    for (var i = 0; i < src.urls.length; i++) {
+      try {
+        var ctrl = new AbortController();
+        var timer = setTimeout(function() { ctrl.abort(); }, 5000);
+        var resp = await fetch(src.urls[i], { signal: ctrl.signal });
+        clearTimeout(timer);
+        if (!resp.ok) continue;
+        var text = await resp.text();
+        var set = src.extract(text);
+        if (set.size > 0) return set;
+      } catch(e) { /* try next url */ }
+    }
+    return key === 'official' ? OFFICIAL_FALLBACK : null;
+  }
+
+  async function fetchAllSources() {
+    var results = await Promise.allSettled(
+      MCP_KEYS.map(function(mk) {
+        return fetchSource(mk).then(function(s) { return { mk: mk, tools: s }; });
+      })
+    );
+    var out = {};
+    results.forEach(function(r) {
+      if (r.status === 'fulfilled' && r.value && r.value.tools)
+        out[r.value.mk] = Array.from(r.value.tools);
+    });
+    return out;
+  }
+
+  var CACHE_KEY = 'mcp-tools-cache-v1';
+  var CACHE_TTL = 60 * 60 * 1000;
+
+  function loadCache() {
+    try {
+      var raw = localStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+      var obj = JSON.parse(raw);
+      if (!obj.timestamp || Date.now() - obj.timestamp > CACHE_TTL) return null;
+      return obj.data;
+    } catch(e) { return null; }
+  }
+  function writeCache(data) {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: data })); } catch(e) {}
+  }
+
+  function diffTools(fresh, baseline) {
+    var out = {};
+    MCP_KEYS.forEach(function(mk) {
+      var freshSet = new Set(fresh[mk] || []);
+      var baseSet  = baseline[mk] || new Set();
+      var added = [], removed = [];
+      freshSet.forEach(function(t) { if (!baseSet.has(t)) added.push(t); });
+      baseSet.forEach(function(t)  { if (!freshSet.has(t)) removed.push(t); });
+      out[mk] = { added: added.sort(), removed: removed.sort() };
+    });
+    return out;
+  }
+
+  function renderDiffBanner(d) {
+    var el = document.getElementById('mcpDiffBanner');
+    if (!el) return;
+    var parts = [];
+    MCP_KEYS.forEach(function(mk) {
+      var a = d[mk].added.length, r = d[mk].removed.length;
+      if (a) parts.push('<span style="color:oklch(0.38 0.14 150)">+' + a + ' ' + escTop(MCP_SHORT[mk]) + '</span>');
+      if (r) parts.push('<span style="color:oklch(0.50 0.18 27)">−' + r + ' ' + escTop(MCP_SHORT[mk]) + '</span>');
+    });
+    if (!parts.length) { el.hidden = true; return; }
+    el.hidden = false;
+    el.innerHTML = '<span class="mcp-diff-summary">🔄 Tool changes detected — ' + parts.join('   ') + '</span>'
+      + '<button class="mcp-diff-force-refresh" onclick="localStorage.removeItem(\'mcp-tools-cache-v1\');location.reload()">Force refresh</button>';
+    var panel = document.getElementById('mcpDiffPanel');
+    if (panel) panel.hidden = false;
+  }
+
+  function renderDiffBannerOffline() {
+    var el = document.getElementById('mcpDiffBanner');
+    if (!el) return;
+    el.hidden = false;
+    el.classList.add('mcp-diff-banner-warn');
+    el.innerHTML = '<span class="mcp-diff-summary">⚠ Could not check for updates (offline or fetch failed)</span>'
+      + '<button class="mcp-diff-force-refresh" onclick="localStorage.removeItem(\'mcp-tools-cache-v1\');location.reload()">Retry</button>';
+  }
+
+  function renderUncategorizedPanel(d) {
+    var body = document.getElementById('mcpDiffPanelBody');
+    var summaryEl = document.querySelector('#mcpDiffPanel > summary');
+    if (!body) return;
+    var totalAdded = 0, totalRemoved = 0, html = '';
+    MCP_KEYS.forEach(function(mk) {
+      var a = d[mk].added, r = d[mk].removed;
+      if (!a.length && !r.length) return;
+      totalAdded += a.length; totalRemoved += r.length;
+      html += '<div class="mcp-diff-section">'
+        + '<div class="mcp-diff-section-title">' + escTop(MCP_SHORT[mk]) + '</div>'
+        + '<div class="mcp-diff-chips">';
+      a.forEach(function(t) {
+        html += '<span class="mcp-diff-chip mcp-diff-added" title="Click to copy" onclick="navigator.clipboard.writeText(this.dataset.t)" data-t="' + escTop(t) + '">+ ' + escTop(t) + '</span>';
+      });
+      r.forEach(function(t) {
+        html += '<span class="mcp-diff-chip mcp-diff-removed" title="Click to copy" onclick="navigator.clipboard.writeText(this.dataset.t)" data-t="' + escTop(t) + '">− ' + escTop(t) + '</span>';
+      });
+      html += '</div></div>';
+    });
+    body.innerHTML = html || '<p style="font-size:12px;color:var(--muted-foreground);margin:0">No changes found.</p>';
+    if (summaryEl) summaryEl.textContent = '🔍 ' + totalAdded + ' added · ' + totalRemoved + ' removed — click to expand';
+  }
+
+  (async function() {
+    var baseline = extractBaseline(FEATURE_MATRIX);
+    var fresh = loadCache();
+    if (!fresh) {
+      fresh = await fetchAllSources();
+      var hasSome = MCP_KEYS.some(function(mk) { return fresh[mk] && fresh[mk].length; });
+      if (!hasSome) { renderDiffBannerOffline(); return; }
+      writeCache(fresh);
+    }
+    var d = diffTools(fresh, baseline);
+    renderDiffBanner(d);
+    renderUncategorizedPanel(d);
+  })();
+
+  // ── Matrix controls (column toggle + search) with state-preserving re-render ──
+  var FEATURE_WIDTHS = [260, 280, 300, 340, 380]; // wider as more MCPs hidden (freed space → readable desc)
+  var matrixTable = null;
+  var searchInput = document.getElementById('matrixSearch');
+  var searchCount = document.getElementById('matrixSearchCount');
+
+  function updateColLayout() {
+    if (!matrixTable) return;
+    var hidden = MCP_KEYS.filter(function(mk) {
+      return matrixTable.hasAttribute('data-hide-' + mk);
+    }).length;
+    var visible = MCP_KEYS.length - hidden;
+    var w = FEATURE_WIDTHS[Math.min(hidden, FEATURE_WIDTHS.length - 1)];
+    matrixTable.style.setProperty('--feature-col-w', w + 'px');
+    if (visible <= 3) matrixTable.setAttribute('data-few-cols', '');
+    else matrixTable.removeAttribute('data-few-cols');
+  }
+
+  function reapplyColState() {
+    if (!matrixTable) return;
+    MCP_KEYS.forEach(function(mk) {
+      var chk = document.getElementById('col-toggle-' + mk);
+      if (chk && !chk.checked) matrixTable.setAttribute('data-hide-' + mk, '');
+      else matrixTable.removeAttribute('data-hide-' + mk);
+    });
+    updateColLayout();
+  }
+
+  function applyMatrixSearch() {
+    if (!matrixTable || !searchInput) return;
+    var isEn = window.LANG === 'en';
+    var q = (searchInput.value || '').trim().toLowerCase();
+    var shown = 0;
+    matrixTable.querySelectorAll('tbody tr').forEach(function(tr) {
+      if (tr.classList.contains('surf-row') || tr.classList.contains('cat-row')) return;
+      var hay = tr.getAttribute('data-search') || '';
+      var match = !q || hay.indexOf(q) !== -1;
+      tr.style.display = match ? '' : 'none';
+      if (match) shown++;
+    });
+    matrixTable.querySelectorAll('tbody tr.cat-row').forEach(function(cat) {
+      var n = cat.nextElementSibling, any = false;
+      while (n && !n.classList.contains('cat-row') && !n.classList.contains('surf-row')) {
+        if (n.style.display !== 'none') { any = true; break; }
+        n = n.nextElementSibling;
+      }
+      cat.style.display = any ? '' : 'none';
+    });
+    matrixTable.querySelectorAll('tbody tr.surf-row').forEach(function(surf) {
+      var n = surf.nextElementSibling, any = false;
+      while (n && !n.classList.contains('surf-row')) {
+        if (!n.classList.contains('cat-row') && n.style.display !== 'none') { any = true; break; }
+        n = n.nextElementSibling;
+      }
+      surf.style.display = any ? '' : 'none';
+    });
+    if (searchCount) {
+      if (q) { searchCount.textContent = shown + (isEn ? ' results' : ' รายการ'); searchCount.hidden = false; }
+      else { searchCount.hidden = true; }
+    }
+    var wrap = matrixTable.parentElement;
+    var existing = wrap.querySelector('.matrix-no-results');
+    var msg = isEn ? ('No feature or command matches "' + q + '"') : ('ไม่พบ feature หรือ command ที่ตรงกับ "' + q + '"');
+    if (q && shown === 0) {
+      if (!existing) {
+        var dd = document.createElement('div');
+        dd.className = 'matrix-no-results';
+        dd.textContent = msg;
+        wrap.appendChild(dd);
+      } else { existing.textContent = msg; }
+    } else if (existing) { existing.remove(); }
+  }
+
+  function refreshMatrix() {
+    renderMatrix();
+    matrixTable = document.querySelector('#matrixPanels .matrix-table');
+    if (matrixTable) { matrixTable.id = 'matrixTable'; reapplyColState(); applyMatrixSearch(); }
+  }
+  window.__refreshMatrix = refreshMatrix;
+
+  renderMatrix();
+  matrixTable = document.querySelector('#matrixPanels .matrix-table');
+  if (matrixTable) {
+    matrixTable.id = 'matrixTable';
+    MCP_KEYS.forEach(function(mk) {
+      var chk = document.getElementById('col-toggle-' + mk);
+      if (!chk) return;
+      chk.addEventListener('change', reapplyColState);
+    });
+    updateColLayout();
+    if (searchInput) searchInput.addEventListener('input', applyMatrixSearch);
+  }
+
+  // ── i18n: language toggle (static chrome + matrix labels) ──────────
+  (function initLang() {
+    var I18N_EN = {
+      'hero.eyebrow': '<span class="dot"></span> Updated May 2026 · For BCIF Design Team',
+      'hero.h1': 'Compare Figma MCP Servers 2026',
+      'hero.lead': 'In-depth analysis of the 5 main Figma MCP servers — covering features, tool commands, update cadence, community feedback, design-system compatibility and DesignOps workflow. Built to help the BCIF team pick the right stack.',
+      'hero.stat4label': 'First-party (write canvas beta)',
+      'hero.stat4trend': 'Figma Official shipped use_figma',
+      'compare.title': 'Filterable + sortable comparison table',
+      'compare.desc': 'Filter by the Figma plan your team uses, write-back capability, and the view you care about. Click a column header to re-sort.',
+      'filter.plan': 'Figma plan:',
+      'filter.plan.all': 'All plans',
+      'filter.write': 'Write canvas:',
+      'filter.write.all': 'Any type',
+      'filter.write.yes': 'Must be writable',
+      'filter.write.no': 'Read-only is fine',
+      'filter.setup': 'Setup:',
+      'filter.setup.all': 'Any level',
+      'filter.setup.easy': 'Easy',
+      'filter.setup.medium': 'Medium',
+      'filter.setup.complex': 'Complex',
+      'filter.view': 'View:',
+      'filter.reset': 'Reset filter',
+      'compare.note': '<strong>Note:</strong> ✓ = supported, ⚠ = partial / conditional, — = not supported. Switch <em>View</em> to see other column sets (Features, DesignOps, Community, Cost)',
+      'deepdive.title': 'Deep dive into each MCP',
+      'deepdive.desc': 'Each tab covers overview, key tools, install snippet, community feedback and notable quirks',
+      'commands.title': 'Compare commands across all MCPs, grouped',
+      'commands.desc': 'Grouped by Figma product surface — click a tab to switch between Figma Design, FigJam and Figma Slides. Each cell shows the actual command name used',
+      'legend.yes': 'supported',
+      'legend.partial': 'partial / conditional',
+      'legend.none': 'not supported',
+      'commands.show': 'Show:',
+      'ph:commands.search': 'Search feature or command (e.g. export, variable, slide)…',
+      'picker.title': 'Decision tree: pick the right MCP in 30 seconds',
+      'picker.desc': 'Answer 4 questions about your team context and the tool recommends the best-fit MCP, with reasons and a backup option',
+      'charts.title': 'Visual comparison: Radar & Bar',
+      'charts.desc': 'Compare the 6 core dimensions of each MCP. Click the legend to hide/show each MCP',
+      'charts.radarTitle': 'Capability Radar (6 dimensions)',
+      'charts.radarDesc': 'Compare 6 dimensions (scale 0–10), click the legend to hide/show',
+      'radar.summary': '▸ What each dimension means',
+      'radar.tokenEff': 'Saves context window before sending to the LLM (0=raw, 10=compress ~90%)',
+      'radar.toolDepth': 'Number + completeness of tools provided (0=few, 10=very complete)',
+      'radar.write': 'How much it can write back to the Figma canvas',
+      'radar.ops': 'Fit for DesignOps team workflow / handoff',
+      'radar.maturity': 'Completeness, stability, docs, community',
+      'radar.freeTier': 'Whether it works on the Figma Free/Starter plan',
+      'footer.credit': '<strong>Figma MCP — Comparison 2026</strong> · Built for BCIF Design Team · 2026'
+    };
+    var snapTh = {};
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      snapTh[el.getAttribute('data-i18n')] = el.innerHTML;
+    });
+    document.querySelectorAll('[data-i18n-ph]').forEach(function(el) {
+      snapTh['ph:' + el.getAttribute('data-i18n-ph')] = el.getAttribute('placeholder');
+    });
+    function applyStatic(lang) {
+      document.querySelectorAll('[data-i18n]').forEach(function(el) {
+        var k = el.getAttribute('data-i18n');
+        var v = (lang === 'en') ? I18N_EN[k] : snapTh[k];
+        if (v != null) el.innerHTML = v;
+      });
+      document.querySelectorAll('[data-i18n-ph]').forEach(function(el) {
+        var k = 'ph:' + el.getAttribute('data-i18n-ph');
+        var v = (lang === 'en') ? I18N_EN[k] : snapTh[k];
+        if (v != null) el.setAttribute('placeholder', v);
+      });
+      var ll = document.getElementById('langLabel');
+      if (ll) ll.textContent = (lang === 'en') ? 'ไทย' : 'EN';
+    }
+    function setLang(lang) {
+      window.LANG = lang;
+      try { localStorage.setItem('mcp-lang', lang); } catch (e) {}
+      document.documentElement.lang = lang;
+      applyStatic(lang);
+      if (window.__refreshMatrix) window.__refreshMatrix();
+      // Re-render other dynamic sections, preserving the active deep-dive tab
+      var activeTab = document.querySelector('.tab-trigger[aria-selected="true"]');
+      var activeId = activeTab ? activeTab.getAttribute('data-tab') : null;
+      if (typeof renderTabs === 'function') {
+        renderTabs();
+        if (activeId) {
+          document.querySelectorAll('.tab-trigger').forEach(function(x){ x.setAttribute('aria-selected', String(x.getAttribute('data-tab') === activeId)); });
+          document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.toggle('active', p.id === 'panel-' + activeId); });
+        }
+      }
+      if (typeof renderTable === 'function') renderTable();
+      if (typeof renderPickerQuestions === 'function') renderPickerQuestions();
+      if (typeof renderPickerResult === 'function') renderPickerResult();
+    }
+    // Initial paint: HTML is Thai by default; only repaint if EN
+    if (window.LANG === 'en') { applyStatic('en'); if (window.__refreshMatrix) window.__refreshMatrix(); }
+    else { applyStatic('th'); }
+    var btn = document.getElementById('langToggle');
+    if (btn) btn.addEventListener('click', function() {
+      setLang(window.LANG === 'en' ? 'th' : 'en');
+    });
+  })();
+
+  // Sync --app-bar-h after fonts load and on resize (font metrics affect height)
+  function syncAppBarH() {
+    var el = document.querySelector('.app-bar');
+    if (el) document.documentElement.style.setProperty('--app-bar-h', el.getBoundingClientRect().height + 'px');
+  }
+  syncAppBarH();
+  document.fonts.ready.then(syncAppBarH);
+  window.addEventListener('resize', syncAppBarH);
+
+  // =========================================================
+  // Decision tree picker
+  // =========================================================
+  function TL(th, en) { return window.LANG === 'en' ? en : th; }
+
+  const PICKER_QUESTIONS = [
+    {
+      key: 'plan',
+      title: '1. Figma plan ของทีมตอนนี้?', title_en: '1. Your team’s current Figma plan?',
+      options: [
+        { id: 'free', label: 'Free / Starter' },
+        { id: 'pro', label: 'Professional+' },
+        { id: 'org', label: 'Organization / Enterprise' }
+      ],
+      default: 'pro'
+    },
+    {
+      key: 'goal',
+      title: '2. เป้าหมายหลัก?', title_en: '2. Primary goal?',
+      options: [
+        { id: 'd2c', label: 'Design-to-code' },
+        { id: 'ds', label: 'Design System governance' },
+        { id: 'write', label: 'แก้ไข canvas ผ่าน AI', label_en: 'Edit canvas via AI' },
+        { id: 'debug', label: 'Plugin debugging' }
+      ],
+      default: 'd2c'
+    },
+    {
+      key: 'cost',
+      title: '3. ความสำคัญของ token cost?', title_en: '3. How important is token cost?',
+      options: [
+        { id: 'high', label: 'สำคัญมาก (เรียกบ่อย)', label_en: 'Very (called often)' },
+        { id: 'normal', label: 'ปานกลาง', label_en: 'Moderate' }
+      ],
+      default: 'high'
+    },
+    {
+      key: 'setup',
+      title: '4. ความยากของ setup ที่ทีมยอมรับได้?', title_en: '4. Setup complexity the team can accept?',
+      options: [
+        { id: 'easy', label: 'ง่าย (npx / OAuth)', label_en: 'Easy (npx / OAuth)' },
+        { id: 'any', label: 'ระดับใดก็ได้', label_en: 'Any level' }
+      ],
+      default: 'any'
+    }
+  ];
+
+  const pickerState = {};
+  PICKER_QUESTIONS.forEach(q => pickerState[q.key] = q.default);
+
+  function renderPickerQuestions() {
+    const root = document.getElementById('pickerQuestions');
+    root.innerHTML = PICKER_QUESTIONS.map(q => `
+      <div class="picker-question">
+        <h4>${(window.LANG === 'en' && q.title_en) ? q.title_en : q.title}</h4>
+        <div class="options" data-key="${q.key}">
+          ${q.options.map(o => `<button class="option-pill" aria-pressed="${pickerState[q.key] === o.id}" data-id="${o.id}">${(window.LANG === 'en' && o.label_en) ? o.label_en : o.label}</button>`).join('')}
+        </div>
+      </div>
+    `).join('');
+    root.querySelectorAll('.options').forEach(grp => {
+      const key = grp.dataset.key;
+      grp.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          pickerState[key] = btn.dataset.id;
+          grp.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b === btn));
+          renderPickerResult();
+        });
+      });
+    });
+  }
+
+  function recommend(state) {
+    // Decision tree
+    const reasons = [];
+    let primary = null;
+
+    if (state.goal === 'debug') {
+      primary = 'console';
+      reasons.push(TL('Plugin debugging มีแค่ Figma Console MCP เท่านั้น (Chrome DevTools Protocol)', 'Plugin debugging is only in Figma Console MCP (Chrome DevTools Protocol)'));
+    } else if (state.goal === 'ds') {
+      primary = 'console';
+      reasons.push(TL('Design System Dashboard, audit, parity check, accessibility scan ครบที่สุด', 'Most complete Design System Dashboard, audit, parity check and accessibility scan'));
+      if (state.plan === 'pro' || state.plan === 'org') reasons.push(TL('Code Connect ถ้าใช้คู่ Official MCP จะได้ end-to-end DS governance', 'Pairing with Official MCP (Code Connect) gives end-to-end DS governance'));
+    } else if (state.goal === 'write') {
+      if (state.plan === 'free') { primary = 'claudetalk'; reasons.push(TL('Write canvas ทำงานบน Free plan + bidirectional ผ่าน WebSocket', 'Write canvas works on the Free plan, bidirectional via WebSocket')); }
+      else { primary = 'official'; reasons.push(TL('use_figma (write canvas) เป็น first-party + Code Connect ผูก codebase', 'use_figma (write canvas) is first-party + Code Connect links the codebase')); }
+    } else if (state.goal === 'd2c') {
+      if (state.cost === 'high') { primary = 'framelink'; reasons.push(TL('Token compression ~90% เหมาะกับงานที่เรียก AI บ่อย — cost ต่ำที่สุด', 'Token compression ~90% suits frequent AI calls — lowest cost')); }
+      else if (state.plan === 'free') { primary = 'framelink'; reasons.push(TL('Free plan ใช้ได้, descriptive JSON ทำให้ AI ใช้ component เดิมในโปรเจกต์', 'Works on Free plan; descriptive JSON helps AI reuse existing project components')); }
+      else { primary = 'official'; reasons.push(TL('Code Connect ผูก components กับ codebase + Write canvas', 'Code Connect links components to the codebase + Write canvas')); }
+    }
+
+    // Setup constraint
+    if (state.setup === 'easy' && primary === 'claudetalk') {
+      const old = primary;
+      primary = state.plan === 'free' ? 'framelink' : 'official';
+      reasons.push(TL(`เลี่ยง Claude Talk to Figma เพราะ setup ซับซ้อน (WebSocket + plugin) — เปลี่ยนเป็น ${primary === 'framelink' ? 'Framelink' : 'Official'} แทน`, `Avoiding Claude Talk to Figma due to complex setup (WebSocket + plugin) — switched to ${primary === 'framelink' ? 'Framelink' : 'Official'} instead`));
+    }
+
+    // Plan constraint check
+    const rec = MCPS.find(m => m.id === primary);
+    if (rec && rec.planRequired === 'pro' && state.plan === 'free') {
+      primary = 'framelink';
+      reasons.push(TL('Plan ไม่รองรับ Official MCP rate limit → Framelink เป็นทางเลือกที่ดีที่สุดบน Free plan', 'Plan does not cover Official MCP rate limits → Framelink is the best option on Free plan'));
+    }
+
+    const recObj = MCPS.find(m => m.id === primary);
+    // Alternatives
+    const alts = MCPS.filter(m => m.id !== primary).slice(0, 2).map(m => ({
+      id: m.id, name: m.name, why: m.bestFor, why_en: m.bestFor_en
+    }));
+
+    // Pair recommendation
+    let pair = null;
+    if (state.goal === 'ds' && (state.plan === 'pro' || state.plan === 'org')) {
+      pair = TL('ใช้คู่ Official MCP (Code Connect) + Figma Console MCP (audit/parity) — TJ Pitre confirm ว่า pattern นี้ทำงานจริง', 'Pair Official MCP (Code Connect) + Figma Console MCP (audit/parity) — TJ Pitre confirms this pattern works in practice');
+    } else if (state.goal === 'd2c' && state.cost === 'high' && state.plan !== 'free') {
+      pair = TL('ใช้คู่ Framelink (efficient extraction) + Official MCP (Code Connect) — ได้ทั้ง token efficiency และ component fidelity', 'Pair Framelink (efficient extraction) + Official MCP (Code Connect) — get both token efficiency and component fidelity');
+    }
+
+    return { rec: recObj, reasons, alts, pair };
+  }
+
+  function renderPickerResult() {
+    const { rec, reasons, alts, pair } = recommend(pickerState);
+    if (!rec) {
+      document.getElementById('pickerResult').innerHTML = `<p>${TL('เลือกตัวเลือกในการ์ดด้านซ้ายเพื่อดูคำแนะนำ', 'Pick options in the card on the left to see a recommendation')}</p>`;
+      return;
+    }
+    document.getElementById('pickerResult').innerHTML = `
+      <div class="row" style="justify-content:space-between;">
+        <div>
+          <span class="badge badge-success">Top match</span>
+          <h3 class="mt-1" style="margin-top:0.25rem;">${rec.name}</h3>
+          <p class="muted" style="margin:0.25rem 0 0;font-size:13px;">${rec.sub}</p>
+        </div>
+        <span class="badge badge-solid">${rec.tools}+ tools</span>
+      </div>
+
+      <div class="recommend-card mt-2">
+        <h4 style="margin:0 0 0.5rem;font-size:13px;font-weight:600;">${TL('เหตุผลที่แนะนำ', 'Why recommended')}</h4>
+        <ul class="reason-list">${reasons.map(r => `<li>${r}</li>`).join('')}</ul>
+        ${pair ? `<div class="mt-2"><span class="badge badge-warn">${TL('คู่ที่แนะนำ', 'Recommended pairing')}</span><p class="mt-1" style="margin:0.5rem 0 0;font-size:13px;">${pair}</p></div>` : ''}
+      </div>
+
+      <h4 class="mt-3" style="margin:1rem 0 0.5rem;font-size:13px;font-weight:600;">${TL('ตัวเลือกสำรอง', 'Backup options')}</h4>
+      <div class="alt-list">
+        ${alts.map(a => `<div class="alt-item"><span class="name">${a.name}</span><span class="why">${(window.LANG === 'en' && a.why_en) ? a.why_en : a.why}</span></div>`).join('')}
+      </div>
+    `;
+  }
+  renderPickerQuestions();
+  renderPickerResult();
+
+  // =========================================================
+  // Charts (Chart.js)
+  // =========================================================
+  function getCssVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  window._charts = {};
+
+  function renderRadar() {
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    const labels = ['Token efficiency', 'Tool depth', 'Write capability', 'DesignOps fit', 'Maturity', 'Free-tier accessibility'];
+    const palette = [getCssVar('--chart-1'), getCssVar('--chart-2'), getCssVar('--chart-3'), getCssVar('--chart-4'), getCssVar('--chart-5')];
+
+    const datasets = MCPS.map((m, i) => {
+      const writeScore = m.writeCapability === 'yes' ? 9 : 2;
+      return {
+        label: m.name,
+        data: [m.tokenEfficiency, m.depth, writeScore, m.opsFit, m.maturity, m.freeTier],
+        backgroundColor: palette[i] + '33',
+        borderColor: palette[i],
+        borderWidth: 1.5,
+        pointBackgroundColor: palette[i],
+        pointRadius: 3
+      };
+    });
+
+    window._charts.radar = new Chart(ctx, {
+      type: 'radar',
+      data: { labels, datasets },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          r: {
+            min: 0, max: 10,
+            ticks: { display: false, stepSize: 2 },
+            grid: { color: getCssVar('--border') },
+            angleLines: { color: getCssVar('--border') },
+            pointLabels: { color: getCssVar('--muted-foreground'), font: { size: 11, family: 'Inter, sans-serif' } }
+          }
+        }
+      }
+    });
+
+    // build legend toggle
+    const lg = document.getElementById('radarLegend');
+    lg.innerHTML = MCPS.map((m, i) => `<button data-i="${i}" aria-pressed="true"><span class="legend-dot" style="background:${palette[i]}"></span>${m.name}</button>`).join('');
+    lg.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const i = +btn.dataset.i;
+        const meta = window._charts.radar.getDatasetMeta(i);
+        meta.hidden = !meta.hidden;
+        btn.setAttribute('aria-pressed', !meta.hidden);
+        window._charts.radar.update();
+      });
+    });
+  }
+
+  function renderBar() {
+    const ctx = document.getElementById('barChart').getContext('2d');
+    // Normalize via log to make small numbers readable
+    const labels = MCPS.map(m => m.name);
+    const stars = MCPS.map(m => m.stars);
+    const tools = MCPS.map(m => m.tools);
+    const npmw = MCPS.map(m => m.npmWeekly || 0);
+
+    window._charts.bar = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          { label: 'GitHub stars', data: stars, backgroundColor: getCssVar('--chart-1'), borderRadius: 6 },
+          { label: 'Tools count', data: tools, backgroundColor: getCssVar('--chart-2'), borderRadius: 6 },
+          { label: 'npm weekly DLs', data: npmw, backgroundColor: getCssVar('--chart-4'), borderRadius: 6 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { labels: { color: getCssVar('--muted-foreground'), font: { size: 11 } } } },
+        scales: {
+          y: {
+            type: 'logarithmic',
+            border: { display: false },
+            ticks: {
+              color: getCssVar('--muted-foreground'),
+              maxTicksLimit: 6,
+              callback: v => {
+                const powers = [1, 10, 100, 1000, 10000, 100000];
+                if (v >= 1000 && powers.includes(v)) return (v/1000)+'K';
+                if (powers.includes(v)) return v;
+                return null;
+              }
+            },
+            grid: { color: getCssVar('--border') }
+          },
+          x: {
+            ticks: { color: getCssVar('--muted-foreground'), font: { size: 11 }, maxRotation: 90, minRotation: 90 },
+            grid: { display: false }
+          }
+        }
+      }
+    });
+  }
+  renderRadar(); renderBar();
+
+  // =========================================================
+  // Live data — GitHub API + npm registry (client-side fetch)
+  // =========================================================
+  function setBadge(loading, timeStr) {
+    const badge = document.getElementById('liveBadge');
+    const dot = document.getElementById('liveDot');
+    const text = document.getElementById('liveText');
+    badge.style.display = 'inline-flex';
+    var en = window.LANG === 'en';
+    if (loading) {
+      dot.className = 'live-dot pulse';
+      text.textContent = en ? ' Loading latest data…' : ' กำลังโหลดข้อมูลล่าสุด…';
+    } else {
+      dot.className = 'live-dot';
+      text.textContent = (en ? ' Live · updated ' : ' Live · อัปเดต ') + timeStr;
+    }
+  }
+
+  async function fetchLiveData() {
+    setBadge(true);
+
+    await Promise.allSettled(
+      MCPS.filter(m => m.githubRepo || m.npmPkg).map(async (mcp) => {
+        const fetches = [];
+
+        if (mcp.githubRepo) {
+          fetches.push(
+            fetch('https://api.github.com/repos/' + mcp.githubRepo, {
+              headers: { Accept: 'application/vnd.github+json' }
+            })
+            .then(r => r.ok ? r.json() : null)
+            .then(d => {
+              if (d && typeof d.stargazers_count === 'number') {
+                mcp.stars = d.stargazers_count;
+                mcp.starsLabel = d.stargazers_count >= 1000
+                  ? '~' + (d.stargazers_count / 1000).toFixed(1) + 'K'
+                  : '~' + d.stargazers_count;
+              }
+            })
+            .catch(() => {})
+          );
+          fetches.push(
+            fetch('https://api.github.com/repos/' + mcp.githubRepo + '/commits?per_page=1', {
+              headers: { Accept: 'application/vnd.github+json' }
+            })
+            .then(r => r.ok ? r.json() : null)
+            .then(d => {
+              if (Array.isArray(d) && d[0] && d[0].commit && d[0].commit.committer) {
+                mcp.lastUpdated = String(d[0].commit.committer.date).slice(0, 10);
+              }
+            })
+            .catch(() => {})
+          );
+        }
+
+        if (mcp.npmPkg) {
+          fetches.push(
+            fetch('https://api.npmjs.org/downloads/point/last-week/' + mcp.npmPkg)
+            .then(r => r.ok ? r.json() : null)
+            .then(d => { if (d && typeof d.downloads === 'number') mcp.npmWeekly = d.downloads; })
+            .catch(() => {})
+          );
+        }
+
+        await Promise.all(fetches);
+      })
+    );
+
+    // Update hero stats with live Framelink data
+    const fl = MCPS.find(m => m.id === 'framelink');
+    if (fl) {
+      const heroStars = document.getElementById('heroStars');
+      const heroNpm = document.getElementById('heroNpm');
+      if (heroStars) heroStars.textContent = fl.starsLabel;
+      if (heroNpm && fl.npmWeekly) heroNpm.textContent = (fl.npmWeekly / 1000).toFixed(1) + 'K';
+    }
+
+    // Re-render dynamic sections with fresh data
+    renderTable();
+    renderTabs();
+    if (window._charts) {
+      window._charts.radar?.destroy();
+      window._charts.bar?.destroy();
+      renderRadar(); renderBar();
+    }
+
+    setBadge(false, new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }));
+  }
+
+  // Scroll-spy: update aria-current on nav links
+  (function() {
+    var navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+    var sections = Array.from(navLinks).map(function(a) {
+      return document.querySelector(a.getAttribute('href'));
+    });
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          navLinks.forEach(function(a) {
+            a.setAttribute('aria-current', a.getAttribute('href') === '#' + entry.target.id ? 'page' : 'false');
+          });
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+    sections.forEach(function(s) { if (s) observer.observe(s); });
+  })();
+
+  fetchLiveData().catch(function() {
+    setBadge(false, null);
+    var dot = document.getElementById('liveDot');
+    var txt = document.getElementById('liveText');
+    if (dot) dot.style.background = 'var(--warning)';
+    if (txt) txt.textContent = window.LANG === 'en' ? 'Could not load live data' : 'ไม่สามารถโหลดข้อมูล live ได้';
+  });
+</script>
+</body>
+</html>
