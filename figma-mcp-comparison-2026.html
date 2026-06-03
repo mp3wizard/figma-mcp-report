@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Figma MCP Servers — Interactive Comparison 2026</title>
+<!-- Favicon: official Figma logo on a rounded dark square (inline SVG data URI) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%23181818'/%3E%3Cg%20transform='translate(20%2013)'%3E%3Cpath%20fill='%231ABCFE'%20d='M12.5%2019a6.25%206.25%200%201%201%2012.5%200%206.25%206.25%200%200%201-12.5%200z'/%3E%3Cpath%20fill='%230ACF83'%20d='M0%2031.25A6.25%206.25%200%200%201%206.25%2025h6.25v6.25a6.25%206.25%200%201%201-12.5%200z'/%3E%3Cpath%20fill='%23FF7262'%20d='M12.5%200v12.5h6.25a6.25%206.25%200%201%200%200-12.5H12.5z'/%3E%3Cpath%20fill='%23F24E1E'%20d='M0%206.25A6.25%206.25%200%200%200%206.25%2012.5h6.25V0H6.25A6.25%206.25%200%200%200%200%206.25z'/%3E%3Cpath%20fill='%23A259FF'%20d='M0%2019a6.25%206.25%200%200%200%206.25%206.25h6.25V12.5H6.25A6.25%206.25%200%200%200%200%2019z'/%3E%3C/g%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai+Looped:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -111,9 +113,10 @@
   .brand { display: flex; align-items: center; gap: 0.625rem; font-weight: 600; letter-spacing: -0.01em; }
   .brand-logo {
     width: 28px; height: 28px; border-radius: 8px;
-    background: linear-gradient(135deg, var(--chart-1), var(--chart-3));
-    display: grid; place-items: center; color: oklch(0.98 0.005 250); font-weight: 700; font-size: 13px;
+    background: var(--secondary); border: 1px solid var(--border);
+    display: grid; place-items: center;
   }
+  .brand-logo svg { display: block; }
   .brand-title { font-size: 14px; }
   .brand-sub { font-size: 12px; color: var(--muted-foreground); margin-left: 0.5rem; }
 
@@ -791,7 +794,15 @@
 <header class="app-bar" role="banner">
   <div class="app-bar-inner">
     <div class="brand">
-      <div class="brand-logo">F</div>
+      <div class="brand-logo" aria-hidden="true">
+        <svg viewBox="0 0 25 38" width="15" height="22" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Figma">
+          <path fill="#1ABCFE" d="M12.5 19a6.25 6.25 0 1 1 12.5 0 6.25 6.25 0 0 1-12.5 0z"/>
+          <path fill="#0ACF83" d="M0 31.25A6.25 6.25 0 0 1 6.25 25h6.25v6.25a6.25 6.25 0 1 1-12.5 0z"/>
+          <path fill="#FF7262" d="M12.5 0v12.5h6.25a6.25 6.25 0 1 0 0-12.5H12.5z"/>
+          <path fill="#F24E1E" d="M0 6.25A6.25 6.25 0 0 0 6.25 12.5h6.25V0H6.25A6.25 6.25 0 0 0 0 6.25z"/>
+          <path fill="#A259FF" d="M0 19a6.25 6.25 0 0 0 6.25 6.25h6.25V12.5H6.25A6.25 6.25 0 0 0 0 19z"/>
+        </svg>
+      </div>
       <div>
         <div class="brand-title">Figma MCP — Comparison 2026</div>
       </div>
