@@ -572,12 +572,45 @@
     display: inline-flex; align-items: center;
     font-size: 12px; font-weight: 700; line-height: 1;
     padding: 0.2rem 0.5rem; border-radius: 999px;
-    background: var(--color-update); color: #fff;
+    /* per-month hue — defaults to the generic update blue if no month match */
+    background: var(--month-bg, var(--color-update));
+    color: var(--month-fg, #fff);
     letter-spacing: 0.06em; flex-shrink: 0;
   }
   [data-theme="dark"] .cmd-since {
-    box-shadow: 0 1px 6px color-mix(in oklch, var(--color-update) 50%, transparent);
+    box-shadow: 0 1px 6px color-mix(in oklch, var(--month-bg, var(--color-update)) 50%, transparent);
   }
+  /* =========================================================
+     Month color scale — one distinct hue per calendar month.
+     Same lightness/chroma so they read as a family; only the
+     hue changes around the wheel. Add a new month by copying a
+     line and swapping the hue. Light theme: solid fill / white text.
+     ========================================================= */
+  .cmd-since[data-month$="-01"] { --month-bg: oklch(0.55 0.16 265); } /* Jan — indigo */
+  .cmd-since[data-month$="-02"] { --month-bg: oklch(0.55 0.16 310); } /* Feb — violet */
+  .cmd-since[data-month$="-03"] { --month-bg: oklch(0.56 0.18 350); } /* Mar — pink */
+  .cmd-since[data-month$="-04"] { --month-bg: oklch(0.57 0.19 25);  } /* Apr — red */
+  .cmd-since[data-month$="-05"] { --month-bg: oklch(0.62 0.17 55);  } /* May — orange */
+  .cmd-since[data-month$="-06"] { --month-bg: oklch(0.66 0.15 95);  } /* Jun — amber */
+  .cmd-since[data-month$="-07"] { --month-bg: oklch(0.66 0.16 130); } /* Jul — lime */
+  .cmd-since[data-month$="-08"] { --month-bg: oklch(0.6 0.15 155);  } /* Aug — green */
+  .cmd-since[data-month$="-09"] { --month-bg: oklch(0.62 0.12 190); } /* Sep — teal */
+  .cmd-since[data-month$="-10"] { --month-bg: oklch(0.6 0.13 220);  } /* Oct — cyan-blue */
+  .cmd-since[data-month$="-11"] { --month-bg: oklch(0.55 0.15 245); } /* Nov — blue */
+  .cmd-since[data-month$="-12"] { --month-bg: oklch(0.5 0.14 285);  } /* Dec — deep violet */
+  /* Dark theme — lift lightness a touch so chips stay vivid on dark bg */
+  [data-theme="dark"] .cmd-since[data-month$="-01"] { --month-bg: oklch(0.64 0.16 265); }
+  [data-theme="dark"] .cmd-since[data-month$="-02"] { --month-bg: oklch(0.64 0.16 310); }
+  [data-theme="dark"] .cmd-since[data-month$="-03"] { --month-bg: oklch(0.66 0.18 350); }
+  [data-theme="dark"] .cmd-since[data-month$="-04"] { --month-bg: oklch(0.67 0.19 25);  }
+  [data-theme="dark"] .cmd-since[data-month$="-05"] { --month-bg: oklch(0.72 0.17 55);  }
+  [data-theme="dark"] .cmd-since[data-month$="-06"] { --month-bg: oklch(0.78 0.15 95);  --month-fg:#1a1400; }
+  [data-theme="dark"] .cmd-since[data-month$="-07"] { --month-bg: oklch(0.78 0.16 130); --month-fg:#0d1400; }
+  [data-theme="dark"] .cmd-since[data-month$="-08"] { --month-bg: oklch(0.7 0.15 155);  }
+  [data-theme="dark"] .cmd-since[data-month$="-09"] { --month-bg: oklch(0.72 0.12 190); --month-fg:#001417; }
+  [data-theme="dark"] .cmd-since[data-month$="-10"] { --month-bg: oklch(0.7 0.13 220);  }
+  [data-theme="dark"] .cmd-since[data-month$="-11"] { --month-bg: oklch(0.64 0.15 245); }
+  [data-theme="dark"] .cmd-since[data-month$="-12"] { --month-bg: oklch(0.6 0.14 285);  }
   .cmd-cell-top {
     display: flex; align-items: center; justify-content: center; gap: 4px;
   }
@@ -668,6 +701,8 @@
     font-size:12px; color:var(--muted-foreground);
   }
   .matrix-legend span { display:flex; align-items:center; gap:0.375rem; }
+  .month-legend-sep { width:1px; height:14px; background:var(--border); margin:0 0.25rem; }
+  .month-legend { display:flex; flex-wrap:wrap; gap:0.375rem; }
 
   /* =========================================================
      Live data badge
@@ -852,7 +887,7 @@
       </div>
       <div class="stat">
         <div class="stat-label">Most tools</div>
-        <div class="stat-value">106+</div>
+        <div class="stat-value">108+</div>
         <div class="stat-trend">Figma Console MCP v1.29</div>
       </div>
       <div class="stat">
@@ -968,6 +1003,9 @@
       <span><span class="cmd-yes" style="display:inline">✓</span> <span data-i18n="legend.yes">รองรับ</span></span>
       <span><span class="cmd-partial" style="display:inline">⚠</span> <span data-i18n="legend.partial">บางส่วน / มีเงื่อนไข</span></span>
       <span><span class="cmd-none" style="display:inline">—</span> <span data-i18n="legend.none">ไม่รองรับ</span></span>
+      <span class="month-legend-sep" aria-hidden="true"></span>
+      <span data-i18n="legend.newSince">เพิ่มใหม่ตั้งแต่:</span>
+      <span id="monthLegend" class="month-legend"></span>
     </div>
     <div id="mcpDiffBanner" hidden></div>
     <details id="mcpDiffPanel" hidden>
@@ -1093,21 +1131,29 @@
       maintainer: 'Figma',
       logoColor: 'oklch(0.6 0.18 250)',
       latestVersion: 'Active (Jun 2026)',
-      lastUpdated: '2026-06-02',
+      lastUpdated: '2026-06-04',
       stars: 1069,
       starsLabel: '~1,069 (guide repo)',
       npmWeekly: null,
-      tools: 13,
+      tools: 17,
       toolsList: [
         'get_design_context',
         'get_variable_defs',
         'get_code_connect_map',
+        'get_code_connect_suggestions ✦',
+        'get_context_for_code_connect ✦',
         'get_screenshot',
         'get_metadata',
         'get_figjam',
-        'use_figma (write canvas, beta)',
+        'get_libraries ✦',
+        'search_design_system ✦',
+        'use_figma (write canvas)',
+        'create_new_file',
         'generate_diagram (Mermaid → FigJam)',
-        'send_code_connect_mappings'
+        'upload_assets ✦',
+        'send_code_connect_mappings',
+        'add_code_connect_map',
+        'whoami ✦'
       ],
       planRequired: 'pro',
       planLabel: 'Starter (6 calls/mo) → Professional+ (Dev/Full seat)',
@@ -1172,8 +1218,8 @@
       sub: 'figma-developer-mcp · GLips',
       maintainer: 'Graham Lipsman',
       logoColor: 'oklch(0.7 0.16 50)',
-      latestVersion: 'v0.11.0 (Apr 2026)',
-      lastUpdated: '2026-04-20',
+      latestVersion: 'v0.12.0 (Jun 2026)',
+      lastUpdated: '2026-06-04',
       stars: 14800,
       starsLabel: '~14,800',
       npmWeekly: 105000,
@@ -1247,28 +1293,37 @@
       maintainer: 'TJ Pitre / SouthLeft',
       logoColor: 'oklch(0.62 0.2 145)',
       latestVersion: 'v1.29.0 (May 2026)',
-      lastUpdated: '2026-05-22',
+      lastUpdated: '2026-06-04',
       stars: 1700,
       starsLabel: '~1,700',
       npmWeekly: null,
-      tools: 106,
+      tools: 108,
       toolsList: [
         'figma_get_console_logs',
         'figma_watch_console',
         'figma_take_screenshot',
         'figma_audit_component_accessibility',
+        'figma_scan_code_accessibility ✦',
         'figma_check_design_parity',
         'figma_batch_create_variables',
         'figma_setup_design_tokens',
         'figma_lint_design',
         'figma_generate_component_doc',
-        'figma_export_tokens (10 formats) ✦',
-        'figma_import_tokens (bidirectional sync) ✦',
-        'figma_get_library_component_by_key ✦',
-        'figma_get_library_variables ✦',
-        'figma_import_library_variable ✦',
-        'figma_diff_versions ✦',
-        'figma_diagnose ✦'
+        'figma_generate_changelog ✦',
+        'figma_blame_node ✦',
+        'figma_analyze_component_set ✦',
+        'figma_arrange_component_set ✦',
+        'figma_instantiate_component ✦',
+        'figma_create_slide / add_text_to_slide (Slides API) ✦',
+        'figma_set_slide_transition ✦',
+        'figma_get_annotations / set_annotations ✦',
+        'figma_export_tokens (10 formats)',
+        'figma_import_tokens (bidirectional sync)',
+        'figma_get_library_component_by_key',
+        'figma_get_library_variables',
+        'figma_import_library_variable',
+        'figma_diff_versions',
+        'figma_diagnose'
       ],
       planRequired: 'free',
       planLabel: 'Free, Pro, Enterprise — ทุก plan',
@@ -1338,25 +1393,29 @@
       sub: 'arinspunk · WebSocket bridge',
       maintainer: 'arinspunk',
       logoColor: 'oklch(0.65 0.2 25)',
-      latestVersion: 'v0.9.2 (Feb 2026)',
-      lastUpdated: '2026-02-28',
+      latestVersion: 'v1.0.0 (Jun 2026)',
+      lastUpdated: '2026-06-04',
       stars: 561,
       starsLabel: '~561',
       npmWeekly: null,
-      tools: 54,
+      tools: 93,
       toolsList: [
-        'rotate_node',
-        'reorder_node',
-        'convert_to_frame',
-        'set_node_properties',
-        'set_gradient',
+        'create_component_set ✦',
+        'create_component_from_node ✦',
+        'detach_instance ✦',
+        'set_instance_variant ✦',
+        'create_paint_style / create_text_style / create_effect_style ✦',
+        'set_effects / set_effect_style_id ✦',
+        'apply_image_transform / set_image_filters ✦',
+        'replace_image_fill ✦',
+        'set_variable / apply_variable_to_node / switch_variable_mode ✦',
+        'set_auto_layout ✦',
+        'flatten_node / group_nodes / ungroup_nodes ✦',
+        'get_styled_text_segments ✦',
+        'set_reactions / get_reactions',
         'boolean_operation',
+        'set_gradient',
         'set_svg / get_svg',
-        'set_image',
-        'set_grid / get_grid',
-        'set_guide / get_guide',
-        'duplicate_page',
-        'analyze_document',
         'export_node_as_image'
       ],
       planRequired: 'free',
@@ -1390,16 +1449,16 @@
       pros: [
         'Bidirectional real-time ผ่าน WebSocket',
         'พูดภาษาธรรมชาติเปลี่ยน design ทั้ง file ได้ ("เปลี่ยนสีปุ่ม primary")',
-        'v0.9.0 เพิ่ม 20 tools: gradient, boolean ops, grids, guides, variables',
-        'v0.9.1 เพิ่ม FigJam support (sticky, connector, shape, section) + image fill',
-        'Generate React/Vue/SwiftUI handoff โดยตรง'
+        'v1.0.0 ขยายเป็น 93 tools: paint/text/effect styles, image filters, component set, variable modes',
+        'set_auto_layout รวม mode/padding/align/sizing/gap เป็นคำสั่งเดียว',
+        'รองรับ FigJam (sticky, connector, shape, section) + Generate React/Vue/SwiftUI handoff'
       ],
       pros_en: [
         'Bidirectional real-time via WebSocket',
         'Change a whole file in natural language ("make the primary button blue")',
-        'v0.9.0 added 20 tools: gradient, boolean ops, grids, guides, variables',
-        'v0.9.1 added FigJam support (sticky, connector, shape, section) + image fill',
-        'Generate React/Vue/SwiftUI handoff directly'
+        'v1.0.0 grew to 93 tools: paint/text/effect styles, image filters, component sets, variable modes',
+        'set_auto_layout unifies mode/padding/align/sizing/gap into one call',
+        'FigJam support (sticky, connector, shape, section) + generate React/Vue/SwiftUI handoff'
       ],
       cons: [
         'Setup ซับซ้อน — ต้องรัน WebSocket server + ติด plugin เอง',
@@ -1427,31 +1486,40 @@
       sub: 'tercumantanumut · Multi-framework fork',
       maintainer: 'Umut TAN (Sunnyside Software)',
       logoColor: 'oklch(0.78 0.15 95)',
-      latestVersion: 'Active (Apr 2026)',
-      lastUpdated: '2026-04-30',
+      latestVersion: 'Active (Jun 2026)',
+      lastUpdated: '2026-06-04',
       stars: 37,
       starsLabel: '~37',
       npmWeekly: null,
-      tools: 30,
+      tools: 27,
       toolsList: [
-        'get_react_component ✦',
-        'analyze_app_structure ✦',
-        'map_app_flow ✦',
-        'batch_extract_frames ✦',
-        'get_figma_assets ✦',
-        'get_figma_variable_definitions ✦',
-        'generate_codegen_plugin ✦',
-        'get_plugin_project_overview ✦',
-        'get_figma_dev_history ✦',
-        'check_figma_dev_connection ✦',
+        'get_react_component',
+        'get_styled_component',
+        'get_tailwind_component',
+        'get_figma_dev_mode_code',
+        'get_All_Layers_CSS ✦',
+        'get_Basic_CSS ✦',
+        'get_JSON ✦',
+        'analyze_app_structure',
+        'analyze_figma_components ✦',
+        'get_figma_page_structure ✦',
+        'get_figma_project_overview ✦',
+        'get_plugin_project_overview',
+        'generate_codegen_plugin',
+        'get_figma_dev_history',
+        'check_figma_dev_connection',
+        'extract_design_tokens',
         'simulate_token_change',
         'analyze_token_change_impact',
+        'apply_token_change ✦',
+        'rollback_token_change ✦',
+        'list_token_simulations ✦',
+        'debug_token_registry ✦',
         'generate_migration_code',
         'track_design_system_health',
         'build_dependency_graph',
-        'get_styled_component',
-        'get_tailwind_component',
-        'get_figma_dev_mode_code'
+        'download_figma_images',
+        'get_figma_data'
       ],
       planRequired: 'partial',
       planLabel: 'Free + บางฟีเจอร์ใช้ Dev seat',
@@ -1758,7 +1826,7 @@
       label: 'Figma Design', icon: '◆', iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20" aria-hidden="true"><rect width="20" height="20" fill="#E5F4FF" rx="4"></rect><path fill="#0D99FF" d="M5.39 4.207a1 1 0 0 1 .84-.181l5.058 1.189.227.06a4.87 4.87 0 0 1 3.522 4.845l.672.672a1 1 0 0 1 0 1.414l-3.5 3.5a1 1 0 0 1-1.414 0l-.673-.673a4.87 4.87 0 0 1-4.845-3.52l-.06-.227-1.19-5.057a1 1 0 0 1 .267-.937l1-1zm.464.938 3.132 3.132a2 2 0 1 1-.707.707L5.147 5.852l-.146.147 1.19 5.058a3.867 3.867 0 0 0 4.31 2.941l1 1.001 3.5-3.5-1-1a3.87 3.87 0 0 0-2.942-4.31l-5.058-1.19zm4.147 3.853a1 1 0 1 0 0 2 1 1 0 0 0 0-2"></path></svg>',
       groups: [
         { cat: 'Read Design', features: [
-          { label: 'โครงสร้าง layout / nodes', label_en:'Layout structure / nodes', desc:'อ่านโครงสร้างทั้งไฟล์เป็น tree ของ frame/group/layer ให้ AI เข้าใจ hierarchy ก่อนแก้หรือ gen code', eg:'ดึง node หน้า Login มาดูว่ามี input/button ซ้อนกันยังไง แล้วสั่งแปลงเป็น React', official:['get_design_context'], framelink:['get_figma_data'], console:['figma_get_file_data','figma_get_selection'], claudetalk:['get_document_info','read_my_design'], sunnyside:['get_figma_data','get_figma_page_structure'] },
+          { label: 'โครงสร้าง layout / nodes', label_en:'Layout structure / nodes', desc:'อ่านโครงสร้างทั้งไฟล์เป็น tree ของ frame/group/layer ให้ AI เข้าใจ hierarchy ก่อนแก้หรือ gen code', eg:'ดึง node หน้า Login มาดูว่ามี input/button ซ้อนกันยังไง แล้วสั่งแปลงเป็น React', official:['get_design_context'], framelink:['get_figma_data'], console:['figma_get_file_data','figma_get_selection'], claudetalk:['get_document_info','get_node_info'], sunnyside:['get_figma_data','get_figma_page_structure'] },
           { label: 'Screenshot / export image',   desc:'แคปภาพ node หรือ export เป็นไฟล์รูป ใช้ตรวจงานจริงหรือแนบให้ AI ดู visual', eg:'export ปุ่ม CTA เป็น PNG @2x ไปแปะใน PR หรือให้ AI ตรวจ alignment', official:['get_screenshot'],    framelink:['download_figma_images'],console:['figma_take_screenshot','figma_capture_screenshot'], claudetalk:['export_node_as_image'], sunnyside:['download_figma_images'] },
           { label: 'Metadata (file / node)',       desc:'ดึงข้อมูลย่อของ node เช่น ขนาด ตำแหน่ง ชื่อ ชนิด โดยไม่ต้องโหลด tree ทั้งก้อน', eg:'เช็กว่า frame กว้าง 375px ตรง spec มือถือไหม ก่อนส่งต่อ dev', official:['get_metadata'],      framelink:['get_figma_data'],       console:['figma_get_file_data'],    claudetalk:['get_node_info','get_nodes_info'],  sunnyside:['get_figma_project_overview'] },
           { label: 'Components & library',         since:'2026-05', desc:'อ่าน component และ library ที่ผูกไว้ ดูว่ามี variant/instance อะไรใช้ได้บ้าง', eg:'list ปุ่มทุก variant ใน design system แล้วเลือก Primary/Large มาวาง', official:['get_libraries'],      framelink:['get_figma_data'],       console:['figma_get_component','figma_get_library_components','figma_search_components'], claudetalk:['get_local_components'], sunnyside:['analyze_figma_components'] },
@@ -1770,9 +1838,8 @@
           { label: 'Library component by key',      since:'2026-05', desc:'ดึง component จาก library ด้วย key ตรงๆ แม้ไม่ได้อยู่ในไฟล์', eg:'ดึง Button หลักจาก shared library มาใช้ในไฟล์ใหม่', official:[],                    framelink:[],                       console:['figma_get_library_component_by_key'], claudetalk:[], sunnyside:[] },
           { label: 'Library variables (shared lib)',since:'2026-05', desc:'อ่าน variable/token ที่แชร์จาก library กลาง', eg:'ดึง spacing/color token จาก DS library มาใช้ข้ามไฟล์', official:[],                    framelink:[],                       console:['figma_get_library_variables'], claudetalk:[], sunnyside:[] },
           { label: 'Import library variable',       since:'2026-05', desc:'นำ variable จาก library เข้ามาผูกใน collection ของไฟล์ปัจจุบัน', eg:'import token color/brand เข้าไฟล์นี้เพื่อใช้ binding', official:[],                    framelink:[],                       console:['figma_import_library_variable'], claudetalk:[], sunnyside:[] },
-          { label: 'Batch extract frames',          since:'2026-05', desc:'ดึงหลาย frame พร้อมกันในครั้งเดียว ประหยัดเวลา', eg:'ดึงทุก screen ของ flow checkout มา gen code รวดเดียว', official:[],                    framelink:[],                       console:[],                          claudetalk:[], sunnyside:['batch_extract_frames'] },
-          { label: 'Get all assets',                since:'2026-05', desc:'ดึง asset ทั้งหมด (รูป/ไอคอน/SVG) ในไฟล์ออกมา', eg:'export ไอคอนทุกตัวเป็น SVG ไปใส่โปรเจกต์', official:[],                    framelink:[],                       console:[],                          claudetalk:[], sunnyside:['get_figma_assets'] },
-          { label: 'App structure & flow mapping',  since:'2026-05', desc:'วิเคราะห์โครงสร้างแอปและ map การเชื่อมต่อระหว่างหน้า', eg:'สร้างแผนผัง flow จาก Home ไป Cart ไป Checkout อัตโนมัติ', official:[],                    framelink:[],                       console:[],                          claudetalk:[], sunnyside:['analyze_app_structure','map_app_flow'] },
+          { label: 'CSS / JSON extraction',         since:'2026-06', desc:'ดึง CSS ทุก layer หรือ raw JSON ของ node ออกมาตรงๆ', eg:'ดึง All-Layers CSS ของหน้า checkout ไปวางใน stylesheet', official:[],                    framelink:[],                       console:[],                          claudetalk:[], sunnyside:['get_All_Layers_CSS','get_Basic_CSS','get_JSON'] },
+          { label: 'App structure & page structure', since:'2026-06', desc:'วิเคราะห์โครงสร้างแอปและ map โครงหน้าทั้งไฟล์', eg:'สร้างแผนผังโครงสร้างจาก Home ไป Cart ไป Checkout อัตโนมัติ', official:[],                    framelink:[],                       console:[],                          claudetalk:[], sunnyside:['analyze_app_structure','get_figma_page_structure'] },
           { label: 'Dev mode history',              since:'2026-05', desc:'ดูประวัติการดึง code ใน Dev Mode ที่ผ่านมา', eg:'ย้อนดูว่าเคย gen component ไหนไปแล้วบ้าง', official:[],                    framelink:[],                       console:[],                          claudetalk:[], sunnyside:['get_figma_dev_history'] },
           { label: 'Plugin project overview',       since:'2026-05', desc:'สรุปภาพรวมโปรเจกต์ผ่าน plugin bridge', eg:'ดูจำนวนหน้า/component/ขนาดไฟล์ก่อนเริ่มงาน', official:[],                    framelink:[],                       console:[],                          claudetalk:[], sunnyside:['get_plugin_project_overview'] },
         ]},
@@ -1789,13 +1856,13 @@
           { label: 'Generate migration code',      since:'2026-05', desc:'สร้าง code สำหรับย้าย token เก่าไปค่าใหม่ใน codebase', eg:'gen find-replace script เปลี่ยนชื่อ token ทั้งโปรเจกต์', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['generate_migration_code'] },
           { label: 'Export tokens (CSS/SCSS/JSON/Tailwind)', since:'2026-05', desc:'ส่งออก token เป็นไฟล์หลายฟอร์แมตให้ dev ใช้ต่อ', eg:'export เป็น CSS variables + Tailwind config พร้อมใช้', official:[], framelink:[], console:['figma_export_tokens'], claudetalk:[], sunnyside:[] },
           { label: 'Import tokens from file',      since:'2026-05', desc:'นำเข้า token จากไฟล์ภายนอกเข้าสู่ Figma', eg:'import tokens.json จาก repo เข้ามาสร้างเป็น variable', official:[], framelink:[], console:['figma_import_tokens'], claudetalk:[], sunnyside:[] },
-          { label: 'Variable definitions (full schema)', since:'2026-05', desc:'ดึงนิยาม variable แบบเต็มทั้ง type/scope/alias', eg:'ดู schema ของ token เพื่อ gen TypeScript type ที่ตรง', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['get_figma_variable_definitions'] },
+          { label: 'Variable definitions (full schema)', since:'2026-05', desc:'ดึงนิยาม variable แบบเต็มทั้ง type/scope/alias', eg:'ดู schema ของ token เพื่อ gen TypeScript type ที่ตรง', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['extract_design_tokens'] },
         ]},
         { cat: 'Write Canvas', features: [
-          { label: 'Create element (rect/frame/text)',since:'2026-05', desc:'สร้าง element ใหม่บน canvas เช่น สี่เหลี่ยม frame หรือ text', eg:'สั่ง AI สร้าง frame การ์ดสินค้า พร้อม text ราคาข้างใน', official:['partial'],        framelink:[], console:['figma_create_child'], claudetalk:['create_rectangle','create_frame','create_text'], sunnyside:[] },
+          { label: 'Create element (rect/frame/text)',since:'2026-05', desc:'สร้าง element ใหม่บน canvas เช่น สี่เหลี่ยม frame หรือ text', eg:'สั่ง AI สร้าง frame การ์ดสินค้า พร้อม text ราคาข้างใน', official:['partial'],        framelink:[], console:['figma_create_child'], claudetalk:['create_rectangle','create_frame','create_text','create_ellipse','create_polygon','create_star'], sunnyside:[] },
           { label: 'Create instance node',        since:'2026-05', desc:'วาง instance ของ component ที่มีอยู่ลงบน canvas', eg:'วางปุ่ม Primary จาก DS ลง 3 จุดในหน้า form', official:['partial'],           framelink:[], console:['figma_instantiate_component'], claudetalk:['create_component_instance'], sunnyside:[] },
           { label: 'Resize / move node',           since:'2026-05', desc:'ปรับขนาดหรือย้ายตำแหน่ง node', eg:'ย้าย CTA ไปกึ่งกลางและขยายกว้างเป็น 320px', official:['partial'],           framelink:[], console:['figma_resize_node','figma_move_node'], claudetalk:['resize_node','move_node'], sunnyside:[] },
-          { label: 'Clone / delete node',          since:'2026-05', desc:'ทำสำเนาหรือลบ node ทีละตัว/หลายตัว', eg:'clone การ์ดตัวอย่างไป 5 ใบ แล้วลบใบที่เกิน', official:['partial'],           framelink:[], console:['figma_clone_node','figma_delete_node'], claudetalk:['clone_node','delete_node','delete_multiple_nodes'], sunnyside:[] },
+          { label: 'Clone / delete node',          since:'2026-05', desc:'ทำสำเนาหรือลบ node ทีละตัว/หลายตัว', eg:'clone การ์ดตัวอย่างไป 5 ใบ แล้วลบใบที่เกิน', official:['partial'],           framelink:[], console:['figma_clone_node','figma_delete_node'], claudetalk:['clone_node','delete_node'], sunnyside:[] },
           { label: 'Set fills / colors',           since:'2026-05', desc:'กำหนดสีพื้น/fill ให้ node', eg:'เปลี่ยนสีพื้น Hero เป็น token color/brand', official:['partial'],           framelink:[], console:['figma_set_fills'], claudetalk:['set_fill_color'], sunnyside:[] },
           { label: 'Set strokes',                  since:'2026-05', desc:'กำหนดเส้นขอบ สี และความหนาของ stroke', eg:'ใส่ขอบ 1px สีเทาให้ input field ทุกอัน', official:['partial'],           framelink:[], console:['figma_set_strokes'], claudetalk:['set_stroke_color'], sunnyside:[] },
           { label: 'Set text content',             since:'2026-05', desc:'แก้ข้อความใน text node ทีละจุดหรือหลายจุด', eg:'แทนที่ Lorem ipsum ทั้งหน้าด้วย copy จริง', official:['partial'],           framelink:[], console:['figma_set_text'], claudetalk:['set_text_content','set_multiple_text_contents'], sunnyside:[] },
@@ -1808,7 +1875,7 @@
           { label: 'Convert to frame',             desc:'แปลง group/element เป็น frame เพื่อใช้ auto layout', eg:'แปลง group การ์ดเป็น frame ก่อนเปิด auto layout', official:[],                    framelink:[], console:[], claudetalk:['convert_to_frame'], sunnyside:[] },
           { label: 'Rename node',                  desc:'เปลี่ยนชื่อ layer/node ให้สื่อความ', eg:'เปลี่ยน Frame 12 เป็น CardProduct ให้ handoff อ่านง่าย', official:[],                    framelink:[], console:['figma_rename_node'], claudetalk:[], sunnyside:[] },
           { label: 'Upload assets',                since:'2026-05', desc:'อัปโหลดรูป/asset เข้าไฟล์ Figma', eg:'อัปรูป hero จากเครื่องเข้ามาใช้บน canvas', official:['upload_assets'],     framelink:[], console:[], claudetalk:[], sunnyside:[] },
-          { label: 'Set instance properties',      since:'2026-05', desc:'ตั้งค่า property/override ของ instance เช่น text, variant', eg:'ตั้งปุ่ม instance ให้เป็น variant Danger + label ลบ', official:[],framelink:[], console:['figma_set_instance_properties'], claudetalk:['set_instance_overrides'], sunnyside:[] },
+          { label: 'Set instance properties',      since:'2026-05', desc:'ตั้งค่า property/override ของ instance เช่น text, variant', eg:'ตั้งปุ่ม instance ให้เป็น variant Danger + label ลบ', official:[],framelink:[], console:['figma_set_instance_properties'], claudetalk:['set_instance_variant'], sunnyside:[] },
         ]},
         { cat: 'Component Properties', features: [
           { label: 'Add component property',    since:'2026-05', desc:'เพิ่ม property ให้ component เช่น variant, boolean, text', eg:'เพิ่ม prop hasIcon (boolean) ให้ปุ่มสลับมีไอคอน', official:[], framelink:[], console:['figma_add_component_property'],    claudetalk:[], sunnyside:[] },
@@ -1817,14 +1884,10 @@
           { label: 'Arrange component set',     since:'2026-05', desc:'จัดเรียง variant ใน component set ให้เป็นระเบียบ', eg:'เรียง variant เป็นตาราง size × state อัตโนมัติ', official:[], framelink:[], console:['figma_arrange_component_set'],     claudetalk:[], sunnyside:[] },
           { label: 'Get component details',     since:'2026-05', desc:'ดึงรายละเอียดเต็มของ component', eg:'ดู prop/variant/description ทั้งหมดของ Input', official:[], framelink:[], console:['figma_get_component_details'],     claudetalk:[], sunnyside:[] },
           { label: 'Get component image',       since:'2026-05', desc:'render รูป preview ของ component', eg:'ดึงภาพ Button ทุก variant ไปทำ doc', official:[], framelink:[], console:['figma_get_component_image'],       claudetalk:[], sunnyside:[] },
-          { label: 'Get / set instance overrides', since:'2026-05', desc:'อ่านหรือเขียน override ของ instance', eg:'copy override จาก card ต้นแบบไปทุก instance', official:[], framelink:[], console:[], claudetalk:['get_instance_overrides','set_instance_overrides'], sunnyside:[] },
+          { label: 'Get / set instance overrides', since:'2026-05', desc:'อ่านหรือเขียน override ของ instance', eg:'copy override จาก card ต้นแบบไปทุก instance', official:[], framelink:[], console:[], claudetalk:['set_instance_variant','detach_instance'], sunnyside:[] },
         ]},
         { cat: 'Auto Layout', features: [
-          { label: 'Set layout mode',           since:'2026-05', desc:'เปิด auto layout แนวตั้ง/แนวนอนให้ frame', eg:'ตั้ง frame เมนูให้เรียง item แนวนอนอัตโนมัติ', official:[], framelink:[], console:[], claudetalk:['set_layout_mode'],  sunnyside:[] },
-          { label: 'Set padding',               since:'2026-05', desc:'ตั้งระยะ padding ภายใน frame', eg:'ใส่ padding 16px รอบเนื้อหาในการ์ด', official:[], framelink:[], console:[], claudetalk:['set_padding'],      sunnyside:[] },
-          { label: 'Set axis alignment',        since:'2026-05', desc:'จัด alignment ของ item ตามแกน', eg:'จัด item ให้ชิดกลางทั้งแนวตั้งและนอน', official:[], framelink:[], console:[], claudetalk:['set_axis_align'],   sunnyside:[] },
-          { label: 'Set layout sizing',         since:'2026-05', desc:'ตั้ง sizing เป็น fixed/hug/fill ให้ item', eg:'ตั้ง input ให้ fill กว้างเต็ม container', official:[], framelink:[], console:[], claudetalk:['set_layout_sizing'],sunnyside:[] },
-          { label: 'Set item spacing',          since:'2026-05', desc:'ตั้งระยะห่างระหว่าง item ใน auto layout', eg:'ตั้ง gap ระหว่างปุ่มเป็น 8px', official:[], framelink:[], console:[], claudetalk:['set_item_spacing'], sunnyside:[] },
+          { label: 'Set auto layout (unified)', since:'2026-06', desc:'ตั้ง auto layout ครบในคำสั่งเดียว — mode, padding, alignment, sizing, gap (v1.0.0 รวม 5 tools เดิมเป็นตัวเดียว)', eg:'ตั้ง frame เมนูให้ horizontal + padding 16 + gap 8 + center รวดเดียว', official:[], framelink:[], console:[], claudetalk:['set_auto_layout'],  sunnyside:[] },
         ]},
         { cat: 'Design System & Audit', features: [
           { label: 'Design system audit (scorecard)', since:'2026-05', desc:'ประเมินสุขภาพ design system เป็นคะแนน 0-100 แบบ Lighthouse', eg:'รัน audit แล้วได้ 72/100 พร้อมจุดที่ควรแก้', official:[],                 framelink:[], console:['figma_audit_design_system','figma_get_design_system_summary'], claudetalk:[], sunnyside:[] },
@@ -1851,7 +1914,7 @@
           { label: 'Reconnect to Figma',          since:'2026-05', desc:'เชื่อมต่อ Figma ใหม่เมื่อ session หลุด', eg:'reconnect หลัง console ถูก clear แล้ว monitor หลุด', official:[], framelink:[], console:['figma_reconnect'],        claudetalk:[], sunnyside:[] },
           { label: 'Get file for plugin',         since:'2026-05', desc:'ดึงข้อมูลไฟล์ในรูปแบบที่ plugin ใช้ต่อได้', eg:'ดึง file data ดิบไปประมวลผลใน plugin เอง', official:[], framelink:[], console:['figma_get_file_for_plugin'], claudetalk:[], sunnyside:[] },
           { label: 'Diagnose plugin health',       since:'2026-05', desc:'ตรวจสุขภาพการเชื่อมต่อ plugin/dev bridge', eg:'รัน diagnose เจอว่า bridge plugin ไม่ได้เปิด', official:[], framelink:[], console:['figma_diagnose'], claudetalk:[], sunnyside:['check_figma_dev_connection'] },
-          { label: 'Pair plugin (Desktop auth)',   since:'2026-05', desc:'จับคู่/ยืนยันตัวตนกับ Figma Desktop plugin', eg:'pair ครั้งแรกเพื่อให้ MCP คุย Desktop ได้', official:[], framelink:[], console:['figma_pair_plugin'], claudetalk:[], sunnyside:[] },
+          { label: 'Pair plugin (Desktop auth)',   since:'2026-05', desc:'จับคู่/ยืนยันตัวตนกับ Figma Desktop plugin', eg:'pair ครั้งแรกเพื่อให้ MCP คุย Desktop ได้', official:[], framelink:[], console:['figma_reconnect'], claudetalk:[], sunnyside:[] },
         ]},
         { cat: 'Version History', features: [
           { label: 'List file versions',          since:'2026-05', desc:'ดูรายการ version history ทั้งหมดของไฟล์', eg:'ดูว่าไฟล์ถูก save เป็น named version ตอนไหนบ้าง', official:[], framelink:[], console:['figma_get_file_versions'],        claudetalk:[], sunnyside:[] },
@@ -1870,9 +1933,9 @@
         ]},
         { cat: 'Collaboration', features: [
           { label: 'Post / get / delete comments', desc:'อ่าน เขียน หรือลบ comment บนไฟล์', eg:'โพสต์ comment ฝาก dev ว่าปุ่มนี้ต้องลิงก์ไปหน้าไหน', official:[], framelink:[], console:['figma_post_comment','figma_get_comments','figma_delete_comment'], claudetalk:[], sunnyside:[] },
-          { label: 'Annotations',                  since:'2026-05', desc:'จัดการ annotation บอก spec ติดกับ node สำหรับ handoff', eg:'แปะ annotation บอกว่า input นี้ required + max 50 ตัว', official:[], framelink:[], console:['figma_get_annotations','figma_set_annotations','figma_get_annotation_categories'], claudetalk:['get_annotations','set_annotation','set_multiple_annotations'], sunnyside:[] },
-          { label: 'Scan nodes by type',           since:'2026-05', desc:'ค้นหา node ตามชนิด เช่น text, frame, instance', eg:'หา instance ทั้งหมดในหน้าเพื่อเช็ก override', official:[], framelink:[], console:[], claudetalk:['scan_nodes_by_types'], sunnyside:[] },
-          { label: 'Focus / select node',          since:'2026-05', desc:'เลื่อนไปโฟกัสหรือเลือก node บน canvas', eg:'สั่งให้ Figma เลื่อนไปที่ปุ่ม CTA แล้วเลือกไว้', official:[], framelink:[], console:['figma_navigate'], claudetalk:['set_focus','set_selections'], sunnyside:[] },
+          { label: 'Annotations',                  since:'2026-05', desc:'จัดการ annotation บอก spec ติดกับ node สำหรับ handoff', eg:'แปะ annotation บอกว่า input นี้ required + max 50 ตัว', official:[], framelink:[], console:['figma_get_annotations','figma_set_annotations','figma_get_annotation_categories'], claudetalk:['get_annotation','set_annotation'], sunnyside:[] },
+          { label: 'Scan nodes by type',           since:'2026-05', desc:'ค้นหา node ตามชนิด เช่น text, frame, instance', eg:'หา instance ทั้งหมดในหน้าเพื่อเช็ก override', official:[], framelink:[], console:[], claudetalk:['scan_text_nodes'], sunnyside:[] },
+          { label: 'Focus / select node',          since:'2026-05', desc:'เลื่อนไปโฟกัสหรือเลือก node บน canvas', eg:'สั่งให้ Figma เลื่อนไปที่ปุ่ม CTA แล้วเลือกไว้', official:[], framelink:[], console:['figma_navigate'], claudetalk:['get_selection','set_current_page'], sunnyside:[] },
           { label: 'Set node description',         desc:'ตั้งคำอธิบายให้ node/component', eg:'ใส่ description บอกวิธีใช้ Badge component', official:[], framelink:[], console:['figma_set_description'], claudetalk:[], sunnyside:[] },
           { label: 'Navigate to node',             desc:'พา view ไปยัง node ที่ระบุ', eg:'jump ไปที่ frame Checkout ทันทีจาก AI', official:[], framelink:[], console:['figma_navigate'], claudetalk:[], sunnyside:[] },
         ]},
@@ -1890,8 +1953,8 @@
         ]},
         { cat: 'Prototype / Connections', features: [
           { label: 'Get prototype reactions',  since:'2026-05', desc:'อ่าน interaction/reaction ของ prototype', eg:'ดูว่าปุ่มนี้ตั้ง on tap ไปหน้าไหน', official:[], framelink:[], console:[], claudetalk:['get_reactions'],          sunnyside:[] },
-          { label: 'Create connections',       since:'2026-05', desc:'สร้างเส้นเชื่อม flow ระหว่าง frame', eg:'เชื่อม Login → Home เมื่อกดปุ่ม Sign in', official:[], framelink:[], console:[], claudetalk:['create_connections'],      sunnyside:[] },
-          { label: 'Set default connector',    since:'2026-05', desc:'ตั้งรูปแบบเส้น connector เริ่มต้น', eg:'ตั้ง connector เป็นเส้นโค้งหัวลูกศรทุกอัน', official:[], framelink:[], console:[], claudetalk:['set_default_connector'],   sunnyside:[] },
+          { label: 'Create connections',       since:'2026-05', desc:'สร้างเส้นเชื่อม flow ระหว่าง frame', eg:'เชื่อม Login → Home เมื่อกดปุ่ม Sign in', official:[], framelink:[], console:[], claudetalk:['create_connector'],      sunnyside:[] },
+          { label: 'Set default connector',    since:'2026-05', desc:'ตั้งรูปแบบเส้น connector เริ่มต้น', eg:'ตั้ง connector เป็นเส้นโค้งหัวลูกศรทุกอัน', official:[], framelink:[], console:[], claudetalk:[],   sunnyside:[] },
         ]},
         { cat: 'Web Capture', features: [
           { label: 'Capture webpage to Figma', since:'2026-05', desc:'ดึงหน้าเว็บจริงเข้ามาเป็น layer ใน Figma', eg:'capture หน้า landing คู่แข่งมาเป็น frame แก้ต่อ', official:['use_figma'], framelink:[], console:[], claudetalk:[], sunnyside:[] },
@@ -2093,7 +2156,7 @@
       const isPartial = cmds[0] === 'partial';
       const isYes     = cmds[0] === 'yes';
       const icon = isPartial ? '<span class="cmd-partial">⚠</span>' : '<span class="cmd-yes">✓</span>';
-      const sinceBadge = since ? '<span class="cmd-since">' + esc(since) + '</span>' : '';
+      const sinceBadge = since ? '<span class="cmd-since" data-month="' + esc(since) + '">' + esc(since) + '</span>' : '';
       const list = (isPartial || isYes) ? cmds.slice(1) : cmds;
       const shown = list.slice(0, 2);
       const more  = list.length > 2 ? list.length - 2 : 0;
@@ -2440,6 +2503,25 @@
   window.__refreshMatrix = refreshMatrix;
 
   renderMatrix();
+
+  // Build the month-color key from months actually present in FEATURE_MATRIX,
+  // so the legend always matches the chips on screen (auto-scales).
+  function populateMonthLegend() {
+    var el = document.getElementById('monthLegend');
+    if (!el) return;
+    var months = new Set();
+    Object.values(FEATURE_MATRIX).forEach(function (surf) {
+      (surf.groups || []).forEach(function (g) {
+        (g.features || []).forEach(function (f) { if (f.since) months.add(f.since); });
+      });
+    });
+    var sorted = Array.from(months).sort();
+    el.innerHTML = sorted.map(function (m) {
+      return '<span class="cmd-since" data-month="' + m + '">' + m + '</span>';
+    }).join('');
+  }
+  populateMonthLegend();
+
   matrixTable = document.querySelector('#matrixPanels .matrix-table');
   if (matrixTable) {
     matrixTable.id = 'matrixTable';
@@ -2483,6 +2565,7 @@
       'legend.yes': 'supported',
       'legend.partial': 'partial / conditional',
       'legend.none': 'not supported',
+      'legend.newSince': 'New since:',
       'commands.show': 'Show:',
       'ph:commands.search': 'Search feature or command (e.g. export, variable, slide)…',
       'picker.title': 'Decision tree: pick the right MCP in 30 seconds',
