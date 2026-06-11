@@ -40,6 +40,27 @@
 
 ## Changelog
 
+### อัปเดต 11 มิ.ย. 2026 — รอบนี้เปลี่ยนอะไรบ้าง
+
+เช็กซ้ำจาก MCP ที่เชื่อมต่อจริง + GitHub repo ต้นทาง (เทียบกับ snapshot 4 มิ.ย.):
+
+**Figma Official MCP — 17 → 18 tools**
+เพิ่ม `download_assets` — ดาวน์โหลด asset (รูป/ไอคอน) จากไฟล์ Figma ออกมาเป็นไฟล์แบบ batch จากเดิมที่มีแต่ `upload_assets` ขาเข้า ตอนนี้ asset ไหลครบสองทาง — ตรงกับงาน design-to-code handoff ที่ต้องดึง icon set เข้า repo
+
+**Figma Console MCP — v1.29.0 → v1.31.0 (tools คงที่ 108)**
+ไม่มี tool ใหม่ แต่แก้ pain point อันดับหนึ่งของ Desktop Bridge: อาการ "connection หลุดแล้วต้อง restart plugin / Claude / kill port เอง"
+- Self-healing connection — กำจัด zombie MCP process อัตโนมัติ (SIGTERM → SIGKILL + กวาด port range ทุก 5 นาที)
+- Plugin auto-reconnect — probe ทุก 12 วินาที ต่อกลับเองทันทีที่ server โผล่ ไม่ต้องเปิด plugin ใหม่
+- Plugin UI ใหม่ — ปุ่ม Pause / Resume / Reconnect ตาม state + badge นับจำนวน server ที่ต่ออยู่
+- ⚠️ ต้อง re-import plugin manifest ใน Figma Desktop ถึงจะได้ UI ใหม่
+
+**ที่เหลือ — ไม่มีฟีเจอร์ใหม่**
+- Framelink ยัง v0.12.0 / 2 tools (stars ~14,800 → ~14,984)
+- Claude Talk to Figma ยัง v1.0.0 / 93 tools (stars 561 → 595, ไม่มี release ใหม่ตั้งแต่ 18 เม.ย.)
+- Sunnyside ยัง 27 tools ไม่มี commit ใหม่ (stars 37 → 35)
+
+เพิ่ม section **"What's new"** ในตัว report (หลัง hero) สรุป diff รอบล่าสุดไว้ในหน้าเดียวกัน + เพิ่มแถว "Download assets (batch)" ใน Commands matrix
+
 ### อัปเดต 4 มิ.ย. 2026 — มีอะไรเพิ่มเข้ามาให้ Designer บ้าง
 
 รอบนี้เช็ก tool ที่มีจริง ๆ จาก MCP ที่ต่ออยู่ + ดึง source จาก GitHub มาเทียบ ทำให้ตัวเลขและรายการ command ตรงกับของจริงมากขึ้น สรุปแบบเข้าใจง่าย:

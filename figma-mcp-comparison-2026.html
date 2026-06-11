@@ -844,6 +844,7 @@
     </div>
     <nav class="nav-links">
       <a class="nav-link" href="#overview">Overview</a>
+      <a class="nav-link" href="#whatsnew">What's new</a>
       <a class="nav-link" href="#compare">Compare</a>
       <a class="nav-link" href="#deep-dive">Deep dive</a>
       <a class="nav-link" href="#commands">Commands</a>
@@ -882,13 +883,13 @@
     <div class="stats" aria-label="ภาพรวมตลาด">
       <div class="stat">
         <div class="stat-label">Top server by stars</div>
-        <div class="stat-value" id="heroStars">14.8K</div>
-        <div class="stat-trend up">▲ Framelink (Apr 2026)</div>
+        <div class="stat-value" id="heroStars">15.0K</div>
+        <div class="stat-trend up">▲ Framelink (Jun 2026)</div>
       </div>
       <div class="stat">
         <div class="stat-label">Most tools</div>
         <div class="stat-value">108+</div>
-        <div class="stat-trend">Figma Console MCP v1.29</div>
+        <div class="stat-trend">Figma Console MCP v1.31</div>
       </div>
       <div class="stat">
         <div class="stat-label">npm weekly downloads</div>
@@ -899,6 +900,48 @@
         <div class="stat-label" data-i18n="hero.stat4label">First-party (write canvas)</div>
         <div class="stat-value">Mar 24</div>
         <div class="stat-trend" data-i18n="hero.stat4trend">Figma Official ปล่อย use_figma</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================================================
+     WHAT'S NEW (11 Jun 2026)
+     ========================================================= -->
+<section id="whatsnew">
+  <div class="container">
+    <div class="section-eyebrow">Changelog</div>
+    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ — รอบอัปเดต 11 มิ.ย. 2026</h2>
+    <p class="section-desc" data-i18n="whatsnew.desc">
+      เทียบกับรอบ 4 มิ.ย. 2026 — ตัวเลข tool ของ Official / Console / Sunnyside ยึดจาก MCP ที่เชื่อมต่อจริง
+      ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง
+    </p>
+    <div style="display:grid; gap:12px; margin-top:16px;">
+      <div class="card" style="padding:16px 20px;">
+        <strong style="color:oklch(0.6 0.18 250);">Figma Official MCP — 17 → 18 tools</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.official">
+          เพิ่ม <code>download_assets</code> — ดาวน์โหลด asset (รูป/ไอคอน) จากไฟล์ Figma ออกมาเป็นไฟล์แบบ batch
+          ปิดช่องว่างเดิมที่มีแต่ <code>upload_assets</code> ขาเข้าอย่างเดียว ตอนนี้ asset ไหลได้สองทางครบ — มีประโยชน์ตรงกับงาน
+          design-to-code handoff ที่ต้องดึง icon set / ภาพประกอบเข้า repo
+        </p>
+      </div>
+      <div class="card" style="padding:16px 20px;">
+        <strong style="color:oklch(0.62 0.2 145);">Figma Console MCP — v1.29.0 → v1.31.0 (tools คงที่ 108)</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.console">
+          รอบนี้ไม่มี tool ใหม่ แต่แก้ pain point อันดับหนึ่งของ Desktop Bridge: อาการ "connection หลุดแล้วต้อง restart
+          plugin / Claude / kill port เอง" — v1.31.0 เพิ่ม self-healing connection (กำจัด zombie process อัตโนมัติ
+          SIGTERM → SIGKILL + กวาดทุก 5 นาที), plugin auto-reconnect (probe ทุก 12 วิ ต่อกลับเองเมื่อ server โผล่),
+          ปุ่ม Pause / Resume / Reconnect ใน plugin UI ใหม่ และ badge นับจำนวน server ที่ต่ออยู่ —
+          <em>ต้อง re-import plugin manifest ใน Figma Desktop ถึงจะได้ UI ใหม่</em>
+        </p>
+      </div>
+      <div class="card" style="padding:16px 20px;">
+        <strong style="color:oklch(0.7 0.16 50);">Framelink · Claude Talk to Figma · Sunnyside — ไม่มีฟีเจอร์ใหม่</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.others">
+          Framelink ยัง v0.12.0 / 2 tools (stars ขยับ ~14,800 → ~14,984) ·
+          ClaudeTalk ยัง v1.0.0 / 93 tools (stars 561 → 595, ไม่มี release ใหม่ตั้งแต่ เม.ย.) ·
+          Sunnyside ยัง 27 tools, ไม่มี commit ใหม่ (stars 37 → 35)
+        </p>
       </div>
     </div>
   </div>
@@ -1131,11 +1174,11 @@
       maintainer: 'Figma',
       logoColor: 'oklch(0.6 0.18 250)',
       latestVersion: 'Active (Jun 2026)',
-      lastUpdated: '2026-06-04',
+      lastUpdated: '2026-06-11',
       stars: 1069,
       starsLabel: '~1,069 (guide repo)',
       npmWeekly: null,
-      tools: 17,
+      tools: 18,
       toolsList: [
         'get_design_context',
         'get_variable_defs',
@@ -1151,6 +1194,7 @@
         'create_new_file',
         'generate_diagram (Mermaid → FigJam)',
         'upload_assets ✦',
+        'download_assets ✦',
         'send_code_connect_mappings',
         'add_code_connect_map',
         'whoami ✦'
@@ -1219,9 +1263,9 @@
       maintainer: 'Graham Lipsman',
       logoColor: 'oklch(0.7 0.16 50)',
       latestVersion: 'v0.12.0 (Jun 2026)',
-      lastUpdated: '2026-06-04',
-      stars: 14800,
-      starsLabel: '~14,800',
+      lastUpdated: '2026-06-11',
+      stars: 14984,
+      starsLabel: '~14,984',
       npmWeekly: 105000,
       tools: 2,
       toolsList: ['get_figma_data', 'download_figma_images'],
@@ -1292,8 +1336,8 @@
       sub: 'southleft · Plugin debugging + DS audit',
       maintainer: 'TJ Pitre / SouthLeft',
       logoColor: 'oklch(0.62 0.2 145)',
-      latestVersion: 'v1.29.0 (May 2026)',
-      lastUpdated: '2026-06-04',
+      latestVersion: 'v1.31.0 (Jun 2026)',
+      lastUpdated: '2026-06-11',
       stars: 1700,
       starsLabel: '~1,700',
       npmWeekly: null,
@@ -1354,16 +1398,18 @@
       community: 'กำลังโต — design system practitioners แนะนำเยอะ',
       community_en: 'Growing — widely recommended by design-system practitioners',
       pros: [
-        '106+ tools ครอบคลุมที่สุด (Local 103 / Cloud 95 / Remote 9)',
+        '108 tools ครอบคลุมที่สุด (นับจาก MCP ที่เชื่อมต่อจริง มิ.ย. 2026)',
         'Bidirectional token sync (v1.27–v1.29): export 10 formats + import diff-aware กลับ Figma',
         'Plugin debugging ผ่าน WebSocket Desktop Bridge — unique feature',
+        'v1.31.0 self-healing bridge: กำจัด zombie process + plugin auto-reconnect ไม่ต้อง restart เอง',
         'Design System Dashboard (Lighthouse-style scorecard 0-100) + version diff/changelog',
         'จัดการ variables/tokens + shared library inspection ได้บน Free plan'
       ],
       pros_en: [
-        '106+ tools — most comprehensive (Local 103 / Cloud 95 / Remote 9)',
+        '108 tools — most comprehensive (counted from the live connected MCP, Jun 2026)',
         'Bidirectional token sync (v1.27–v1.29): export 10 formats + diff-aware import back to Figma',
         'Plugin debugging via WebSocket Desktop Bridge — a unique feature',
+        'v1.31.0 self-healing bridge: zombie-process reaper + plugin auto-reconnect, no manual restarts',
         'Design System Dashboard (Lighthouse-style scorecard 0-100) + version diff/changelog',
         'Manage variables/tokens + shared library inspection on the Free plan'
       ],
@@ -1393,10 +1439,10 @@
       sub: 'arinspunk · WebSocket bridge',
       maintainer: 'arinspunk',
       logoColor: 'oklch(0.65 0.2 25)',
-      latestVersion: 'v1.0.0 (Jun 2026)',
-      lastUpdated: '2026-06-04',
-      stars: 561,
-      starsLabel: '~561',
+      latestVersion: 'v1.0.0 (Apr 2026)',
+      lastUpdated: '2026-06-11',
+      stars: 595,
+      starsLabel: '~595',
       npmWeekly: null,
       tools: 93,
       toolsList: [
@@ -1487,9 +1533,9 @@
       maintainer: 'Umut TAN (Sunnyside Software)',
       logoColor: 'oklch(0.78 0.15 95)',
       latestVersion: 'Active (Jun 2026)',
-      lastUpdated: '2026-06-04',
-      stars: 37,
-      starsLabel: '~37',
+      lastUpdated: '2026-06-11',
+      stars: 35,
+      starsLabel: '~35',
       npmWeekly: null,
       tools: 27,
       toolsList: [
@@ -1547,8 +1593,8 @@
         'Install the Figma Plugin (real-time mode) or Dev Mode Bridge',
         'Configure your MCP client'
       ],
-      community: 'เล็กที่สุด (~37 stars) — ผู้ดูแลเองยอมรับว่ายัง buggy',
-      community_en: 'Smallest (~37 stars) — the maintainer admits it is still buggy',
+      community: 'เล็กที่สุด (~35 stars) — ผู้ดูแลเองยอมรับว่ายัง buggy',
+      community_en: 'Smallest (~35 stars) — the maintainer admits it is still buggy',
       pros: [
         'Multi-framework code gen ครบ React/Vue/Angular/TS',
         'Styling options: CSS Modules, Tailwind, inline, styled-components',
@@ -1828,6 +1874,7 @@
         { cat: 'Read Design', features: [
           { label: 'โครงสร้าง layout / nodes', label_en:'Layout structure / nodes', desc:'อ่านโครงสร้างทั้งไฟล์เป็น tree ของ frame/group/layer ให้ AI เข้าใจ hierarchy ก่อนแก้หรือ gen code', eg:'ดึง node หน้า Login มาดูว่ามี input/button ซ้อนกันยังไง แล้วสั่งแปลงเป็น React', official:['get_design_context'], framelink:['get_figma_data'], console:['figma_get_file_data','figma_get_selection'], claudetalk:['get_document_info','get_node_info'], sunnyside:['get_figma_data','get_figma_page_structure'] },
           { label: 'Screenshot / export image',   desc:'แคปภาพ node หรือ export เป็นไฟล์รูป ใช้ตรวจงานจริงหรือแนบให้ AI ดู visual', eg:'export ปุ่ม CTA เป็น PNG @2x ไปแปะใน PR หรือให้ AI ตรวจ alignment', official:['get_screenshot'],    framelink:['download_figma_images'],console:['figma_take_screenshot','figma_capture_screenshot'], claudetalk:['export_node_as_image'], sunnyside:['download_figma_images'] },
+          { label: 'Download assets (batch)',      since:'2026-06', desc:'ดาวน์โหลด asset (รูป/ไอคอน) จาก design ออกมาเป็นไฟล์หลายตัวพร้อมกัน เอาไปใช้ใน codebase ต่อได้เลย', eg:'ดึง icon set ทั้งหน้า Settings ออกมาเป็นไฟล์ SVG/PNG เข้า repo', official:['download_assets'], framelink:['download_figma_images'], console:[], claudetalk:['export_node_as_image'], sunnyside:['download_figma_images'] },
           { label: 'Metadata (file / node)',       desc:'ดึงข้อมูลย่อของ node เช่น ขนาด ตำแหน่ง ชื่อ ชนิด โดยไม่ต้องโหลด tree ทั้งก้อน', eg:'เช็กว่า frame กว้าง 375px ตรง spec มือถือไหม ก่อนส่งต่อ dev', official:['get_metadata'],      framelink:['get_figma_data'],       console:['figma_get_file_data'],    claudetalk:['get_node_info','get_nodes_info'],  sunnyside:['get_figma_project_overview'] },
           { label: 'Components & library',         since:'2026-05', desc:'อ่าน component และ library ที่ผูกไว้ ดูว่ามี variant/instance อะไรใช้ได้บ้าง', eg:'list ปุ่มทุก variant ใน design system แล้วเลือก Primary/Large มาวาง', official:['get_libraries'],      framelink:['get_figma_data'],       console:['figma_get_component','figma_get_library_components','figma_search_components'], claudetalk:['get_local_components'], sunnyside:['analyze_figma_components'] },
           { label: 'Styles (color / text)',        desc:'อ่าน color/text style ที่ define ไว้ในไฟล์ ดูค่าจริงของแต่ละ style', eg:'ดึงสี Primary/500 กับ Heading style มาเทียบกับ token ใน code', official:[],                    framelink:['get_figma_data'],       console:['figma_get_styles','figma_get_text_styles'], claudetalk:['get_styles'], sunnyside:[] },
@@ -2542,6 +2589,11 @@
       'hero.lead': 'In-depth analysis of the 5 main Figma MCP servers — covering features, tool commands, update cadence, community feedback, design-system compatibility and DesignOps workflow. Built to help the BCIF team pick the right stack.',
       'hero.stat4label': 'First-party (write canvas beta)',
       'hero.stat4trend': 'Figma Official shipped use_figma',
+      'whatsnew.title': "What's new — update of Jun 11, 2026",
+      'whatsnew.desc': 'Compared against the Jun 4, 2026 snapshot — tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos.',
+      'whatsnew.official': 'Added <code>download_assets</code> — batch-download assets (images/icons) from a Figma file. Closes the gap where only inbound <code>upload_assets</code> existed; assets now flow both ways — directly useful for design-to-code handoff when pulling icon sets / illustrations into a repo.',
+      'whatsnew.console': "No new tools this round, but it fixes the #1 Desktop Bridge pain point: connections dropping until you restart the plugin / Claude / kill ports manually — v1.31.0 adds a self-healing connection (auto zombie-process reaper, SIGTERM → SIGKILL + 5-min sweep), plugin auto-reconnect (12s probe, reattaches on its own), Pause / Resume / Reconnect controls in a redesigned plugin UI, and a live server-count badge — <em>re-import the plugin manifest in Figma Desktop to get the new UI</em>.",
+      'whatsnew.others': 'Framelink still v0.12.0 / 2 tools (stars ~14,800 → ~14,984) · ClaudeTalk still v1.0.0 / 93 tools (stars 561 → 595, no release since Apr) · Sunnyside still 27 tools, no new commits (stars 37 → 35).',
       'compare.title': 'Filterable + sortable comparison table',
       'compare.desc': 'Filter by the Figma plan your team uses, write-back capability, and the view you care about. Click a column header to re-sort.',
       'filter.plan': 'Figma plan:',
