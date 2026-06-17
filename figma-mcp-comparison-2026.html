@@ -867,7 +867,7 @@
      ========================================================= -->
 <section class="hero" id="overview">
   <div class="container">
-    <div class="hero-eyebrow" data-i18n="hero.eyebrow"><span class="dot"></span> Updated Jun 2026 · For BCIF Design Team</div>
+    <div class="hero-eyebrow" data-i18n="hero.eyebrow"><span class="dot"></span> Updated 17 Jun 2026 · For BCIF Design Team</div>
     <h1 data-i18n="hero.h1">เปรียบเทียบ Figma MCP Servers ปี 2026</h1>
     <p class="lead" data-i18n="hero.lead">
       วิเคราะห์เชิงลึก 5 Figma MCP servers หลัก ครอบคลุม features, tools commands, update cadence,
@@ -889,7 +889,7 @@
       <div class="stat">
         <div class="stat-label">Most tools</div>
         <div class="stat-value">108+</div>
-        <div class="stat-trend">Figma Console MCP v1.31</div>
+        <div class="stat-trend">Figma Console MCP v1.31.1</div>
       </div>
       <div class="stat">
         <div class="stat-label">npm weekly downloads</div>
@@ -911,7 +911,7 @@
 <section id="whatsnew">
   <div class="container">
     <div class="section-eyebrow">Changelog</div>
-    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ — รอบอัปเดต 11 มิ.ย. 2026</h2>
+    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ — รอบอัปเดต 17 มิ.ย. 2026</h2>
     <p class="section-desc" data-i18n="whatsnew.desc">
       เทียบกับรอบ 4 มิ.ย. 2026 — ตัวเลข tool ของ Official / Console / Sunnyside ยึดจาก MCP ที่เชื่อมต่อจริง
       ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง
@@ -926,13 +926,16 @@
         </p>
       </div>
       <div class="card" style="padding:16px 20px;">
-        <strong style="color:oklch(0.62 0.2 145);">Figma Console MCP — v1.29.0 → v1.31.0 (tools คงที่ 108)</strong>
+        <strong style="color:oklch(0.62 0.2 145);">Figma Console MCP — v1.31.0 → v1.31.1 (tools คงที่ 108)</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.console">
-          รอบนี้ไม่มี tool ใหม่ แต่แก้ pain point อันดับหนึ่งของ Desktop Bridge: อาการ "connection หลุดแล้วต้อง restart
-          plugin / Claude / kill port เอง" — v1.31.0 เพิ่ม self-healing connection (กำจัด zombie process อัตโนมัติ
-          SIGTERM → SIGKILL + กวาดทุก 5 นาที), plugin auto-reconnect (probe ทุก 12 วิ ต่อกลับเองเมื่อ server โผล่),
-          ปุ่ม Pause / Resume / Reconnect ใน plugin UI ใหม่ และ badge นับจำนวน server ที่ต่ออยู่ —
-          <em>ต้อง re-import plugin manifest ใน Figma Desktop ถึงจะได้ UI ใหม่</em>
+          v1.31.1 เป็น maintenance patch ต่อจาก v1.31.0 — ไม่มี tool ใหม่ (คงที่ 108) และไม่มี entry ใน CHANGELOG.
+          ของหลักยังเป็น self-healing Desktop Bridge จาก v1.31.0: แก้อาการ "connection หลุดแล้วต้อง restart
+          plugin / Claude / kill port เอง" ด้วยการกำจัด zombie process อัตโนมัติ (SIGTERM → SIGKILL + กวาดทุก 5 นาที),
+          plugin auto-reconnect (probe ทุก 12 วิ ต่อกลับเองเมื่อ server โผล่), ปุ่ม Pause / Resume / Reconnect
+          ใน plugin UI ใหม่ และ badge นับจำนวน server ที่ต่ออยู่ —
+          <em>ต้อง re-import plugin manifest ใน Figma Desktop ถึงจะได้ UI ใหม่</em>.
+          ตัวเลข tool ทั้ง 5 server ตรวจ verify กับ MCP ที่เชื่อมต่อจริงในเซสชัน 17 มิ.ย. 2026:
+          Official 18 · Console 108 · Sunnyside 27 — ตรงกับตารางทุกตัว
         </p>
       </div>
       <div class="card" style="padding:16px 20px;">
@@ -1336,8 +1339,8 @@
       sub: 'southleft · Plugin debugging + DS audit',
       maintainer: 'TJ Pitre / SouthLeft',
       logoColor: 'oklch(0.62 0.2 145)',
-      latestVersion: 'v1.31.0 (Jun 2026)',
-      lastUpdated: '2026-06-11',
+      latestVersion: 'v1.31.1 (Jun 2026)',
+      lastUpdated: '2026-06-17',
       stars: 1700,
       starsLabel: '~1,700',
       npmWeekly: null,
@@ -2592,7 +2595,7 @@
       'whatsnew.title': "What's new — update of Jun 11, 2026",
       'whatsnew.desc': 'Compared against the Jun 4, 2026 snapshot — tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos.',
       'whatsnew.official': 'Added <code>download_assets</code> — batch-download assets (images/icons) from a Figma file. Closes the gap where only inbound <code>upload_assets</code> existed; assets now flow both ways — directly useful for design-to-code handoff when pulling icon sets / illustrations into a repo.',
-      'whatsnew.console': "No new tools this round, but it fixes the #1 Desktop Bridge pain point: connections dropping until you restart the plugin / Claude / kill ports manually — v1.31.0 adds a self-healing connection (auto zombie-process reaper, SIGTERM → SIGKILL + 5-min sweep), plugin auto-reconnect (12s probe, reattaches on its own), Pause / Resume / Reconnect controls in a redesigned plugin UI, and a live server-count badge — <em>re-import the plugin manifest in Figma Desktop to get the new UI</em>.",
+      'whatsnew.console': "v1.31.1 is a maintenance patch over v1.31.0 — no new tools (still 108) and no CHANGELOG entry. The headline remains the v1.31.0 self-healing Desktop Bridge: it fixes the #1 pain point of connections dropping until you restart the plugin / Claude / kill ports manually, via an auto zombie-process reaper (SIGTERM → SIGKILL + 5-min sweep), plugin auto-reconnect (12s probe, reattaches on its own), Pause / Resume / Reconnect controls in a redesigned plugin UI, and a live server-count badge — <em>re-import the plugin manifest in Figma Desktop to get the new UI</em>. Tool counts for all 5 servers were verified against the live connected MCP on 17 Jun 2026: Official 18 · Console 108 · Sunnyside 27 — all match the table.",
       'whatsnew.others': 'Framelink still v0.12.0 / 2 tools (stars ~14,800 → ~14,984) · ClaudeTalk still v1.0.0 / 93 tools (stars 561 → 595, no release since Apr) · Sunnyside still 27 tools, no new commits (stars 37 → 35).',
       'compare.title': 'Filterable + sortable comparison table',
       'compare.desc': 'Filter by the Figma plan your team uses, write-back capability, and the view you care about. Click a column header to re-sort.',
