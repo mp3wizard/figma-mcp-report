@@ -917,6 +917,18 @@
       ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง
     </p>
     <div style="display:grid; gap:12px; margin-top:16px;">
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.18 250 / 0.5);">
+        <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Official MCP — 18 → 24 tools: motion-to-code + video export + shader library</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.motion">
+          เพิ่ม 6 tool ใหม่ (verify จาก MCP ที่เชื่อมต่อจริง 17 มิ.ย. 2026) ที่ <strong>ไม่มี server อื่นในตารางทำได้</strong>:
+          <code>get_motion_context</code> — ดึง keyframe/easing ของ animation แล้ว pre-compute เป็น CSS <code>@keyframes</code> +
+          motion.dev snippet (ใช้ต่อจาก <code>get_design_context</code> สำหรับ motion-aware code gen);
+          <code>export_video</code> — render timeline node เป็น MP4 ฝั่ง server แบบ async (presigned URL, poll ด้วย jobId);
+          และ shader library 4 ตัว — <code>list/get_shader_effects</code> (post-effect sample raster) +
+          <code>list/get_shader_fills</code> (generate pixel ตรง ๆ) อ่าน source จาก account library.
+          ขยับ Official จาก design-to-code ล้วน → ครอบ <strong>motion + video + shader</strong> ครบ
+        </p>
+      </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.18 250 / 0.4);">
         <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Official MCP — use_figma ขยายข้าม surface: รองรับ Figma Slides แล้ว</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.slides">
@@ -1189,11 +1201,11 @@
       maintainer: 'Figma',
       logoColor: 'oklch(0.6 0.18 250)',
       latestVersion: 'Active (Jun 2026)',
-      lastUpdated: '2026-06-11',
+      lastUpdated: '2026-06-17',
       stars: 1069,
       starsLabel: '~1,069 (guide repo)',
       npmWeekly: null,
-      tools: 18,
+      tools: 24,
       toolsList: [
         'get_design_context',
         'get_variable_defs',
@@ -1212,7 +1224,13 @@
         'download_assets ✦',
         'send_code_connect_mappings',
         'add_code_connect_map',
-        'whoami ✦'
+        'whoami ✦',
+        'get_motion_context — keyframe/easing → CSS @keyframes + motion.dev ✦',
+        'export_video — timeline node → MP4 (async render) ✦',
+        'list_shader_effects ✦',
+        'get_shader_effect ✦',
+        'list_shader_fills ✦',
+        'get_shader_fill ✦'
       ],
       planRequired: 'pro',
       planLabel: 'Starter (6 calls/mo) → Professional+ (Dev/Full seat)',
@@ -1241,12 +1259,14 @@
       pros: [
         'Code Connect ผูก components ↔ codebase ได้',
         'Write to Canvas (use_figma) ขยายข้าม surface — รองรับ Figma Slides + FigJam + Make แล้ว (มิ.ย. 2026)',
+        'Motion-to-code (get_motion_context) + export MP4 (export_video) + shader library — ไม่มีใน server อื่น',
         'รองรับ Mermaid → FigJam diagram generation',
         'Setup ผ่าน OAuth ใน 5 นาที'
       ],
       pros_en: [
         'Code Connect links components ↔ codebase',
         'Write to Canvas (use_figma) now spans surfaces — supports Figma Slides + FigJam + Make (Jun 2026)',
+        'Motion-to-code (get_motion_context) + MP4 export (export_video) + shader library — unique to Official',
         'Supports Mermaid → FigJam diagram generation',
         'Setup via OAuth in 5 minutes'
       ],
@@ -2022,6 +2042,12 @@
         { cat: 'Web Capture', features: [
           { label: 'Capture webpage to Figma', since:'2026-05', desc:'ดึงหน้าเว็บจริงเข้ามาเป็น layer ใน Figma', eg:'capture หน้า landing คู่แข่งมาเป็น frame แก้ต่อ', official:['use_figma'], framelink:[], console:[], claudetalk:[], sunnyside:[] },
         ]},
+        { cat: 'Motion & Media', features: [
+          { label: 'Motion context → code',    since:'2026-06', desc:'ดึง keyframe/easing ของ animation แล้ว pre-compute เป็น CSS @keyframes + motion.dev snippet', eg:'แปลง animation ของ hero เป็น @keyframes + motion.dev โค้ดพร้อมใช้', official:['get_motion_context'], framelink:[], console:[], claudetalk:[], sunnyside:[] },
+          { label: 'Export timeline → MP4',     since:'2026-06', desc:'render timeline node เป็นวิดีโอ MP4 ฝั่ง server (async, presigned URL)', eg:'export สไลด์ animation เป็น MP4 ไปแปะใน deck/LINE', official:['export_video'], framelink:[], console:[], claudetalk:[], sunnyside:[] },
+          { label: 'Shader effects (library)',  since:'2026-06', desc:'list/อ่าน shader effect จาก account library (post-effect sample raster)', eg:'ดึง source ของ shader effect ที่ทีมทำไว้มา reuse', official:['list_shader_effects','get_shader_effect'], framelink:[], console:[], claudetalk:[], sunnyside:[] },
+          { label: 'Shader fills (library)',    since:'2026-06', desc:'list/อ่าน shader fill จาก account library (generate pixel ตรง ๆ)', eg:'อ่าน shader fill gradient แบบ procedural มาดู source', official:['list_shader_fills','get_shader_fill'], framelink:[], console:[], claudetalk:[], sunnyside:[] },
+        ]},
       ]
     },
     figjam: {
@@ -2607,6 +2633,7 @@
       'hero.stat4trend': 'Figma Official shipped use_figma',
       'whatsnew.title': "What's new — update of Jun 17, 2026",
       'whatsnew.desc': 'Compared against the Jun 4, 2026 snapshot — tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos.',
+      'whatsnew.motion': 'Six new tools (verified against the live connected MCP on Jun 17, 2026) that <strong>no other server in the table can do</strong>: <code>get_motion_context</code> — pull a node’s keyframe/easing data and pre-compute it into CSS <code>@keyframes</code> + motion.dev snippets (use after <code>get_design_context</code> for motion-aware code gen); <code>export_video</code> — render a timeline node to MP4 server-side, async (presigned URL, poll via jobId); and a 4-tool shader library — <code>list/get_shader_effects</code> (post-effects sampling a raster) + <code>list/get_shader_fills</code> (generate pixels directly), reading source from the account library. This moves Official from pure design-to-code to also covering <strong>motion + video + shader</strong>.',
       'whatsnew.slides': 'Per the <a href="https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/" target="_blank" rel="noopener">Figma blog (Jun 16, 2026)</a>, the MCP server now works across <strong>Figma Slides, FigJam, Figma Make, and the Figma agent</strong> via the <code>use_figma</code> tool plus the new <code>/figma-use-slides</code> skill — you can create or refresh decks from a prompt (e.g. "update my AI deck, pull from Slack/Drive/blog"), with custom-font support (renders your uploaded typefaces, not web-safe approximations). The Slides → Write tab now shows <code>use_figma</code> in the Official column. <em>Note:</em> the <code>tools-and-prompts</code> docs page does not yet list Slides under <code>use_figma</code>’s supported file types — capability shipped ahead of the docs.',
       'whatsnew.official': 'Added <code>download_assets</code> — batch-download assets (images/icons) from a Figma file. Closes the gap where only inbound <code>upload_assets</code> existed; assets now flow both ways — directly useful for design-to-code handoff when pulling icon sets / illustrations into a repo.',
       'whatsnew.console': "v1.31.1 is a maintenance patch over v1.31.0 — no new tools (still 108) and no CHANGELOG entry. The headline remains the v1.31.0 self-healing Desktop Bridge: it fixes the #1 pain point of connections dropping until you restart the plugin / Claude / kill ports manually, via an auto zombie-process reaper (SIGTERM → SIGKILL + 5-min sweep), plugin auto-reconnect (12s probe, reattaches on its own), Pause / Resume / Reconnect controls in a redesigned plugin UI, and a live server-count badge — <em>re-import the plugin manifest in Figma Desktop to get the new UI</em>. Tool counts for all 5 servers were verified against the live connected MCP on 17 Jun 2026: Official 18 · Console 108 · Sunnyside 27 — all match the table.",
