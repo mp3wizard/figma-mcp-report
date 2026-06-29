@@ -40,6 +40,24 @@
 
 ## Changelog
 
+### อัปเดต 17 มิ.ย. 2026 — Figma Official ขยายข้าม surface + motion/video/shader
+
+เช็กซ้ำจาก MCP ที่เชื่อมต่อจริง (Official 18 · Console 108 · Sunnyside 27 ตรงกับตาราง):
+
+**Figma Official MCP — 18 → 24 tools**
+เพิ่ม 6 tool ที่ **ไม่มี server อื่นในตารางทำได้**:
+- `get_motion_context` — ดึง keyframe/easing ของ animation แล้ว pre-compute เป็น CSS `@keyframes` + motion.dev snippet (ใช้ต่อจาก `get_design_context` สำหรับ motion-aware code gen)
+- `export_video` — render timeline node เป็น MP4 ฝั่ง server แบบ async (presigned URL, poll ด้วย jobId)
+- shader library 4 ตัว — `list/get_shader_effects` (post-effect sample raster) + `list/get_shader_fills` (generate pixel ตรง ๆ) อ่าน source จาก account library
+
+ขยับ Official จาก design-to-code ล้วน → ครอบ **motion + video + shader**
+
+**Figma Official MCP — use_figma รองรับ Figma Slides แล้ว**
+ตาม [Figma blog (16 มิ.ย. 2026)](https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/) ตัว MCP ทำงานข้าม **Figma Slides, FigJam, Figma Make และ Figma agent** ผ่าน `use_figma` + skill ใหม่ `/figma-use-slides` — สร้าง/รีเฟรชเด็คจาก prompt ได้ พร้อม custom-font support
+
+**Figma Console MCP — v1.31.0 → v1.31.1**
+maintenance patch ไม่มี tool ใหม่ (ยัง 108) — headline ยังเป็น self-healing Desktop Bridge ของ v1.31.0
+
 ### อัปเดต 11 มิ.ย. 2026 — รอบนี้เปลี่ยนอะไรบ้าง
 
 เช็กซ้ำจาก MCP ที่เชื่อมต่อจริง + GitHub repo ต้นทาง (เทียบกับ snapshot 4 มิ.ย.):
