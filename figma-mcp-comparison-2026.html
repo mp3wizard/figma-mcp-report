@@ -867,7 +867,7 @@
      ========================================================= -->
 <section class="hero" id="overview">
   <div class="container">
-    <div class="hero-eyebrow" data-i18n="hero.eyebrow"><span class="dot"></span> Updated 17 Jun 2026 · For BCIF Design Team</div>
+    <div class="hero-eyebrow" data-i18n="hero.eyebrow"><span class="dot"></span> Updated 4 Jul 2026 · For BCIF Design Team</div>
     <h1 data-i18n="hero.h1">เปรียบเทียบ Figma MCP Servers ปี 2026</h1>
     <p class="lead" data-i18n="hero.lead">
       วิเคราะห์เชิงลึก 5 Figma MCP servers หลัก ครอบคลุม features, tools commands, update cadence,
@@ -888,8 +888,8 @@
       </div>
       <div class="stat">
         <div class="stat-label">Most tools</div>
-        <div class="stat-value">108+</div>
-        <div class="stat-trend">Figma Console MCP v1.31.1</div>
+        <div class="stat-value">114+</div>
+        <div class="stat-trend">Figma Console MCP v1.35.0</div>
       </div>
       <div class="stat">
         <div class="stat-label">npm weekly downloads</div>
@@ -911,16 +911,16 @@
 <section id="whatsnew">
   <div class="container">
     <div class="section-eyebrow">Changelog</div>
-    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ — รอบอัปเดต 17 มิ.ย. 2026</h2>
+    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ — รอบอัปเดต 10 ก.ค. 2026</h2>
     <p class="section-desc" data-i18n="whatsnew.desc">
-      เทียบกับรอบ 4 มิ.ย. 2026 — ตัวเลข tool ของ Official / Console / Sunnyside ยึดจาก MCP ที่เชื่อมต่อจริง
+      เทียบกับรอบ 17 มิ.ย. 2026 — ตัวเลข tool ของ Official / Console / Sunnyside ยึดจาก MCP ที่เชื่อมต่อจริง
       ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง
     </p>
     <div style="display:grid; gap:12px; margin-top:16px;">
       <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.18 250 / 0.5);">
         <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Official MCP — 18 → 24 tools: motion-to-code + video export + shader library</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.motion">
-          เพิ่ม 6 tool ใหม่ (verify จาก MCP ที่เชื่อมต่อจริง 17 มิ.ย. 2026) ที่ <strong>ไม่มี server อื่นในตารางทำได้</strong>:
+          เพิ่ม 6 tool ใหม่ (verify จาก MCP ที่เชื่อมต่อจริง 4 ก.ค. 2026 — ยังคงอยู่) ที่ <strong>ไม่มี server อื่นในตารางทำได้</strong>:
           <code>get_motion_context</code> — ดึง keyframe/easing ของ animation แล้ว pre-compute เป็น CSS <code>@keyframes</code> +
           motion.dev snippet (ใช้ต่อจาก <code>get_design_context</code> สำหรับ motion-aware code gen);
           <code>export_video</code> — render timeline node เป็น MP4 ฝั่ง server แบบ async (presigned URL, poll ด้วย jobId);
@@ -949,25 +949,41 @@
           มีประโยชน์ตรงกับงาน design-to-code handoff ที่ต้องดึง icon set / ภาพประกอบเข้า repo
         </p>
       </div>
-      <div class="card" style="padding:16px 20px;">
-        <strong style="color:oklch(0.62 0.2 145);">Figma Console MCP — v1.31.0 → v1.31.1 (tools คงที่ 108)</strong>
-        <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.console">
-          v1.31.1 เป็น maintenance patch ต่อจาก v1.31.0 — ไม่มี tool ใหม่ (คงที่ 108) และไม่มี entry ใน CHANGELOG.
-          ของหลักยังเป็น self-healing Desktop Bridge จาก v1.31.0: แก้อาการ "connection หลุดแล้วต้อง restart
-          plugin / Claude / kill port เอง" ด้วยการกำจัด zombie process อัตโนมัติ (SIGTERM → SIGKILL + กวาดทุก 5 นาที),
-          plugin auto-reconnect (probe ทุก 12 วิ ต่อกลับเองเมื่อ server โผล่), ปุ่ม Pause / Resume / Reconnect
-          ใน plugin UI ใหม่ และ badge นับจำนวน server ที่ต่ออยู่ —
-          <em>ต้อง re-import plugin manifest ใน Figma Desktop ถึงจะได้ UI ใหม่</em>.
-          ตัวเลข tool ทั้ง 5 server ตรวจ verify กับ MCP ที่เชื่อมต่อจริงในเซสชัน 17 มิ.ย. 2026:
-          Official 18 · Console 108 · Sunnyside 27 — ตรงกับตารางทุกตัว
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
+        <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP — v1.34.1 → v1.35.0 (109 → 114 tools): Figma Slots API</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.slots">
+          เพิ่ม 5 tool ใหม่รอบเดียว — <code>figma_create_slot</code>, <code>figma_get_slots</code>, <code>figma_append_to_slot</code>,
+          <code>figma_reset_slot</code>, <code>figma_add_slot_property</code> — ผ่าน Desktop Bridge ต่อยอด SlotNode ที่ Figma เพิ่งเปิด GA
+          ใน Plugin API (ปิด issue #29 ของ repo ต้นทาง). Slot คือ "placeholder ที่ตั้งกฎไว้ล่วงหน้า" ใน component/component-set —
+          AI ยัด instance/content เข้าไปแทนแล้ว Figma auto-layout/resize ให้ตรงกฎ ไม่ต้องคำนวณตำแหน่งเอง (แก้ปัญหา clone หลุดกรอบใน
+          slot แบบ NONE-layout ด้วย auto-snap ไปจุดกำเนิด slot). รองรับสร้าง slot ใน variant component ภายใน COMPONENT_SET แล้ว
+          (GA ปลดข้อจำกัด beta เดิม), และ rename node = rename slot property key ตรงตัว. Live-validated กับ Figma จริง 9 ก.ค. 2026
         </p>
       </div>
       <div class="card" style="padding:16px 20px;">
-        <strong style="color:oklch(0.7 0.16 50);">Framelink · Claude Talk to Figma · Sunnyside — ไม่มีฟีเจอร์ใหม่</strong>
+        <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP — v1.31.1 → v1.34.1 (108 → 109 tools)</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.console">
+          รอบใหญ่ 4 minor release (v1.32 → v1.34). <strong>Tool ใหม่ 1 ตัว:</strong> <code>figma_create_component_set</code>
+          (v1.34) — สร้าง component set จาก variant matrix (เช่น <code>{State:[default,hover,disabled] × Size:[sm,lg]}</code>)
+          จบใน call เดียว แทน pattern <code>figma_execute</code> + <code>combineAsVariants</code> เดิม.
+          <strong>Feature ใหญ่:</strong> (1) <em>full bidirectional token sync</em> — <code>figma_import_tokens</code> apply diff เต็ม:
+          สร้าง collection/variable ที่ขาด + เขียน alias จริง (VARIABLE_ALIAS) + ลบ (gate ด้วย <code>strategy:replace</code>) +
+          per-item error isolation; (2) <em>DTCG 2025.10 dialect</em> บน export/import สำหรับ Style Dictionary v5+
+          (default ยังเป็น legacy byte-identical); (3) v1.33 <em>connection overhaul</em> — <code>/health</code> auto-discovery,
+          version handshake (plugin เตือนเองเมื่อ stale), status pill ที่บอก connection จริง + CSWSH origin fix.
+          รวมถึง lint แยก group <code>wcag</code> / <code>best-practice</code> (v1.32, ลด false positive WCAG 1.4.12).
+          <em>ต้อง re-import plugin manifest</em>. Verify กับ MCP ที่เชื่อมต่อจริง 4 ก.ค. 2026:
+          Official 24 · Console 109 · Sunnyside 27
+        </p>
+      </div>
+      <div class="card" style="padding:16px 20px;">
+        <strong style="color:oklch(0.7 0.16 50);">Framelink · Claude Talk to Figma · Sunnyside — ไม่มีฟีเจอร์ใหม่ (re-check 4 ก.ค. 2026)</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.others">
-          Framelink ยัง v0.12.0 / 2 tools (stars ขยับ ~14,800 → ~14,984) ·
-          ClaudeTalk ยัง v1.0.0 / 93 tools (stars 561 → 595, ไม่มี release ใหม่ตั้งแต่ เม.ย.) ·
-          Sunnyside ยัง 27 tools, ไม่มี commit ใหม่ (stars 37 → 35)
+          เช็ค repo ต้นทางแล้ว ทั้ง 3 ตัวไม่มี release/tool ใหม่ตั้งแต่รอบก่อน:
+          Framelink ยัง <strong>v0.12.0 / 2 tools</strong> (stars ~14,984) ·
+          ClaudeTalk ยัง <strong>v1.0.0 / 93 tools</strong> (ไม่มี release ใหม่ตั้งแต่ เม.ย.) ·
+          Sunnyside ยัง <strong>v0.4.4 / 27 tools</strong> (commit ล่าสุด 0.4.4, ไม่มีของใหม่).
+          ของใหม่ทั้งหมดรอบนี้กระจุกที่ Figma Console MCP
         </p>
       </div>
     </div>
@@ -1372,33 +1388,37 @@
       sub: 'southleft · Plugin debugging + DS audit',
       maintainer: 'TJ Pitre / SouthLeft',
       logoColor: 'oklch(0.62 0.2 145)',
-      latestVersion: 'v1.31.1 (Jun 2026)',
-      lastUpdated: '2026-06-17',
+      latestVersion: 'v1.35.0 (Jul 2026)',
+      lastUpdated: '2026-07-09',
       stars: 1700,
       starsLabel: '~1,700',
       npmWeekly: null,
-      tools: 108,
+      tools: 114,
       toolsList: [
         'figma_get_console_logs',
         'figma_watch_console',
-        'figma_take_screenshot',
+        'figma_take_screenshot (bridge-first, ทุก plan) ✦',
         'figma_audit_component_accessibility',
-        'figma_scan_code_accessibility ✦',
+        'figma_scan_code_accessibility (+ text-spacing 1.4.12) ✦',
         'figma_check_design_parity',
         'figma_batch_create_variables',
-        'figma_setup_design_tokens',
-        'figma_lint_design',
+        'figma_setup_design_tokens (+ alias refs) ✦',
+        'figma_lint_design (wcag / best-practice groups) ✦',
         'figma_generate_component_doc',
         'figma_generate_changelog ✦',
         'figma_blame_node ✦',
         'figma_analyze_component_set ✦',
-        'figma_arrange_component_set ✦',
+        'figma_arrange_component_set (in-place) ✦',
+        'figma_create_component_set — variant matrix → set ✦',
+        'figma_create_slot / figma_get_slots (Slots API, GA) ✦ NEW v1.35',
+        'figma_append_to_slot / figma_reset_slot ✦ NEW v1.35',
+        'figma_add_slot_property ✦ NEW v1.35',
         'figma_instantiate_component ✦',
         'figma_create_slide / add_text_to_slide (Slides API) ✦',
         'figma_set_slide_transition ✦',
         'figma_get_annotations / set_annotations ✦',
-        'figma_export_tokens (10 formats)',
-        'figma_import_tokens (bidirectional sync)',
+        'figma_export_tokens (10 formats + DTCG 2025.10) ✦',
+        'figma_import_tokens (full bidirectional apply: create/alias/delete) ✦',
         'figma_get_library_component_by_key',
         'figma_get_library_variables',
         'figma_import_library_variable',
@@ -1434,18 +1454,22 @@
       community: 'กำลังโต — design system practitioners แนะนำเยอะ',
       community_en: 'Growing — widely recommended by design-system practitioners',
       pros: [
-        '108 tools ครอบคลุมที่สุด (นับจาก MCP ที่เชื่อมต่อจริง มิ.ย. 2026)',
-        'Bidirectional token sync (v1.27–v1.29): export 10 formats + import diff-aware กลับ Figma',
+        '114 tools ครอบคลุมที่สุด (นับจาก MCP ที่เชื่อมต่อจริง ก.ค. 2026)',
+        'Figma Slots API (v1.35): 5 tool ใหม่ — สร้าง/populate/reset slot placeholder ใน component ผ่าน GA SlotNode, auto-layout จัดตำแหน่งให้เอง',
+        'Full bidirectional token sync (v1.34): import apply diff เต็ม — create collection/variable + alias re-target + delete (replace-gated) + DTCG 2025.10',
+        'figma_create_component_set (v1.34): สร้าง variant matrix → component set จบใน call เดียว',
         'Plugin debugging ผ่าน WebSocket Desktop Bridge — unique feature',
-        'v1.31.0 self-healing bridge: กำจัด zombie process + plugin auto-reconnect ไม่ต้อง restart เอง',
+        'v1.33 connection overhaul: /health auto-discovery + version handshake + status pill ที่บอกความจริง',
         'Design System Dashboard (Lighthouse-style scorecard 0-100) + version diff/changelog',
         'จัดการ variables/tokens + shared library inspection ได้บน Free plan'
       ],
       pros_en: [
-        '108 tools — most comprehensive (counted from the live connected MCP, Jun 2026)',
-        'Bidirectional token sync (v1.27–v1.29): export 10 formats + diff-aware import back to Figma',
+        '114 tools — most comprehensive (counted from the live connected MCP, Jul 2026)',
+        'Figma Slots API (v1.35): 5 new tools — create/populate/reset slot placeholders inside a component via the GA SlotNode API, auto-layout handles positioning',
+        'Full bidirectional token sync (v1.34): import applies the complete diff — create collections/variables + alias re-target + replace-gated delete + DTCG 2025.10 dialect',
+        'figma_create_component_set (v1.34): build a full variant matrix → component set in one call',
         'Plugin debugging via WebSocket Desktop Bridge — a unique feature',
-        'v1.31.0 self-healing bridge: zombie-process reaper + plugin auto-reconnect, no manual restarts',
+        'v1.33 connection overhaul: /health auto-discovery + version handshake + a status pill that tells the truth',
         'Design System Dashboard (Lighthouse-style scorecard 0-100) + version diff/changelog',
         'Manage variables/tokens + shared library inspection on the Free plan'
       ],
@@ -1937,8 +1961,8 @@
           { label: 'Token simulation & rollback',  since:'2026-05', desc:'ลองเปลี่ยน token แบบ preview ก่อนใช้จริง และย้อนกลับได้', eg:'ลองเปลี่ยน radius เป็น 12px ดูผลทั้งไฟล์ ไม่ชอบก็ rollback', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['simulate_token_change','apply_token_change','rollback_token_change'] },
           { label: 'Token change impact analysis', since:'2026-05', desc:'วิเคราะห์ว่าถ้าแก้ token นี้จะกระทบ component ไหนบ้าง', eg:'ดูว่าเปลี่ยน color/primary แล้วกระทบ 38 component', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['analyze_token_change_impact','list_token_simulations'] },
           { label: 'Generate migration code',      since:'2026-05', desc:'สร้าง code สำหรับย้าย token เก่าไปค่าใหม่ใน codebase', eg:'gen find-replace script เปลี่ยนชื่อ token ทั้งโปรเจกต์', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['generate_migration_code'] },
-          { label: 'Export tokens (CSS/SCSS/JSON/Tailwind)', since:'2026-05', desc:'ส่งออก token เป็นไฟล์หลายฟอร์แมตให้ dev ใช้ต่อ', eg:'export เป็น CSS variables + Tailwind config พร้อมใช้', official:[], framelink:[], console:['figma_export_tokens'], claudetalk:[], sunnyside:[] },
-          { label: 'Import tokens from file',      since:'2026-05', desc:'นำเข้า token จากไฟล์ภายนอกเข้าสู่ Figma', eg:'import tokens.json จาก repo เข้ามาสร้างเป็น variable', official:[], framelink:[], console:['figma_import_tokens'], claudetalk:[], sunnyside:[] },
+          { label: 'Export tokens (CSS/SCSS/JSON/Tailwind + DTCG 2025.10)', since:'2026-07', desc:'ส่งออก token หลายฟอร์แมต + รองรับ DTCG 2025.10 (object color/dimension) สำหรับ Style Dictionary v5+', eg:'export เป็น CSS variables + Tailwind + DTCG 2025 พร้อมใช้', official:[], framelink:[], console:['figma_export_tokens'], claudetalk:[], sunnyside:[] },
+          { label: 'Import tokens — full apply (create/alias/delete)', since:'2026-07', desc:'v1.34: import apply diff เต็ม — สร้าง collection/variable ที่ขาด, เขียน alias จริง, ลบ (gate ด้วย strategy:replace), รองรับ DTCG 2 dialect', eg:'sync tokens.json จาก repo กลับ Figma แบบสองทางครบ ไม่ใช่แค่ update ค่า', official:[], framelink:[], console:['figma_import_tokens'], claudetalk:[], sunnyside:[] },
           { label: 'Variable definitions (full schema)', since:'2026-05', desc:'ดึงนิยาม variable แบบเต็มทั้ง type/scope/alias', eg:'ดู schema ของ token เพื่อ gen TypeScript type ที่ตรง', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['extract_design_tokens'] },
         ]},
         { cat: 'Write Canvas', features: [
@@ -1965,6 +1989,7 @@
           { label: 'Edit component property',   since:'2026-05', desc:'แก้ไขนิยาม property ของ component', eg:'เปลี่ยนค่า default ของ prop size จาก M เป็น L', official:[], framelink:[], console:['figma_edit_component_property'],   claudetalk:[], sunnyside:[] },
           { label: 'Delete component property', since:'2026-05', desc:'ลบ property ที่ไม่ใช้ออกจาก component', eg:'ลบ prop legacy ที่เลิกใช้แล้วออกจาก Button', official:[], framelink:[], console:['figma_delete_component_property'], claudetalk:[], sunnyside:[] },
           { label: 'Arrange component set',     since:'2026-05', desc:'จัดเรียง variant ใน component set ให้เป็นระเบียบ', eg:'เรียง variant เป็นตาราง size × state อัตโนมัติ', official:[], framelink:[], console:['figma_arrange_component_set'],     claudetalk:[], sunnyside:[] },
+          { label: 'Create component set (variant matrix)', since:'2026-07', desc:'สร้าง component set จาก matrix ของ variant axes จบใน call เดียว (combine + grid + คืน variant keys)', eg:'สร้าง Button variant { State: [default,hover,disabled] × Size: [sm,lg] } รวดเดียว', official:[], framelink:[], console:['figma_create_component_set'], claudetalk:[], sunnyside:[] },
           { label: 'Get component details',     since:'2026-05', desc:'ดึงรายละเอียดเต็มของ component', eg:'ดู prop/variant/description ทั้งหมดของ Input', official:[], framelink:[], console:['figma_get_component_details'],     claudetalk:[], sunnyside:[] },
           { label: 'Get component image',       since:'2026-05', desc:'render รูป preview ของ component', eg:'ดึงภาพ Button ทุก variant ไปทำ doc', official:[], framelink:[], console:['figma_get_component_image'],       claudetalk:[], sunnyside:[] },
           { label: 'Get / set instance overrides', since:'2026-05', desc:'อ่านหรือเขียน override ของ instance', eg:'copy override จาก card ต้นแบบไปทุก instance', official:[], framelink:[], console:[], claudetalk:['set_instance_variant','detach_instance'], sunnyside:[] },
@@ -2631,13 +2656,14 @@
       'hero.lead': 'In-depth analysis of the 5 main Figma MCP servers — covering features, tool commands, update cadence, community feedback, design-system compatibility and DesignOps workflow. Built to help the BCIF team pick the right stack.',
       'hero.stat4label': 'First-party (write canvas beta)',
       'hero.stat4trend': 'Figma Official shipped use_figma',
-      'whatsnew.title': "What's new — update of Jun 17, 2026",
-      'whatsnew.desc': 'Compared against the Jun 4, 2026 snapshot — tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos.',
+      'whatsnew.title': "What's new — update of Jul 10, 2026",
+      'whatsnew.desc': 'Compared against the Jun 17, 2026 snapshot — tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos.',
       'whatsnew.motion': 'Six new tools (verified against the live connected MCP on Jun 17, 2026) that <strong>no other server in the table can do</strong>: <code>get_motion_context</code> — pull a node’s keyframe/easing data and pre-compute it into CSS <code>@keyframes</code> + motion.dev snippets (use after <code>get_design_context</code> for motion-aware code gen); <code>export_video</code> — render a timeline node to MP4 server-side, async (presigned URL, poll via jobId); and a 4-tool shader library — <code>list/get_shader_effects</code> (post-effects sampling a raster) + <code>list/get_shader_fills</code> (generate pixels directly), reading source from the account library. This moves Official from pure design-to-code to also covering <strong>motion + video + shader</strong>.',
       'whatsnew.slides': 'Per the <a href="https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/" target="_blank" rel="noopener">Figma blog (Jun 16, 2026)</a>, the MCP server now works across <strong>Figma Slides, FigJam, Figma Make, and the Figma agent</strong> via the <code>use_figma</code> tool plus the new <code>/figma-use-slides</code> skill — you can create or refresh decks from a prompt (e.g. "update my AI deck, pull from Slack/Drive/blog"), with custom-font support (renders your uploaded typefaces, not web-safe approximations). The Slides → Write tab now shows <code>use_figma</code> in the Official column. <em>Note:</em> the <code>tools-and-prompts</code> docs page does not yet list Slides under <code>use_figma</code>’s supported file types — capability shipped ahead of the docs.',
       'whatsnew.official': 'Added <code>download_assets</code> — batch-download assets (images/icons) from a Figma file. Closes the gap where only inbound <code>upload_assets</code> existed; assets now flow both ways — directly useful for design-to-code handoff when pulling icon sets / illustrations into a repo.',
-      'whatsnew.console': "v1.31.1 is a maintenance patch over v1.31.0 — no new tools (still 108) and no CHANGELOG entry. The headline remains the v1.31.0 self-healing Desktop Bridge: it fixes the #1 pain point of connections dropping until you restart the plugin / Claude / kill ports manually, via an auto zombie-process reaper (SIGTERM → SIGKILL + 5-min sweep), plugin auto-reconnect (12s probe, reattaches on its own), Pause / Resume / Reconnect controls in a redesigned plugin UI, and a live server-count badge — <em>re-import the plugin manifest in Figma Desktop to get the new UI</em>. Tool counts for all 5 servers were verified against the live connected MCP on 17 Jun 2026: Official 18 · Console 108 · Sunnyside 27 — all match the table.",
-      'whatsnew.others': 'Framelink still v0.12.0 / 2 tools (stars ~14,800 → ~14,984) · ClaudeTalk still v1.0.0 / 93 tools (stars 561 → 595, no release since Apr) · Sunnyside still 27 tools, no new commits (stars 37 → 35).',
+      'whatsnew.slots': "Five new tools in one release — <code>figma_create_slot</code>, <code>figma_get_slots</code>, <code>figma_append_to_slot</code>, <code>figma_reset_slot</code>, <code>figma_add_slot_property</code> — via the Desktop Bridge, built on Figma's newly-GA SlotNode Plugin API (closes issue #29 upstream). A slot is a pre-constrained placeholder inside a component/component-set: AI populates it with an instance/content and Figma auto-layout/resizing enforces the rule, no manual position math needed (includes an auto-snap fix so clones no longer land outside NONE-layout slots). Slot creation now works on variant components inside a COMPONENT_SET (GA lifted the old beta restriction), and renaming the node renames the linked slot property key directly. Live-validated against Figma on Jul 9, 2026.",
+      'whatsnew.console': "A big round — 4 minor releases (v1.32 → v1.34). <strong>One new tool:</strong> <code>figma_create_component_set</code> (v1.34) builds a component set from a variant-axes matrix (e.g. <code>{State:[default,hover,disabled] × Size:[sm,lg]}</code>) in a single call, replacing the old <code>figma_execute</code> + <code>combineAsVariants</code> pattern. <strong>Major features:</strong> (1) <em>full bidirectional token sync</em> — <code>figma_import_tokens</code> now applies the complete diff: creates missing collections/variables, writes real VARIABLE_ALIAS references, and deletes (gated behind <code>strategy:replace</code>), with per-item error isolation; (2) <em>DTCG 2025.10 dialect</em> on export/import for Style Dictionary v5+ (default stays legacy, byte-identical); (3) the v1.33 <em>connection overhaul</em> — <code>/health</code> auto-discovery, a version handshake (the plugin banners itself when stale), an honest status pill, and a CSWSH origin fix. Plus <code>figma_lint_design</code> split into <code>wcag</code> / <code>best-practice</code> groups (v1.32), cutting WCAG 1.4.12 false positives. <em>Re-import the plugin manifest.</em> Verified against the live connected MCP on Jul 4, 2026: Official 24 · Console 109 · Sunnyside 27.",
+      'whatsnew.others': 'Re-checked the upstream repos — all three unchanged since the last round: Framelink still <strong>v0.12.0 / 2 tools</strong> (stars ~14,984) · ClaudeTalk still <strong>v1.0.0 / 93 tools</strong> (no release since Apr) · Sunnyside still <strong>v0.4.4 / 27 tools</strong> (latest commit 0.4.4, nothing new). Every new capability this round is concentrated in Figma Console MCP.',
       'compare.title': 'Filterable + sortable comparison table',
       'compare.desc': 'Filter by the Figma plan your team uses, write-back capability, and the view you care about. Click a column header to re-sort.',
       'filter.plan': 'Figma plan:',
