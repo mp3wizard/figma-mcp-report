@@ -870,12 +870,12 @@
     <div class="hero-eyebrow" data-i18n="hero.eyebrow"><span class="dot"></span> Updated 4 Jul 2026 · For BCIF Design Team</div>
     <h1 data-i18n="hero.h1">เปรียบเทียบ Figma MCP Servers ปี 2026</h1>
     <p class="lead" data-i18n="hero.lead">
-      วิเคราะห์เชิงลึก 5 Figma MCP servers หลัก ครอบคลุม features, tools commands, update cadence,
+      วิเคราะห์เชิงลึก 5 Figma MCP servers และ 1 local Desktop CLI ครอบคลุม features, tools commands, update cadence,
       community feedback, ความเข้ากันได้กับ design system และ DesignOps workflow —
       ออกแบบเพื่อช่วยพี่นนและทีม BCIF ตัดสินใจเลือก stack ที่ใช่
     </p>
     <div class="hero-meta">
-      <span class="badge">5 MCP servers</span>
+      <span class="badge">5 MCP servers + 1 local CLI</span>
       <span class="badge">Free to Enterprise tier</span>
       <span class="badge">Read · Write · Debug</span>
     </div>
@@ -917,6 +917,13 @@
       ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง
     </p>
     <div style="display:grid; gap:12px; margin-top:16px;">
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.15 305 / 0.48);">
+        <strong style="color:oklch(0.52 0.18 305);">New comparison baseline — figma-cli v2.1.0 (local Desktop/CDP; not an MCP server)</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          เพิ่ม <a href="https://github.com/silships/figma-cli" target="_blank" rel="noopener">silships/figma-cli</a> เป็นตัวเลือกคู่เทียบสำหรับ workflow ที่ต้อง write canvas ผ่าน Figma Desktop โดยตรง:
+          ไม่ใช้ Figma API key, ไม่ต้องมี MCP transport และไม่ติด API rate limit. จุดแลกเปลี่ยนคือ workflow ต้องพึ่ง local Desktop/CDP และรายงานจะไม่นับ figma-cli ใน Commands matrix เพราะ matrix นั้นเทียบ MCP tools เท่านั้น.
+        </p>
+      </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.18 250 / 0.5);">
         <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Official MCP — 18 → 24 tools: motion-to-code + video export + shader library</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.motion">
@@ -1064,7 +1071,7 @@
 <section id="deep-dive">
   <div class="container">
     <div class="section-eyebrow">Deep dive</div>
-    <h2 class="section-title" data-i18n="deepdive.title">เจาะลึกแต่ละ MCP</h2>
+    <h2 class="section-title" data-i18n="deepdive.title">เจาะลึกแต่ละ MCP และ local CLI</h2>
     <p class="section-desc" data-i18n="deepdive.desc">
       แต่ละ tab รวม overview, key tools, install snippet, community feedback และข้อสังเกตเฉพาะตัว
     </p>
@@ -1194,6 +1201,7 @@
       <a href="https://docs.figma-console-mcp.southleft.com/" target="_blank" rel="noopener">Figma Console MCP Docs</a>
       <a href="https://github.com/arinspunk/claude-talk-to-figma-mcp" target="_blank" rel="noopener">Claude Talk to Figma</a>
       <a href="https://github.com/tercumantanumut/sunnysideFigma-Context-MCP" target="_blank" rel="noopener">Sunnyside Figma Context</a>
+      <a href="https://github.com/silships/figma-cli" target="_blank" rel="noopener">figma-cli (local Desktop/CDP)</a>
       <a href="https://ui.shadcn.com/docs/theming" target="_blank" rel="noopener">shadcn/ui Theming</a>
     </div>
   </div>
@@ -1685,6 +1693,89 @@
       links: [
         { label: 'GitHub', url: 'https://github.com/tercumantanumut/sunnysideFigma-Context-MCP' }
       ]
+    },
+    {
+      id: 'figmacli',
+      githubRepo: 'silships/figma-cli',
+      npmPkg: 'figma-ds-cli',
+      name: 'figma-cli',
+      sub: 'Local Figma Desktop/CDP · not an MCP server',
+      maintainer: 'Sil Bormüller / Into Design Systems',
+      logoColor: 'oklch(0.58 0.18 305)',
+      latestVersion: 'v2.1.0 (local source snapshot)',
+      lastUpdated: '2026-07-11',
+      stars: 0,
+      starsLabel: 'Live on load',
+      npmWeekly: null,
+      tools: 35,
+      toolsList: [
+        'Desktop CDP connection',
+        'Build editable frames / components / variants',
+        'Import & export DESIGN.md',
+        'Import Tailwind / CSS / DTCG tokens',
+        'Design-system component reuse',
+        'Figma Motion & asset export'
+      ],
+      planRequired: 'free',
+      planLabel: 'Figma Desktop; no API key / no MCP transport',
+      planLabel_en: 'Figma Desktop; no API key / no MCP transport',
+      devSeat: false,
+      writeCapability: 'yes',
+      readCapability: true,
+      debug: false,
+      codeConnect: false,
+      tokenMgmt: 'yes',
+      pluginDebug: false,
+      tokenEfficiency: 9,
+      maturity: 6,
+      freeTier: 10,
+      opsFit: 8,
+      depth: 8,
+      setupComplexity: 'medium',
+      setupSteps: [
+        'เปิด Figma Desktop',
+        'Clone project แล้วให้ AI coding assistant รัน setup/connect',
+        'เลือก Yolo mode (Desktop patch ที่ reversible) หรือ Safe mode (plugin)',
+        'สั่งงานผ่าน Claude Code หรือ Cursor ด้วยภาษาปกติ'
+      ],
+      setupSteps_en: [
+        'Open Figma Desktop',
+        'Clone the project and let an AI coding assistant run setup/connect',
+        'Choose Yolo mode (reversible Desktop patch) or Safe mode (plugin)',
+        'Work through Claude Code or Cursor in natural language'
+      ],
+      community: 'Local-first alternative; GitHub signal loads live',
+      community_en: 'Local-first alternative; GitHub signal loads live',
+      pros: [
+        'เขียน Figma Desktop โดยตรงผ่าน CDP — ไม่ผ่าน Figma REST API',
+        'ไม่ใช้ API key, ไม่ใช้ MCP transport และไม่ติด API rate limit',
+        'import/export DESIGN.md และ token sources (Tailwind, CSS, DTCG) เหมาะกับ Design System workflow',
+        'รองรับ Claude Code และ Cursor พร้อม real editable Figma objects'
+      ],
+      pros_en: [
+        'Writes directly to Figma Desktop via CDP — not the Figma REST API',
+        'No API key, MCP transport, or Figma API rate limit',
+        'DESIGN.md and token-source import/export fit Design System workflows',
+        'Works with Claude Code and Cursor using real editable Figma objects'
+      ],
+      cons: [
+        'ไม่ใช่ MCP server จึงไม่เข้ากับ MCP client ทุกตัว',
+        'ต้องพึ่ง Figma Desktop ที่เปิดอยู่และ local Desktop/CDP access',
+        'Yolo mode patch แอป Figma แม้ reversible — ต้องผ่าน IT policy ก่อนใช้ในองค์กร'
+      ],
+      cons_en: [
+        'Not an MCP server, so it does not fit every MCP client',
+        'Requires an open Figma Desktop and local Desktop/CDP access',
+        'Yolo mode patches the Figma app, although reversibly — validate against enterprise IT policy first'
+      ],
+      install: 'git clone https://github.com/silships/figma-cli\n# then ask Claude Code / Cursor: set up figma-cli and connect it to my Figma',
+      install_en: 'git clone https://github.com/silships/figma-cli\n# then ask Claude Code / Cursor: set up figma-cli and connect it to my Figma',
+      bestFor: 'local-first rapid prototyping และ Design System work ที่ต้อง write canvas บ่อยโดยไม่กิน API quota',
+      bestFor_en: 'Local-first rapid prototyping and Design System work with frequent canvas writes and no API quota',
+      links: [
+        { label: 'GitHub', url: 'https://github.com/silships/figma-cli' },
+        { label: 'README', url: 'https://github.com/silships/figma-cli#readme' }
+      ]
     }
   ];
 
@@ -1720,7 +1811,7 @@
   // =========================================================
   const COLUMN_VIEWS = {
     features: [
-      { key: 'name', label: 'MCP Server', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
+      { key: 'name', label: 'Integration', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
       { key: 'tools', label: 'Tools', sortable: true, render: row => `<strong>${row.tools}+</strong>` },
       { key: 'writeCapability', label: 'Write canvas', sortable: true, render: row => row.writeCapability === 'yes' ? '<span class="check">✓</span>' : '<span class="x">—</span>' },
       { key: 'codeConnect', label: 'Code Connect', sortable: true, render: row => row.codeConnect ? '<span class="check">✓</span>' : '<span class="x">—</span>' },
@@ -1728,7 +1819,7 @@
       { key: 'tokenMgmt', label: 'Token mgmt', sortable: true, render: row => row.tokenMgmt === 'yes' ? '<span class="check">✓</span>' : (row.tokenMgmt === 'partial' ? '<span class="partial">⚠</span>' : '<span class="x">—</span>') }
     ],
     ops: [
-      { key: 'name', label: 'MCP Server', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
+      { key: 'name', label: 'Integration', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
       { key: 'opsFit', label: 'DesignOps fit', sortable: true, render: row => `<span class="badge ${row.opsFit >= 9 ? 'badge-success' : (row.opsFit >= 7 ? '' : 'badge-warn')}">${row.opsFit}/10</span>` },
       { key: 'codeConnect', label: 'Code Connect', sortable: true, render: row => row.codeConnect ? '<span class="check">✓</span>' : '<span class="x">—</span>' },
       { key: 'tokenMgmt', label: 'Variable / Token mgmt', sortable: true, render: row => row.tokenMgmt === 'yes' ? '<span class="check">✓</span>' : (row.tokenMgmt === 'partial' ? '<span class="partial">⚠</span>' : '<span class="x">—</span>') },
@@ -1736,7 +1827,7 @@
       { key: 'depth', label: 'Tool depth', sortable: true, render: row => `<span class="badge">${row.depth}/10</span>` }
     ],
     community: [
-      { key: 'name', label: 'MCP Server', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
+      { key: 'name', label: 'Integration', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
       { key: 'stars', label: 'GitHub stars', sortable: true, render: row => `<strong>${row.starsLabel}</strong>` },
       { key: 'npmWeekly', label: 'npm weekly', sortable: true, render: row => row.npmWeekly ? `${(row.npmWeekly/1000).toFixed(1)}K` : '<span class="muted">—</span>' },
       { key: 'lastUpdated', label: 'Last updated', sortable: true, render: row => row.lastUpdated },
@@ -1744,7 +1835,7 @@
       { key: 'community', label: 'Signal', sortable: false, render: row => `<span class="muted" style="font-size:12px;">${(window.LANG === 'en' && row.community_en) ? row.community_en : row.community}</span>` }
     ],
     cost: [
-      { key: 'name', label: 'MCP Server', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
+      { key: 'name', label: 'Integration', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
       { key: 'planRequired', label: 'Figma plan', sortable: true, render: row => `<span class="badge ${row.planRequired === 'free' ? 'badge-success' : (row.planRequired === 'pro' ? 'badge-warn' : '')}">${(window.LANG === 'en' && row.planLabel_en) ? row.planLabel_en : row.planLabel}</span>` },
       { key: 'devSeat', label: 'Dev seat', sortable: true, render: row => { const en = window.LANG === 'en'; return row.devSeat ? `<span class="partial">⚠ ${en ? 'required' : 'ต้องใช้'}</span>` : `<span class="check">✕ ${en ? 'not needed' : 'ไม่จำเป็น'}</span>`; } },
       { key: 'setupComplexity', label: 'Setup', sortable: true, render: row => {
@@ -2653,7 +2744,7 @@
     var I18N_EN = {
       'hero.eyebrow': '<span class="dot"></span> Updated May 2026 · For BCIF Design Team',
       'hero.h1': 'Compare Figma MCP Servers 2026',
-      'hero.lead': 'In-depth analysis of the 5 main Figma MCP servers — covering features, tool commands, update cadence, community feedback, design-system compatibility and DesignOps workflow. Built to help the BCIF team pick the right stack.',
+      'hero.lead': 'In-depth analysis of 5 Figma MCP servers and 1 local Desktop CLI — covering features, tool commands, update cadence, community feedback, design-system compatibility and DesignOps workflow. Built to help the BCIF team pick the right stack.',
       'hero.stat4label': 'First-party (write canvas beta)',
       'hero.stat4trend': 'Figma Official shipped use_figma',
       'whatsnew.title': "What's new — update of Jul 10, 2026",
@@ -2931,7 +3022,7 @@
   function renderRadar() {
     const ctx = document.getElementById('radarChart').getContext('2d');
     const labels = ['Token efficiency', 'Tool depth', 'Write capability', 'DesignOps fit', 'Maturity', 'Free-tier accessibility'];
-    const palette = [getCssVar('--chart-1'), getCssVar('--chart-2'), getCssVar('--chart-3'), getCssVar('--chart-4'), getCssVar('--chart-5')];
+    const palette = [getCssVar('--chart-1'), getCssVar('--chart-2'), getCssVar('--chart-3'), getCssVar('--chart-4'), getCssVar('--chart-5'), 'oklch(0.58 0.18 305)'];
 
     const datasets = MCPS.map((m, i) => {
       const writeScore = m.writeCapability === 'yes' ? 9 : 2;
