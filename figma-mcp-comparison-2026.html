@@ -468,15 +468,32 @@
   }
   /* No scroll container ancestor — sticky <th> in <thead> anchors to the viewport.
      border-collapse:separate is required for position:sticky to work on table cells. */
-  .matrix-scroll-outer { /* outer kept for future horizontal-scroll media query if needed */ }
-  .matrix-table-wrap {
+  /* Dense 6-column matrix: always a self-contained horizontal-scroll region so
+     it can never break out of .container. Sticky feature column + sticky header
+     keep orientation while scrolling. Fits a full desktop; scrolls below ~1180px. */
+  .matrix-scroll-outer {
+    position: relative;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
     border: 1px solid var(--border);
+    border-radius: 8px;
   }
-  .matrix-table { width:100%; border-collapse:separate; border-spacing:0; font-size:12px; --feature-col-w: 260px; }
-  @media (max-width: 820px) {
-    .matrix-scroll-outer { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .matrix-table-wrap { min-width: 820px; }
+  .matrix-table-wrap { min-width: max-content; }
+  .matrix-table { width:100%; min-width: 1120px; border-collapse:separate; border-spacing:0; font-size:12px; --feature-col-w: 236px; }
+  /* Edge fades cueing more columns off-screen; pinned to the visible edge of the
+     shell (which does NOT scroll), toggled by JS as the matrix scrolls. */
+  .matrix-scroll-shell { position: relative; }
+  .matrix-fade {
+    position:absolute; top:1px; bottom:1px; width:44px;
+    pointer-events:none; z-index:16; opacity:0;
+    transition:opacity 160ms ease;
   }
+  .matrix-fade-r { right:1px; background:linear-gradient(to right, transparent, var(--background)); border-radius:0 8px 8px 0; }
+  .matrix-fade-l { left:1px;  background:linear-gradient(to left,  transparent, var(--background)); border-radius:8px 0 0 8px; }
+  .matrix-scroll-shell.has-r .matrix-fade-r { opacity:1; }
+  .matrix-scroll-shell.has-l .matrix-fade-l { opacity:1; }
   .matrix-table .head-row th {
     padding:0.5rem 0.75rem; text-align:center; font-weight:600; font-size:12px;
     background:var(--muted); color:var(--muted-foreground);
@@ -497,7 +514,7 @@
     position:sticky; left:0; top:var(--app-bar-h, 64px); z-index:21; background:var(--muted);
   }
   .matrix-table td {
-    padding:0.5rem 0.625rem; border-bottom:1px solid var(--border);
+    padding:0.5rem 0.5rem; border-bottom:1px solid var(--border);
     vertical-align:top; text-align:center;
   }
   .matrix-table td.col-feature {
@@ -692,7 +709,7 @@
     display:inline-block; font-family:'JetBrains Mono',monospace;
     font-size:12px; padding:0.1rem 0.35rem; border-radius:3px;
     background:var(--secondary); border:1px solid var(--border);
-    color:var(--muted-foreground); max-width:155px;
+    color:var(--muted-foreground); max-width:132px;
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
     cursor:help;
   }
@@ -2434,11 +2451,27 @@
       return surfRow + groupRows;
     }).join('');
 
-    panelsEl.innerHTML = '<div class="matrix-scroll-outer"><div class="matrix-table-wrap"><table class="matrix-table">'
+    panelsEl.innerHTML = '<div class="matrix-scroll-shell">'
+      + '<div class="matrix-scroll-outer"><div class="matrix-table-wrap"><table class="matrix-table">'
       + '<thead>' + headRow + '</thead>'
       + '<tbody>' + allRows + '</tbody>'
-      + '</table></div></div>';
+      + '</table></div></div>'
+      + '<span class="matrix-fade matrix-fade-r" aria-hidden="true"></span>'
+      + '<span class="matrix-fade matrix-fade-l" aria-hidden="true"></span>'
+      + '</div>';
 
+    var scroller = panelsEl.querySelector('.matrix-scroll-outer');
+    var shell = panelsEl.querySelector('.matrix-scroll-shell');
+    if (scroller && shell) {
+      var syncFade = function() {
+        var max = scroller.scrollWidth - scroller.clientWidth;
+        shell.classList.toggle('has-r', max > 1 && scroller.scrollLeft < max - 1);
+        shell.classList.toggle('has-l', max > 1 && scroller.scrollLeft > 1);
+      };
+      scroller.addEventListener('scroll', syncFade, { passive: true });
+      window.addEventListener('resize', syncFade);
+      requestAnimationFrame(syncFade);
+    }
   }
 
   // ── MCP Auto-update ──────────────────────────────────────────────
@@ -2634,7 +2667,7 @@
   })();
 
   // ── Matrix controls (column toggle + search) with state-preserving re-render ──
-  var FEATURE_WIDTHS = [260, 280, 300, 340, 380]; // wider as more MCPs hidden (freed space → readable desc)
+  var FEATURE_WIDTHS = [236, 280, 300, 340, 380]; // wider as more MCPs hidden (freed space → readable desc)
   var matrixTable = null;
   var searchInput = document.getElementById('matrixSearch');
   var searchCount = document.getElementById('matrixSearchCount');
@@ -2649,6 +2682,8 @@
     matrixTable.style.setProperty('--feature-col-w', w + 'px');
     if (visible <= 3) matrixTable.setAttribute('data-few-cols', '');
     else matrixTable.removeAttribute('data-few-cols');
+    // hiding/showing a column changes scrollWidth → let the edge-fade sync recompute
+    window.dispatchEvent(new Event('resize'));
   }
 
   function reapplyColState() {
