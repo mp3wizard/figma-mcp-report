@@ -935,6 +935,18 @@
       ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง
     </p>
     <div style="display:grid; gap:12px; margin-top:16px;">
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.18 250 / 0.5);">
+        <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Official MCP — re-check จาก guide repo (v2.2.78): 24 → 25 tools + แก้ข้อมูล Make</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          เช็คซ้ำจาก <a href="https://github.com/figma/mcp-server-guide/" target="_blank" rel="noopener">figma/mcp-server-guide</a> (<code>server.json</code> = <strong>v2.2.78</strong>):
+          เพิ่ม tool ที่ตกไป — <code>list_file_components_for_code_connect</code> (ดึง component ทั้งไฟล์มาไล่ทำ Code Connect mapping) → นับใหม่เป็น <strong>25 tools</strong>.
+          <strong>แก้ข้อมูลเดิมที่คลาดเคลื่อน:</strong> <code>use_figma</code> เขียนได้แค่ <strong>Design · FigJam · Slides</strong> — <em>ไม่ใช่</em> Make;
+          Make ต่อผ่าน <strong>MCP resources capability</strong> (ดึง context จาก Make project มา extend prototype เป็น production code) คนละกลไกกัน.
+          Web capture ที่ถูกต้องคือ tool <code>generate_figma_design</code> (live UI / หน้าเว็บ → design layer, กำลัง rolling out) ไม่ใช่ <code>use_figma</code>.
+          repo ยังมี Agent Skills พร้อมใช้ (design-to-code, generate-design/-library/-diagram, code-connect) + workflow skills เดี่ยว
+          <code>video-interaction-mapper</code> (UI recording → annotated storyboard) และ <code>generate-project-plan</code> (PRD → FigJam plan board).
+        </p>
+      </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.15 305 / 0.48);">
         <strong style="color:oklch(0.52 0.18 305);">New comparison baseline — figma-cli v2.1.0 (local Desktop/CDP; not an MCP server)</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;">
@@ -1246,18 +1258,19 @@
       sub: 'First-party · Figma + Anthropic',
       maintainer: 'Figma',
       logoColor: 'oklch(0.6 0.18 250)',
-      latestVersion: 'Active (Jun 2026)',
+      latestVersion: 'v2.2.78 (guide repo)',
       lastUpdated: '2026-06-17',
       stars: 1069,
       starsLabel: '~1,069 (guide repo)',
       npmWeekly: null,
-      tools: 24,
+      tools: 25,
       toolsList: [
         'get_design_context',
         'get_variable_defs',
         'get_code_connect_map',
         'get_code_connect_suggestions ✦',
         'get_context_for_code_connect ✦',
+        'list_file_components_for_code_connect ✦',
         'get_screenshot',
         'get_metadata',
         'get_figjam',
@@ -1303,18 +1316,20 @@
       ],
       community: 'Big & official',
       pros: [
-        'Code Connect ผูก components ↔ codebase ได้',
-        'Write to Canvas (use_figma) ขยายข้าม surface — รองรับ Figma Slides + FigJam + Make แล้ว (มิ.ย. 2026)',
+        'Code Connect ผูก components ↔ codebase ได้ (+ list_file_components_for_code_connect ดึง component ในไฟล์มา map)',
+        'Write to Canvas (use_figma) ขยายข้าม surface — รองรับ Figma Design + FigJam + Slides (มิ.ย. 2026)',
+        'Make + MCP integration — ดึง context จาก Make project (MCP resources capability) มา extend prototype เป็น production code (คนละทางกับ use_figma)',
         'Motion-to-code (get_motion_context) + export MP4 (export_video) + shader library — ไม่มีใน server อื่น',
-        'รองรับ Mermaid → FigJam diagram generation',
-        'Setup ผ่าน OAuth ใน 5 นาที'
+        'มี Agent Skills พร้อมใช้ (design-to-code, generate-design/-library/-diagram, code-connect) + workflow skills เดี่ยว: video-interaction-mapper, generate-project-plan',
+        'รองรับ Mermaid → FigJam diagram generation · Setup ผ่าน OAuth ใน 5 นาที'
       ],
       pros_en: [
-        'Code Connect links components ↔ codebase',
-        'Write to Canvas (use_figma) now spans surfaces — supports Figma Slides + FigJam + Make (Jun 2026)',
+        'Code Connect links components ↔ codebase (+ list_file_components_for_code_connect pulls a file’s components to map)',
+        'Write to Canvas (use_figma) spans surfaces — supports Figma Design + FigJam + Slides (Jun 2026)',
+        'Make + MCP integration — fetch context from a Make project (MCP resources capability) to extend prototypes into production code (distinct from use_figma)',
         'Motion-to-code (get_motion_context) + MP4 export (export_video) + shader library — unique to Official',
-        'Supports Mermaid → FigJam diagram generation',
-        'Setup via OAuth in 5 minutes'
+        'Bundled Agent Skills (design-to-code, generate-design/-library/-diagram, code-connect) + standalone workflow skills: video-interaction-mapper, generate-project-plan',
+        'Supports Mermaid → FigJam diagram generation · Setup via OAuth in 5 minutes'
       ],
       cons: [
         'Starter plan ได้แค่ 6 tool calls/เดือน → ไม่พอใช้จริง',
@@ -1332,6 +1347,7 @@
       bestFor_en: 'Teams on Professional+ who want first-party Code Connect + Write canvas',
       links: [
         { label: 'Developer Docs', url: 'https://developers.figma.com/docs/figma-mcp-server/' },
+        { label: 'Guide repo (server.json v2.2.78)', url: 'https://github.com/figma/mcp-server-guide/' },
         { label: 'Plans & Permissions', url: 'https://developers.figma.com/docs/figma-mcp-server/plans-access-and-permissions/' },
         { label: 'Blog: 4 ways we use MCP (Slides/FigJam/Make)', url: 'https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/' }
       ]
@@ -2152,6 +2168,7 @@
           { label: 'Code connect suggestions',    since:'2026-05', desc:'แนะนำว่า component Figma ควรผูกกับไฟล์ code ไหน', eg:'AI เดาว่า Card น่าจะ map กับ Card.tsx', official:['get_code_connect_suggestions'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:[] },
           { label: 'Context for code connect',    since:'2026-05', desc:'ดึง context ที่จำเป็นก่อนทำ Code Connect mapping', eg:'ดึง prop/variant ของ component ไปช่วยเขียน mapping', official:['get_context_for_code_connect'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:[] },
           { label: 'Add code connect map',        since:'2026-05', desc:'เพิ่ม mapping ใหม่ระหว่าง component Figma กับ code', eg:'ผูก Input ใน Figma เข้ากับ Input.tsx ใหม่', official:['add_code_connect_map'],         framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:[] },
+          { label: 'List file components (for mapping)', since:'2026-07', desc:'ดึงรายการ component ทั้งหมดในไฟล์ Figma ออกมาเพื่อเลือกทำ Code Connect mapping', eg:'list ทุก component ในไฟล์ design system แล้วไล่ map เข้ากับ code', official:['list_file_components_for_code_connect'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:[] },
         ]},
         { cat: 'Collaboration', features: [
           { label: 'Post / get / delete comments', desc:'อ่าน เขียน หรือลบ comment บนไฟล์', eg:'โพสต์ comment ฝาก dev ว่าปุ่มนี้ต้องลิงก์ไปหน้าไหน', official:[], framelink:[], console:['figma_post_comment','figma_get_comments','figma_delete_comment'], claudetalk:[], sunnyside:[], figmacli:[] },
@@ -2179,7 +2196,7 @@
           { label: 'Set default connector',    since:'2026-05', desc:'ตั้งรูปแบบเส้น connector เริ่มต้น', eg:'ตั้ง connector เป็นเส้นโค้งหัวลูกศรทุกอัน', official:[], framelink:[], console:[], claudetalk:[],   sunnyside:[], figmacli:[] },
         ]},
         { cat: 'Web Capture', features: [
-          { label: 'Capture webpage to Figma', since:'2026-05', desc:'ดึงหน้าเว็บจริงเข้ามาเป็น layer ใน Figma', eg:'capture หน้า landing คู่แข่งมาเป็น frame แก้ต่อ', official:['use_figma'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:['analyze-url','screenshot-url','link'] },
+          { label: 'Capture webpage to Figma', since:'2026-05', desc:'ดึง live UI / หน้าเว็บจริงเข้ามาเป็น design layer ใน Figma (generate_figma_design — กำลัง rolling out)', eg:'capture หน้า landing คู่แข่งมาเป็น frame แก้ต่อ', official:['generate_figma_design'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:['analyze-url','screenshot-url','link'] },
         ]},
         { cat: 'Motion & Media', features: [
           { label: 'Motion context → code',    since:'2026-06', desc:'ดึง keyframe/easing ของ animation แล้ว pre-compute เป็น CSS @keyframes + motion.dev snippet', eg:'แปลง animation ของ hero เป็น @keyframes + motion.dev โค้ดพร้อมใช้', official:['get_motion_context'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:['motion','timeline','stagger'] },
@@ -2328,6 +2345,7 @@
     'Code connect suggestions': { d:"Suggest which code file a Figma component should map to", e:"AI guesses Card likely maps to Card.tsx" },
     'Context for code connect': { d:"Pull the context needed before doing a Code Connect mapping", e:"Pull a component's props/variants to help write the mapping" },
     'Add code connect map': { d:"Add a new mapping between a Figma component and code", e:"Link Figma Input to a new Input.tsx" },
+    'List file components (for mapping)': { d:"List every component in a Figma file so you can pick which ones to Code Connect", e:"List all components in the design-system file, then map them to code one by one" },
     'Post / get / delete comments': { d:"Read, write or delete comments on the file", e:"Post a comment telling the dev where this button links" },
     'Annotations': { d:"Manage annotations that pin spec to a node for handoff", e:"Pin an annotation: this input is required + max 50 chars" },
     'Scan nodes by type': { d:"Find nodes by type, e.g. text, frame, instance", e:"Find all instances on the page to check overrides" },
