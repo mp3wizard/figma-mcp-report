@@ -911,7 +911,7 @@
 <section id="whatsnew">
   <div class="container">
     <div class="section-eyebrow">Changelog</div>
-    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ — รอบอัปเดต 10 ก.ค. 2026</h2>
+    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ — รอบอัปเดต 12 ก.ค. 2026</h2>
     <p class="section-desc" data-i18n="whatsnew.desc">
       เทียบกับรอบ 17 มิ.ย. 2026 — ตัวเลข tool ของ Official / Console / Sunnyside ยึดจาก MCP ที่เชื่อมต่อจริง
       ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง
@@ -2748,7 +2748,7 @@
       'hero.lead': 'In-depth analysis of 5 Figma MCP servers and 1 local Desktop CLI — covering features, tool commands, update cadence, community feedback, design-system compatibility and DesignOps workflow. Built to help the BCIF team pick the right stack.',
       'hero.stat4label': 'First-party (write canvas beta)',
       'hero.stat4trend': 'Figma Official shipped use_figma',
-      'whatsnew.title': "What's new — update of Jul 10, 2026",
+      'whatsnew.title': "What's new — update of Jul 12, 2026",
       'whatsnew.desc': 'Compared against the Jun 17, 2026 snapshot — tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos.',
       'whatsnew.motion': 'Six new tools (verified against the live connected MCP on Jun 17, 2026) that <strong>no other server in the table can do</strong>: <code>get_motion_context</code> — pull a node’s keyframe/easing data and pre-compute it into CSS <code>@keyframes</code> + motion.dev snippets (use after <code>get_design_context</code> for motion-aware code gen); <code>export_video</code> — render a timeline node to MP4 server-side, async (presigned URL, poll via jobId); and a 4-tool shader library — <code>list/get_shader_effects</code> (post-effects sampling a raster) + <code>list/get_shader_fills</code> (generate pixels directly), reading source from the account library. This moves Official from pure design-to-code to also covering <strong>motion + video + shader</strong>.',
       'whatsnew.slides': 'Per the <a href="https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/" target="_blank" rel="noopener">Figma blog (Jun 16, 2026)</a>, the MCP server now works across <strong>Figma Slides, FigJam, Figma Make, and the Figma agent</strong> via the <code>use_figma</code> tool plus the new <code>/figma-use-slides</code> skill — you can create or refresh decks from a prompt (e.g. "update my AI deck, pull from Slack/Drive/blog"), with custom-font support (renders your uploaded typefaces, not web-safe approximations). The Slides → Write tab now shows <code>use_figma</code> in the Official column. <em>Note:</em> the <code>tools-and-prompts</code> docs page does not yet list Slides under <code>use_figma</code>’s supported file types — capability shipped ahead of the docs.',
