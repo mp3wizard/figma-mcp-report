@@ -935,6 +935,31 @@
       ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง
     </p>
     <div style="display:grid; gap:12px; margin-top:16px;">
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.57 0.19 25 / 0.5);">
+        <strong style="color:oklch(0.57 0.19 25);">⭐ API Rate Limits — ทำไม version-history/blame ถึงติด limit (verified จาก Figma docs, ก.ค. 2026)</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Figma REST API</strong> = leaky bucket, เกิน limit → HTTP <code>429</code> + header <code>Retry-After</code>. แบ่ง 3 tier ตาม seat/plan
+          (<a href="https://developers.figma.com/docs/rest-api/rate-limits/" target="_blank" rel="noopener">docs</a>):
+        </p>
+        <ul class="muted" style="margin:8px 0 0; padding-left:1.1rem; font-size:13.5px; line-height:1.7;">
+          <li><strong>Tier 1</strong> (get file / nodes / image): <strong>View/Collab seat = แค่ 6 ครั้ง/เดือน</strong> · Dev/Full = 10/15/20 ต่อนาที (Starter/Pro/Org)</li>
+          <li><strong>Tier 2</strong> (<strong>Version History</strong>, variables, comments, dev resources): View/Collab = 5/นาที · Dev/Full = 25/50/100 ต่อนาที</li>
+          <li><strong>Tier 3</strong> (file metadata, components/styles, POST variables): View/Collab = 10/นาที · Dev/Full = 50/100/150 ต่อนาที</li>
+        </ul>
+        <p class="muted" style="margin:8px 0 0; font-size:14px;">
+          <strong>Figma MCP server (Official)</strong> มี limit แยก + มี daily cap: Starter/View/Collab = 6/เดือน · Dev/Full บน Pro = <strong>200/วัน · 10/นาที</strong> · Org/Ent = 600/วัน · 20/นาที
+          (<a href="https://developers.figma.com/docs/figma-mcp-server/rate-limits-access/" target="_blank" rel="noopener">docs</a>). Write tools ยกเว้น: <code>add_code_connect_map</code>, <code>generate_figma_design</code>, <code>whoami</code>.
+        </p>
+        <p class="muted" style="margin:8px 0 0; font-size:14px;">
+          <strong>ใครติด / ไม่ติด</strong> (ตรวจจาก source ใน repo): ติด REST limit = <strong>Console</strong> (version/diff/blame tools), <strong>Framelink</strong>, <strong>Sunnyside</strong> (เฉพาะ <code>get_figma_data</code>) — เพราะยิง <code>api.figma.com</code> ด้วย token ของ user.
+          ไม่ติด = <strong>figma-cli</strong> (Desktop/CDP, ไม่มี API key), <strong>ClaudeTalk</strong> (WebSocket → plugin), และฝั่ง write ของ Console (Desktop Bridge) + Dev Mode tools ของ Sunnyside (local 127.0.0.1:3845).
+        </p>
+        <p class="muted" style="margin:8px 0 0; font-size:14px;">
+          <strong>แก้ความเข้าใจ blame:</strong> Console <code>blame</code> <em>ไม่ได้</em> ยิงทุก version — ใช้ <strong>binary search ≈ log₂(N) calls</strong>. ตัวที่ยิงหนักกว่าคือ <code>get_file_versions</code> (paginate <code>/versions</code> ทีละ 50, สูงสุด 20 page = 1,000 version) และ <code>diff</code> (2 calls + 2 ต่อ component). ต้นตอที่ทำให้ติดจริงคือ <strong>seat</strong>: ถ้าเป็น View/Collab → Tier 1 มีแค่ 6 ครั้ง/<em>เดือน</em> และ Version History 5/นาที ยิงไม่กี่ทีก็หมด.
+          <strong>การจัดการ 429:</strong> Console retry ×3 + honor Retry-After (cap 30s) + snapshot cache (LRU 50) — ดีสุดในกลุ่ม. Framelink/Sunnyside อ่าน Retry-After แต่ <strong>ไม่ retry/backoff จริง</strong> → เจอ 429 เด้ง error.
+          <strong>ทางแก้:</strong> ใช้ Dev/Full seat บน Pro+ · ลด scope (component เดียว / ช่วง version แคบ) · หรือใช้ local channel (figma-cli/ClaudeTalk) สำหรับงานที่ไม่ต้อง REST.
+        </p>
+      </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.18 250 / 0.5);">
         <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Official MCP — re-check จาก guide repo (v2.2.78): 24 → 25 tools + แก้ข้อมูล Make</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;">
@@ -1409,12 +1434,14 @@
       cons: [
         'Read-only — เขียนกลับ Figma ไม่ได้',
         'มีแค่ 2 tools',
+        'REST API ล้วน → ติด Figma rate limit (Tier 1: get file/nodes/image); โค้ดอ่าน Retry-After แต่ไม่ retry/backoff/cache จริง — เจอ 429 แล้วเด้ง error',
         'เคยมี Critical RCE ใน <0.6.3 (ต.ค. 2025) — ใช้ ≥0.11.0 เท่านั้น',
         'macOS ARM ผ่าน npx เคยมี sharp/libvips dlopen issue'
       ],
       cons_en: [
         'Read-only — cannot write back to Figma',
         'Only 2 tools',
+        'Pure REST API → subject to Figma rate limits (Tier 1: file/nodes/image); reads Retry-After but does not actually retry/back off/cache — a 429 surfaces as an error',
         'Had a Critical RCE in <0.6.3 (Oct 2025) — use ≥0.11.0 only',
         'macOS ARM via npx had a sharp/libvips dlopen issue'
       ],
@@ -1507,7 +1534,8 @@
         'Plugin debugging ผ่าน WebSocket Desktop Bridge — unique feature',
         'v1.33 connection overhaul: /health auto-discovery + version handshake + status pill ที่บอกความจริง',
         'Design System Dashboard (Lighthouse-style scorecard 0-100) + version diff/changelog',
-        'จัดการ variables/tokens + shared library inspection ได้บน Free plan'
+        'จัดการ variables/tokens + shared library inspection ได้บน Free plan',
+        'Version tools จัดการ rate limit ดีสุดในกลุ่ม: 429 retry ×3 + honor Retry-After (cap 30s) + snapshot cache LRU 50; blame ใช้ binary search ~log2(N) calls ไม่ยิงทุก version'
       ],
       pros_en: [
         '114 tools — most comprehensive (counted from the live connected MCP, Jul 2026)',
@@ -1517,17 +1545,20 @@
         'Plugin debugging via WebSocket Desktop Bridge — a unique feature',
         'v1.33 connection overhaul: /health auto-discovery + version handshake + a status pill that tells the truth',
         'Design System Dashboard (Lighthouse-style scorecard 0-100) + version diff/changelog',
-        'Manage variables/tokens + shared library inspection on the Free plan'
+        'Manage variables/tokens + shared library inspection on the Free plan',
+        'Best rate-limit handling in the group: 429 retry ×3 + honors Retry-After (30s cap) + LRU snapshot cache (50); blame uses binary search ~log2(N) calls, not one per version'
       ],
       cons: [
         'Tools เยอะ → ต้องเรียนรู้ command shape',
         'Local Mode ต้องติด Bridge plugin เพิ่ม',
-        'Token usage ปานกลาง'
+        'Token usage ปานกลาง',
+        'version-history/diff/changelog ยิง Figma REST (Version History = Tier 2). ถ้าใช้ View/Collab seat จะได้แค่ 5/นาที (และ Tier 1 get file/nodes = 6 ครั้ง/เดือน) → งานใหญ่ยังติด 429 แม้จะ retry ให้; ทางแก้คือใช้ Dev/Full seat บน Pro+'
       ],
       cons_en: [
         'Many tools → a learning curve for command shapes',
         'Local Mode requires installing the Bridge plugin',
-        'Moderate token usage'
+        'Moderate token usage',
+        'version-history/diff/changelog hit the Figma REST API (Version History = Tier 2). On a View/Collab seat that is only 5/min (and Tier 1 get file/nodes = 6/month) → big jobs still hit 429 despite the retries; fix is a Dev/Full seat on Pro+'
       ],
       install: 'Remote (OAuth) หรือ\nDesktop Bridge plugin + local MCP server',
       install_en: 'Remote (OAuth) or\nDesktop Bridge plugin + local MCP server',
@@ -1603,14 +1634,16 @@
         'พูดภาษาธรรมชาติเปลี่ยน design ทั้ง file ได้ ("เปลี่ยนสีปุ่ม primary")',
         'v1.0.0 ขยายเป็น 93 tools: paint/text/effect styles, image filters, component set, variable modes',
         'set_auto_layout รวม mode/padding/align/sizing/gap เป็นคำสั่งเดียว',
-        'รองรับ FigJam (sticky, connector, shape, section) + Generate React/Vue/SwiftUI handoff'
+        'รองรับ FigJam (sticky, connector, shape, section) + Generate React/Vue/SwiftUI handoff',
+        'ทุก tool วิ่งผ่าน WebSocket → Figma plugin (local) ไม่ยิง Figma REST API เลย → ไม่ติด Figma REST rate limit'
       ],
       pros_en: [
         'Bidirectional real-time via WebSocket',
         'Change a whole file in natural language ("make the primary button blue")',
         'v1.0.0 grew to 93 tools: paint/text/effect styles, image filters, component sets, variable modes',
         'set_auto_layout unifies mode/padding/align/sizing/gap into one call',
-        'FigJam support (sticky, connector, shape, section) + generate React/Vue/SwiftUI handoff'
+        'FigJam support (sticky, connector, shape, section) + generate React/Vue/SwiftUI handoff',
+        'Every tool goes over WebSocket → Figma plugin (local); it never calls the Figma REST API → no Figma REST rate limit'
       ],
       cons: [
         'Setup ซับซ้อน — ต้องรัน WebSocket server + ติด plugin เอง',
@@ -1717,13 +1750,15 @@
         'Community เล็กที่สุด — feedback ยังจำกัด',
         'License เป็น proprietary (commercial ต้องติดต่อ Umut TAN)',
         'ผู้ดูแลระบุว่ายัง buggy + อยู่ระหว่างพัฒนา',
-        'ไม่มี write capability'
+        'ไม่มี write capability',
+        'ส่วน get_figma_data ยิง Figma REST → ติด rate limit; fetchWithRetry แค่ลอง 1 ครั้งแล้ว fallback เป็น curl ไม่ honor Retry-After จริง (Dev Mode tools วิ่ง local 127.0.0.1:3845 ไม่ติด)'
       ],
       cons_en: [
         'Smallest community — limited feedback so far',
         'Proprietary license (commercial use requires contacting Umut TAN)',
         'Maintainer notes it is still buggy + under active development',
-        'No write capability'
+        'No write capability',
+        'get_figma_data hits the Figma REST API → subject to rate limits; fetchWithRetry only tries once then falls back to curl, not honoring Retry-After (Dev Mode tools run local on 127.0.0.1:3845 and are exempt)'
       ],
       install: 'Node.js 18+ + Figma API key + Plugin install',
       bestFor: 'ทีมที่อยากได้ multi-framework code gen + แค่ explore ตัวเลือก',
