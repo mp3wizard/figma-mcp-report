@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Figma MCP Servers — Interactive Comparison 2026</title>
+<title>Figma MCP Servers - Interactive Comparison 2026</title>
 <!-- Favicon: official Figma logo on a rounded dark square (inline SVG data URI) -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%23181818'/%3E%3Cg%20transform='translate(20%2013)'%3E%3Cpath%20fill='%231ABCFE'%20d='M12.5%2019a6.25%206.25%200%201%201%2012.5%200%206.25%206.25%200%200%201-12.5%200z'/%3E%3Cpath%20fill='%230ACF83'%20d='M0%2031.25A6.25%206.25%200%200%201%206.25%2025h6.25v6.25a6.25%206.25%200%201%201-12.5%200z'/%3E%3Cpath%20fill='%23FF7262'%20d='M12.5%200v12.5h6.25a6.25%206.25%200%201%200%200-12.5H12.5z'/%3E%3Cpath%20fill='%23F24E1E'%20d='M0%206.25A6.25%206.25%200%200%200%206.25%2012.5h6.25V0H6.25A6.25%206.25%200%200%200%200%206.25z'/%3E%3Cpath%20fill='%23A259FF'%20d='M0%2019a6.25%206.25%200%200%200%206.25%206.25h6.25V12.5H6.25A6.25%206.25%200%200%200%200%2019z'/%3E%3C/g%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -12,7 +12,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   /* =========================================================
-     shadcn/ui Design Tokens — Tailwind v4 OKLCH (Neutral)
+     shadcn/ui Design Tokens - Tailwind v4 OKLCH (Neutral)
      Based on https://ui.shadcn.com/docs/theming
      ========================================================= */
   :root {
@@ -198,7 +198,7 @@
   .card-desc { font-size: 13px; color: var(--muted-foreground); margin: 0.25rem 0 0; }
 
   /* =========================================================
-     Stats strip (compact metrics row — not card grid)
+     Stats strip (compact metrics row - not card grid)
      ========================================================= */
   .stats {
     display: flex; flex-wrap: wrap; gap: 0;
@@ -466,7 +466,7 @@
     letter-spacing:0.06em; color:var(--muted-foreground);
     padding:0.5rem 0.25rem; border-bottom:2px solid var(--border); margin-bottom:0;
   }
-  /* No scroll container ancestor — sticky <th> in <thead> anchors to the viewport.
+  /* No scroll container ancestor - sticky <th> in <thead> anchors to the viewport.
      border-collapse:separate is required for position:sticky to work on table cells. */
   /* Dense 6-column matrix: always a self-contained horizontal-scroll region so
      it can never break out of .container. Sticky feature column + sticky header
@@ -589,7 +589,7 @@
     display: inline-flex; align-items: center;
     font-size: 12px; font-weight: 700; line-height: 1;
     padding: 0.2rem 0.5rem; border-radius: 999px;
-    /* per-month hue — defaults to the generic update blue if no month match */
+    /* per-month hue - defaults to the generic update blue if no month match */
     background: var(--month-bg, var(--color-update));
     color: var(--month-fg, #fff);
     letter-spacing: 0.06em; flex-shrink: 0;
@@ -598,24 +598,24 @@
     box-shadow: 0 1px 6px color-mix(in oklch, var(--month-bg, var(--color-update)) 50%, transparent);
   }
   /* =========================================================
-     Month color scale — one distinct hue per calendar month.
+     Month color scale - one distinct hue per calendar month.
      Same lightness/chroma so they read as a family; only the
      hue changes around the wheel. Add a new month by copying a
      line and swapping the hue. Light theme: solid fill / white text.
      ========================================================= */
-  .cmd-since[data-month$="-01"] { --month-bg: oklch(0.55 0.16 265); } /* Jan — indigo */
-  .cmd-since[data-month$="-02"] { --month-bg: oklch(0.55 0.16 310); } /* Feb — violet */
-  .cmd-since[data-month$="-03"] { --month-bg: oklch(0.56 0.18 350); } /* Mar — pink */
-  .cmd-since[data-month$="-04"] { --month-bg: oklch(0.57 0.19 25);  } /* Apr — red */
-  .cmd-since[data-month$="-05"] { --month-bg: oklch(0.62 0.17 55);  } /* May — orange */
-  .cmd-since[data-month$="-06"] { --month-bg: oklch(0.66 0.15 95);  } /* Jun — amber */
-  .cmd-since[data-month$="-07"] { --month-bg: oklch(0.66 0.16 130); } /* Jul — lime */
-  .cmd-since[data-month$="-08"] { --month-bg: oklch(0.6 0.15 155);  } /* Aug — green */
-  .cmd-since[data-month$="-09"] { --month-bg: oklch(0.62 0.12 190); } /* Sep — teal */
-  .cmd-since[data-month$="-10"] { --month-bg: oklch(0.6 0.13 220);  } /* Oct — cyan-blue */
-  .cmd-since[data-month$="-11"] { --month-bg: oklch(0.55 0.15 245); } /* Nov — blue */
-  .cmd-since[data-month$="-12"] { --month-bg: oklch(0.5 0.14 285);  } /* Dec — deep violet */
-  /* Dark theme — lift lightness a touch so chips stay vivid on dark bg */
+  .cmd-since[data-month$="-01"] { --month-bg: oklch(0.55 0.16 265); } /* Jan - indigo */
+  .cmd-since[data-month$="-02"] { --month-bg: oklch(0.55 0.16 310); } /* Feb - violet */
+  .cmd-since[data-month$="-03"] { --month-bg: oklch(0.56 0.18 350); } /* Mar - pink */
+  .cmd-since[data-month$="-04"] { --month-bg: oklch(0.57 0.19 25);  } /* Apr - red */
+  .cmd-since[data-month$="-05"] { --month-bg: oklch(0.62 0.17 55);  } /* May - orange */
+  .cmd-since[data-month$="-06"] { --month-bg: oklch(0.66 0.15 95);  } /* Jun - amber */
+  .cmd-since[data-month$="-07"] { --month-bg: oklch(0.66 0.16 130); } /* Jul - lime */
+  .cmd-since[data-month$="-08"] { --month-bg: oklch(0.6 0.15 155);  } /* Aug - green */
+  .cmd-since[data-month$="-09"] { --month-bg: oklch(0.62 0.12 190); } /* Sep - teal */
+  .cmd-since[data-month$="-10"] { --month-bg: oklch(0.6 0.13 220);  } /* Oct - cyan-blue */
+  .cmd-since[data-month$="-11"] { --month-bg: oklch(0.55 0.15 245); } /* Nov - blue */
+  .cmd-since[data-month$="-12"] { --month-bg: oklch(0.5 0.14 285);  } /* Dec - deep violet */
+  /* Dark theme - lift lightness a touch so chips stay vivid on dark bg */
   [data-theme="dark"] .cmd-since[data-month$="-01"] { --month-bg: oklch(0.64 0.16 265); }
   [data-theme="dark"] .cmd-since[data-month$="-02"] { --month-bg: oklch(0.64 0.16 310); }
   [data-theme="dark"] .cmd-since[data-month$="-03"] { --month-bg: oklch(0.66 0.18 350); }
@@ -740,7 +740,7 @@
   @keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
   /* =========================================================
-     Reduced Motion — respect user preference (WCAG 2.3.3)
+     Reduced Motion - respect user preference (WCAG 2.3.3)
      ========================================================= */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -857,7 +857,7 @@
         </svg>
       </div>
       <div>
-        <div class="brand-title">Figma MCP — Comparison 2026</div>
+        <div class="brand-title">Figma MCP - Comparison 2026</div>
       </div>
     </div>
     <nav class="nav-links">
@@ -889,7 +889,7 @@
     <h1 data-i18n="hero.h1">เปรียบเทียบ Figma MCP Servers ปี 2026</h1>
     <p class="lead" data-i18n="hero.lead">
       วิเคราะห์เชิงลึก 5 Figma MCP servers และ 1 local Desktop CLI ครอบคลุม features, tools commands, update cadence,
-      community feedback, ความเข้ากันได้กับ design system และ DesignOps workflow —
+      community feedback, ความเข้ากันได้กับ design system และ DesignOps workflow -
       ออกแบบเพื่อช่วยพี่นนและทีม BCIF ตัดสินใจเลือก stack ที่ใช่
     </p>
     <div class="hero-meta">
@@ -929,9 +929,9 @@
 <section id="whatsnew">
   <div class="container">
     <div class="section-eyebrow">Changelog</div>
-    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ — รอบอัปเดต 19 ก.ค. 2026</h2>
+    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ - รอบอัปเดต 19 ก.ค. 2026</h2>
     <p class="section-desc" data-i18n="whatsnew.desc">
-      เทียบกับรอบ 17 มิ.ย. 2026 — ตัวเลข tool ของ Official / Console / Sunnyside ยึดจาก MCP ที่เชื่อมต่อจริง
+      เทียบกับรอบ 17 มิ.ย. 2026 - ตัวเลข tool ของ Official / Console / Sunnyside ยึดจาก MCP ที่เชื่อมต่อจริง
       ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง
     </p>
     <div style="display:grid; gap:12px; margin-top:16px;">
@@ -944,7 +944,7 @@
         </p>
       </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.57 0.19 25 / 0.5);">
-        <strong style="color:oklch(0.57 0.19 25);">⭐ API Rate Limits — ทำไม version-history/blame ถึงติด limit (verified จาก Figma docs, ก.ค. 2026)</strong>
+        <strong style="color:oklch(0.57 0.19 25);">⭐ API Rate Limits - ทำไม version-history/blame ถึงติด limit (verified จาก Figma docs, ก.ค. 2026)</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;">
           <strong>Figma REST API</strong> = leaky bucket, เกิน limit → HTTP <code>429</code> + header <code>Retry-After</code>. แบ่ง 3 tier ตาม seat/plan
           (<a href="https://developers.figma.com/docs/rest-api/rate-limits/" target="_blank" rel="noopener">docs</a>):
@@ -959,21 +959,21 @@
           (<a href="https://developers.figma.com/docs/figma-mcp-server/rate-limits-access/" target="_blank" rel="noopener">docs</a>). Write tools ยกเว้น: <code>add_code_connect_map</code>, <code>generate_figma_design</code>, <code>whoami</code>.
         </p>
         <p class="muted" style="margin:8px 0 0; font-size:14px;">
-          <strong>ใครติด / ไม่ติด</strong> (ตรวจจาก source ใน repo): ติด REST limit = <strong>Console</strong> (version/diff/blame tools), <strong>Framelink</strong>, <strong>Sunnyside</strong> (เฉพาะ <code>get_figma_data</code>) — เพราะยิง <code>api.figma.com</code> ด้วย token ของ user.
+          <strong>ใครติด / ไม่ติด</strong> (ตรวจจาก source ใน repo): ติด REST limit = <strong>Console</strong> (version/diff/blame tools), <strong>Framelink</strong>, <strong>Sunnyside</strong> (เฉพาะ <code>get_figma_data</code>) - เพราะยิง <code>api.figma.com</code> ด้วย token ของ user.
           ไม่ติด = <strong>figma-cli</strong> (Desktop/CDP, ไม่มี API key), <strong>ClaudeTalk</strong> (WebSocket → plugin), และฝั่ง write ของ Console (Desktop Bridge) + Dev Mode tools ของ Sunnyside (local 127.0.0.1:3845).
         </p>
         <p class="muted" style="margin:8px 0 0; font-size:14px;">
-          <strong>แก้ความเข้าใจ blame:</strong> Console <code>blame</code> <em>ไม่ได้</em> ยิงทุก version — ใช้ <strong>binary search ≈ log₂(N) calls</strong>. ตัวที่ยิงหนักกว่าคือ <code>get_file_versions</code> (paginate <code>/versions</code> ทีละ 50, สูงสุด 20 page = 1,000 version) และ <code>diff</code> (2 calls + 2 ต่อ component). ต้นตอที่ทำให้ติดจริงคือ <strong>seat</strong>: ถ้าเป็น View/Collab → Tier 1 มีแค่ 6 ครั้ง/<em>เดือน</em> และ Version History 5/นาที ยิงไม่กี่ทีก็หมด.
-          <strong>การจัดการ 429:</strong> Console retry ×3 + honor Retry-After (cap 30s) + snapshot cache (LRU 50) — ดีสุดในกลุ่ม. Framelink/Sunnyside อ่าน Retry-After แต่ <strong>ไม่ retry/backoff จริง</strong> → เจอ 429 เด้ง error.
+          <strong>แก้ความเข้าใจ blame:</strong> Console <code>blame</code> <em>ไม่ได้</em> ยิงทุก version - ใช้ <strong>binary search ≈ log₂(N) calls</strong>. ตัวที่ยิงหนักกว่าคือ <code>get_file_versions</code> (paginate <code>/versions</code> ทีละ 50, สูงสุด 20 page = 1,000 version) และ <code>diff</code> (2 calls + 2 ต่อ component). ต้นตอที่ทำให้ติดจริงคือ <strong>seat</strong>: ถ้าเป็น View/Collab → Tier 1 มีแค่ 6 ครั้ง/<em>เดือน</em> และ Version History 5/นาที ยิงไม่กี่ทีก็หมด.
+          <strong>การจัดการ 429:</strong> Console retry ×3 + honor Retry-After (cap 30s) + snapshot cache (LRU 50) - ดีสุดในกลุ่ม. Framelink/Sunnyside อ่าน Retry-After แต่ <strong>ไม่ retry/backoff จริง</strong> → เจอ 429 เด้ง error.
           <strong>ทางแก้:</strong> ใช้ Dev/Full seat บน Pro+ · ลด scope (component เดียว / ช่วง version แคบ) · หรือใช้ local channel (figma-cli/ClaudeTalk) สำหรับงานที่ไม่ต้อง REST.
         </p>
       </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.18 250 / 0.5);">
-        <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Official MCP — re-check จาก guide repo (v2.2.78): 24 → 25 tools + แก้ข้อมูล Make</strong>
+        <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Official MCP - re-check จาก guide repo (v2.2.78): 24 → 25 tools + แก้ข้อมูล Make</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;">
           เช็คซ้ำจาก <a href="https://github.com/figma/mcp-server-guide/" target="_blank" rel="noopener">figma/mcp-server-guide</a> (<code>server.json</code> = <strong>v2.2.78</strong>):
-          เพิ่ม tool ที่ตกไป — <code>list_file_components_for_code_connect</code> (ดึง component ทั้งไฟล์มาไล่ทำ Code Connect mapping) → นับใหม่เป็น <strong>25 tools</strong>.
-          <strong>แก้ข้อมูลเดิมที่คลาดเคลื่อน:</strong> <code>use_figma</code> เขียนได้แค่ <strong>Design · FigJam · Slides</strong> — <em>ไม่ใช่</em> Make;
+          เพิ่ม tool ที่ตกไป - <code>list_file_components_for_code_connect</code> (ดึง component ทั้งไฟล์มาไล่ทำ Code Connect mapping) → นับใหม่เป็น <strong>25 tools</strong>.
+          <strong>แก้ข้อมูลเดิมที่คลาดเคลื่อน:</strong> <code>use_figma</code> เขียนได้แค่ <strong>Design · FigJam · Slides</strong> - <em>ไม่ใช่</em> Make;
           Make ต่อผ่าน <strong>MCP resources capability</strong> (ดึง context จาก Make project มา extend prototype เป็น production code) คนละกลไกกัน.
           Web capture ที่ถูกต้องคือ tool <code>generate_figma_design</code> (live UI / หน้าเว็บ → design layer, กำลัง rolling out) ไม่ใช่ <code>use_figma</code>.
           repo ยังมี Agent Skills พร้อมใช้ (design-to-code, generate-design/-library/-diagram, code-connect) + workflow skills เดี่ยว
@@ -981,68 +981,68 @@
         </p>
       </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.15 305 / 0.48);">
-        <strong style="color:oklch(0.52 0.18 305);">New comparison baseline — figma-cli v2.1.0 (local Desktop/CDP; not an MCP server)</strong>
+        <strong style="color:oklch(0.52 0.18 305);">New comparison baseline - figma-cli v2.1.0 (local Desktop/CDP; not an MCP server)</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;">
           เพิ่ม <a href="https://github.com/silships/figma-cli" target="_blank" rel="noopener">silships/figma-cli</a> เป็นตัวเลือกคู่เทียบสำหรับ workflow ที่ต้อง write canvas ผ่าน Figma Desktop โดยตรง:
           ไม่ใช้ Figma API key, ไม่ต้องมี MCP transport และไม่ติด API rate limit. จุดแลกเปลี่ยนคือ workflow ต้องพึ่ง local Desktop/CDP.
-          <strong>อัปเดต 12 ก.ค.:</strong> figma-cli เข้า Commands matrix เป็นคอลัมน์ที่ 6 แล้ว (map จาก command จริงของ CLI) — แม้ไม่ใช่ MCP แต่มี named command surface เทียบได้:
+          <strong>อัปเดต 12 ก.ค.:</strong> figma-cli เข้า Commands matrix เป็นคอลัมน์ที่ 6 แล้ว (map จาก command จริงของ CLI) - แม้ไม่ใช่ MCP แต่มี named command surface เทียบได้:
           ครอบ write canvas, tokens/variables, variants + slots, auto-layout, a11y/audit, motion, web capture และ extract → CSS/JSX;
           ส่วนที่ไม่มี = version history, code connect, plugin console logs, multi-framework codegen (Vue/Angular/SwiftUI) และ Figma Slides.
         </p>
       </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.18 250 / 0.5);">
-        <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Official MCP — 18 → 24 tools: motion-to-code + video export + shader library</strong>
+        <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Official MCP - 18 → 24 tools: motion-to-code + video export + shader library</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.motion">
-          เพิ่ม 6 tool ใหม่ (verify จาก MCP ที่เชื่อมต่อจริง 4 ก.ค. 2026 — ยังคงอยู่) ที่ <strong>ไม่มี server อื่นในตารางทำได้</strong>:
-          <code>get_motion_context</code> — ดึง keyframe/easing ของ animation แล้ว pre-compute เป็น CSS <code>@keyframes</code> +
+          เพิ่ม 6 tool ใหม่ (verify จาก MCP ที่เชื่อมต่อจริง 4 ก.ค. 2026 - ยังคงอยู่) ที่ <strong>ไม่มี server อื่นในตารางทำได้</strong>:
+          <code>get_motion_context</code> - ดึง keyframe/easing ของ animation แล้ว pre-compute เป็น CSS <code>@keyframes</code> +
           motion.dev snippet (ใช้ต่อจาก <code>get_design_context</code> สำหรับ motion-aware code gen);
-          <code>export_video</code> — render timeline node เป็น MP4 ฝั่ง server แบบ async (presigned URL, poll ด้วย jobId);
-          และ shader library 4 ตัว — <code>list/get_shader_effects</code> (post-effect sample raster) +
+          <code>export_video</code> - render timeline node เป็น MP4 ฝั่ง server แบบ async (presigned URL, poll ด้วย jobId);
+          และ shader library 4 ตัว - <code>list/get_shader_effects</code> (post-effect sample raster) +
           <code>list/get_shader_fills</code> (generate pixel ตรง ๆ) อ่าน source จาก account library.
           ขยับ Official จาก design-to-code ล้วน → ครอบ <strong>motion + video + shader</strong> ครบ
         </p>
       </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.18 250 / 0.4);">
-        <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Official MCP — use_figma ขยายข้าม surface: รองรับ Figma Slides แล้ว</strong>
+        <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Official MCP - use_figma ขยายข้าม surface: รองรับ Figma Slides แล้ว</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.slides">
           ตาม <a href="https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/" target="_blank" rel="noopener">Figma blog (16 มิ.ย. 2026)</a>
-          — MCP server ตอนนี้ทำงานข้าม <strong>Figma Slides, FigJam, Figma Make และ Figma agent</strong> ผ่าน tool <code>use_figma</code>
+          - MCP server ตอนนี้ทำงานข้าม <strong>Figma Slides, FigJam, Figma Make และ Figma agent</strong> ผ่าน tool <code>use_figma</code>
           + skill ใหม่ <code>/figma-use-slides</code> สั่ง create/refresh เด็คจาก prompt ได้ (เช่น "update my AI deck, pull from Slack/Drive/blog")
           พร้อม custom-font support (render typeface ที่อัปโหลดเอง ไม่ใช่ web-safe). ในตาราง Slides → tab Write จึงขึ้น
           <code>use_figma</code> ในคอลัมน์ Official แล้ว.
           <em>หมายเหตุ:</em> หน้า docs <code>tools-and-prompts</code> ยังไม่ระบุ Slides ใน "Supported file types" ของ <code>use_figma</code>
-          (docs ตาม blog ไม่ทัน) — capability มาก่อน documentation
+          (docs ตาม blog ไม่ทัน) - capability มาก่อน documentation
         </p>
       </div>
       <div class="card" style="padding:16px 20px;">
-        <strong style="color:oklch(0.6 0.18 250);">Figma Official MCP — 17 → 18 tools (download_assets)</strong>
+        <strong style="color:oklch(0.6 0.18 250);">Figma Official MCP - 17 → 18 tools (download_assets)</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.official">
-          เพิ่ม <code>download_assets</code> — ดาวน์โหลด asset (รูป/ไอคอน) จากไฟล์ Figma ออกมาเป็นไฟล์จริง (SVG/PDF/JPG/PNG) แบบ batch
-          ไม่ใช่ screenshot. ปิดช่องว่างเดิมที่มีแต่ <code>upload_assets</code> ขาเข้าอย่างเดียว ตอนนี้ asset ไหลได้สองทางครบ —
+          เพิ่ม <code>download_assets</code> - ดาวน์โหลด asset (รูป/ไอคอน) จากไฟล์ Figma ออกมาเป็นไฟล์จริง (SVG/PDF/JPG/PNG) แบบ batch
+          ไม่ใช่ screenshot. ปิดช่องว่างเดิมที่มีแต่ <code>upload_assets</code> ขาเข้าอย่างเดียว ตอนนี้ asset ไหลได้สองทางครบ -
           มีประโยชน์ตรงกับงาน design-to-code handoff ที่ต้องดึง icon set / ภาพประกอบเข้า repo
         </p>
       </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
-        <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP — v1.34.1 → v1.35.0 (109 → 114 tools): Figma Slots API</strong>
+        <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP - v1.34.1 → v1.35.0 (109 → 114 tools): Figma Slots API</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.slots">
-          เพิ่ม 5 tool ใหม่รอบเดียว — <code>figma_create_slot</code>, <code>figma_get_slots</code>, <code>figma_append_to_slot</code>,
-          <code>figma_reset_slot</code>, <code>figma_add_slot_property</code> — ผ่าน Desktop Bridge ต่อยอด SlotNode ที่ Figma เพิ่งเปิด GA
-          ใน Plugin API (ปิด issue #29 ของ repo ต้นทาง). Slot คือ "placeholder ที่ตั้งกฎไว้ล่วงหน้า" ใน component/component-set —
+          เพิ่ม 5 tool ใหม่รอบเดียว - <code>figma_create_slot</code>, <code>figma_get_slots</code>, <code>figma_append_to_slot</code>,
+          <code>figma_reset_slot</code>, <code>figma_add_slot_property</code> - ผ่าน Desktop Bridge ต่อยอด SlotNode ที่ Figma เพิ่งเปิด GA
+          ใน Plugin API (ปิด issue #29 ของ repo ต้นทาง). Slot คือ "placeholder ที่ตั้งกฎไว้ล่วงหน้า" ใน component/component-set -
           AI ยัด instance/content เข้าไปแทนแล้ว Figma auto-layout/resize ให้ตรงกฎ ไม่ต้องคำนวณตำแหน่งเอง (แก้ปัญหา clone หลุดกรอบใน
           slot แบบ NONE-layout ด้วย auto-snap ไปจุดกำเนิด slot). รองรับสร้าง slot ใน variant component ภายใน COMPONENT_SET แล้ว
           (GA ปลดข้อจำกัด beta เดิม), และ rename node = rename slot property key ตรงตัว. Live-validated กับ Figma จริง 9 ก.ค. 2026
         </p>
       </div>
       <div class="card" style="padding:16px 20px;">
-        <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP — v1.31.1 → v1.34.1 (108 → 109 tools)</strong>
+        <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP - v1.31.1 → v1.34.1 (108 → 109 tools)</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.console">
           รอบใหญ่ 4 minor release (v1.32 → v1.34). <strong>Tool ใหม่ 1 ตัว:</strong> <code>figma_create_component_set</code>
-          (v1.34) — สร้าง component set จาก variant matrix (เช่น <code>{State:[default,hover,disabled] × Size:[sm,lg]}</code>)
+          (v1.34) - สร้าง component set จาก variant matrix (เช่น <code>{State:[default,hover,disabled] × Size:[sm,lg]}</code>)
           จบใน call เดียว แทน pattern <code>figma_execute</code> + <code>combineAsVariants</code> เดิม.
-          <strong>Feature ใหญ่:</strong> (1) <em>full bidirectional token sync</em> — <code>figma_import_tokens</code> apply diff เต็ม:
+          <strong>Feature ใหญ่:</strong> (1) <em>full bidirectional token sync</em> - <code>figma_import_tokens</code> apply diff เต็ม:
           สร้าง collection/variable ที่ขาด + เขียน alias จริง (VARIABLE_ALIAS) + ลบ (gate ด้วย <code>strategy:replace</code>) +
           per-item error isolation; (2) <em>DTCG 2025.10 dialect</em> บน export/import สำหรับ Style Dictionary v5+
-          (default ยังเป็น legacy byte-identical); (3) v1.33 <em>connection overhaul</em> — <code>/health</code> auto-discovery,
+          (default ยังเป็น legacy byte-identical); (3) v1.33 <em>connection overhaul</em> - <code>/health</code> auto-discovery,
           version handshake (plugin เตือนเองเมื่อ stale), status pill ที่บอก connection จริง + CSWSH origin fix.
           รวมถึง lint แยก group <code>wcag</code> / <code>best-practice</code> (v1.32, ลด false positive WCAG 1.4.12).
           <em>ต้อง re-import plugin manifest</em>. Verify กับ MCP ที่เชื่อมต่อจริง 4 ก.ค. 2026:
@@ -1050,7 +1050,7 @@
         </p>
       </div>
       <div class="card" style="padding:16px 20px;">
-        <strong style="color:oklch(0.7 0.16 50);">Framelink · Claude Talk to Figma · Sunnyside — ไม่มีฟีเจอร์ใหม่ (re-check 4 ก.ค. 2026)</strong>
+        <strong style="color:oklch(0.7 0.16 50);">Framelink · Claude Talk to Figma · Sunnyside - ไม่มีฟีเจอร์ใหม่ (re-check 4 ก.ค. 2026)</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.others">
           เช็ค repo ต้นทางแล้ว ทั้ง 3 ตัวไม่มี release/tool ใหม่ตั้งแต่รอบก่อน:
           Framelink ยัง <strong>v0.12.0 / 2 tools</strong> (stars ~14,984) ·
@@ -1125,7 +1125,7 @@
       </div>
     </div>
     <p class="muted mt-2" style="font-size:12px;" data-i18n="compare.note">
-      <strong>หมายเหตุ:</strong> ✓ = รองรับ, ⚠ = บางส่วน/มีเงื่อนไข, — = ไม่รองรับ
+      <strong>หมายเหตุ:</strong> ✓ = รองรับ, ⚠ = บางส่วน/มีเงื่อนไข, - = ไม่รองรับ
       สลับ <em>View</em> เพื่อดูชุดคอลัมน์อื่น (Features, DesignOps, Community, Cost)
     </p>
   </div>
@@ -1155,13 +1155,13 @@
     <div class="section-eyebrow">Commands &amp; Features</div>
     <h2 class="section-title" data-i18n="commands.title">เปรียบเทียบ Commands ทุก MCP แบบ grouped</h2>
     <p class="section-desc" data-i18n="commands.desc">
-      จัดกลุ่มตาม Figma product surface — คลิก tab เพื่อสลับระหว่าง Figma Design, FigJam และ Figma Slides
+      จัดกลุ่มตาม Figma product surface - คลิก tab เพื่อสลับระหว่าง Figma Design, FigJam และ Figma Slides
       แต่ละ cell แสดงชื่อ command จริงที่ใช้เรียก
     </p>
     <div class="matrix-legend">
       <span><span class="cmd-yes" style="display:inline">✓</span> <span data-i18n="legend.yes">รองรับ</span></span>
       <span><span class="cmd-partial" style="display:inline">⚠</span> <span data-i18n="legend.partial">บางส่วน / มีเงื่อนไข</span></span>
-      <span><span class="cmd-none" style="display:inline">—</span> <span data-i18n="legend.none">ไม่รองรับ</span></span>
+      <span><span class="cmd-none" style="display:inline">-</span> <span data-i18n="legend.none">ไม่รองรับ</span></span>
       <span class="month-legend-sep" aria-hidden="true"></span>
       <span data-i18n="legend.newSince">เพิ่มใหม่ตั้งแต่:</span>
       <span id="monthLegend" class="month-legend"></span>
@@ -1258,7 +1258,7 @@
   <div class="container">
     <div class="between">
       <div data-i18n="footer.credit">
-        <strong>Figma MCP — Comparison 2026</strong> · Built for BCIF Design Team · พ.ศ. 2569
+        <strong>Figma MCP - Comparison 2026</strong> · Built for BCIF Design Team · พ.ศ. 2569
       </div>
       <div class="muted">Design tokens: shadcn/ui (Tailwind v4 OKLCH) · Charts: Chart.js</div>
     </div>
@@ -1275,12 +1275,12 @@
 </footer>
 
 <script>
-  // Language state — set FIRST so all initial renders read the correct language
+  // Language state - set FIRST so all initial renders read the correct language
   window.LANG = (function(){ try { return localStorage.getItem('mcp-lang') || 'th'; } catch(e){ return 'th'; } })();
   document.documentElement.lang = window.LANG;
 
   // =========================================================
-  // Data layer — single source of truth
+  // Data layer - single source of truth
   // =========================================================
   const MCPS = [
     {
@@ -1317,8 +1317,8 @@
         'send_code_connect_mappings',
         'add_code_connect_map',
         'whoami ✦',
-        'get_motion_context — keyframe/easing → CSS @keyframes + motion.dev ✦',
-        'export_video — timeline node → MP4 (async render) ✦',
+        'get_motion_context - keyframe/easing → CSS @keyframes + motion.dev ✦',
+        'export_video - timeline node → MP4 (async render) ✦',
         'list_shader_effects ✦',
         'get_shader_effect ✦',
         'list_shader_fills ✦',
@@ -1350,17 +1350,17 @@
       community: 'Big & official',
       pros: [
         'Code Connect ผูก components ↔ codebase ได้ (+ list_file_components_for_code_connect ดึง component ในไฟล์มา map)',
-        'Write to Canvas (use_figma) ขยายข้าม surface — รองรับ Figma Design + FigJam + Slides (มิ.ย. 2026)',
-        'Make + MCP integration — ดึง context จาก Make project (MCP resources capability) มา extend prototype เป็น production code (คนละทางกับ use_figma)',
-        'Motion-to-code (get_motion_context) + export MP4 (export_video) + shader library — ไม่มีใน server อื่น',
+        'Write to Canvas (use_figma) ขยายข้าม surface - รองรับ Figma Design + FigJam + Slides (มิ.ย. 2026)',
+        'Make + MCP integration - ดึง context จาก Make project (MCP resources capability) มา extend prototype เป็น production code (คนละทางกับ use_figma)',
+        'Motion-to-code (get_motion_context) + export MP4 (export_video) + shader library - ไม่มีใน server อื่น',
         'มี Agent Skills พร้อมใช้ (design-to-code, generate-design/-library/-diagram, code-connect) + workflow skills เดี่ยว: video-interaction-mapper, generate-project-plan',
         'รองรับ Mermaid → FigJam diagram generation · Setup ผ่าน OAuth ใน 5 นาที'
       ],
       pros_en: [
         'Code Connect links components ↔ codebase (+ list_file_components_for_code_connect pulls a file’s components to map)',
-        'Write to Canvas (use_figma) spans surfaces — supports Figma Design + FigJam + Slides (Jun 2026)',
-        'Make + MCP integration — fetch context from a Make project (MCP resources capability) to extend prototypes into production code (distinct from use_figma)',
-        'Motion-to-code (get_motion_context) + MP4 export (export_video) + shader library — unique to Official',
+        'Write to Canvas (use_figma) spans surfaces - supports Figma Design + FigJam + Slides (Jun 2026)',
+        'Make + MCP integration - fetch context from a Make project (MCP resources capability) to extend prototypes into production code (distinct from use_figma)',
+        'Motion-to-code (get_motion_context) + MP4 export (export_video) + shader library - unique to Official',
         'Bundled Agent Skills (design-to-code, generate-design/-library/-diagram, code-connect) + standalone workflow skills: video-interaction-mapper, generate-project-plan',
         'Supports Mermaid → FigJam diagram generation · Setup via OAuth in 5 minutes'
       ],
@@ -1428,29 +1428,29 @@
       community: 'ใหญ่ที่สุดในกลุ่ม community-built',
       community_en: 'Largest among community-built MCPs',
       pros: [
-        'Token efficiency สูงสุด — compress ~90% ก่อนส่ง LLM',
+        'Token efficiency สูงสุด - compress ~90% ก่อนส่ง LLM',
         'รองรับทุก client: Cursor, Claude Code, VS Code, Zed, Codex, Antigravity',
         '~105,000 npm weekly downloads (Jun 2026; peak ~198K เม.ย. แล้วนิ่งลง)',
         'Descriptive JSON ทำให้ AI ใช้ component เดิมในโปรเจกต์'
       ],
       pros_en: [
-        'Highest token efficiency — compresses ~90% before sending to the LLM',
+        'Highest token efficiency - compresses ~90% before sending to the LLM',
         'Works with every client: Cursor, Claude Code, VS Code, Zed, Codex, Antigravity',
         '~105,000 npm weekly downloads (Jun 2026; peaked ~198K in Apr, now stabilized)',
         'Descriptive JSON helps the AI reuse existing project components'
       ],
       cons: [
-        'Read-only — เขียนกลับ Figma ไม่ได้',
+        'Read-only - เขียนกลับ Figma ไม่ได้',
         'มีแค่ 2 tools',
-        'REST API ล้วน → ติด Figma rate limit (Tier 1: get file/nodes/image); โค้ดอ่าน Retry-After แต่ไม่ retry/backoff/cache จริง — เจอ 429 แล้วเด้ง error',
-        'เคยมี Critical RCE ใน <0.6.3 (ต.ค. 2025) — ใช้ ≥0.11.0 เท่านั้น',
+        'REST API ล้วน → ติด Figma rate limit (Tier 1: get file/nodes/image); โค้ดอ่าน Retry-After แต่ไม่ retry/backoff/cache จริง - เจอ 429 แล้วเด้ง error',
+        'เคยมี Critical RCE ใน <0.6.3 (ต.ค. 2025) - ใช้ ≥0.11.0 เท่านั้น',
         'macOS ARM ผ่าน npx เคยมี sharp/libvips dlopen issue'
       ],
       cons_en: [
-        'Read-only — cannot write back to Figma',
+        'Read-only - cannot write back to Figma',
         'Only 2 tools',
-        'Pure REST API → subject to Figma rate limits (Tier 1: file/nodes/image); reads Retry-After but does not actually retry/back off/cache — a 429 surfaces as an error',
-        'Had a Critical RCE in <0.6.3 (Oct 2025) — use ≥0.11.0 only',
+        'Pure REST API → subject to Figma rate limits (Tier 1: file/nodes/image); reads Retry-After but does not actually retry/back off/cache - a 429 surfaces as an error',
+        'Had a Critical RCE in <0.6.3 (Oct 2025) - use ≥0.11.0 only',
         'macOS ARM via npx had a sharp/libvips dlopen issue'
       ],
       install: 'npx -y figma-developer-mcp --figma-api-key=YOUR-KEY --stdio',
@@ -1490,7 +1490,7 @@
         'figma_blame_node ✦',
         'figma_analyze_component_set ✦',
         'figma_arrange_component_set (in-place) ✦',
-        'figma_create_component_set — variant matrix → set ✦',
+        'figma_create_component_set - variant matrix → set ✦',
         'figma_create_slot / figma_get_slots (Slots API, GA) ✦ NEW v1.35',
         'figma_append_to_slot / figma_reset_slot ✦ NEW v1.35',
         'figma_add_slot_property ✦ NEW v1.35',
@@ -1507,8 +1507,8 @@
         'figma_diagnose'
       ],
       planRequired: 'free',
-      planLabel: 'Free, Pro, Enterprise — ทุก plan',
-      planLabel_en: 'Free, Pro, Enterprise — every plan',
+      planLabel: 'Free, Pro, Enterprise - ทุก plan',
+      planLabel_en: 'Free, Pro, Enterprise - every plan',
       devSeat: false,
       writeCapability: 'yes',
       readCapability: true,
@@ -1532,27 +1532,27 @@
         'Or Local: install the Desktop Bridge plugin + run a local MCP server',
         'Call audit/debug/parity from your AI client'
       ],
-      community: 'กำลังโต — design system practitioners แนะนำเยอะ',
-      community_en: 'Growing — widely recommended by design-system practitioners',
+      community: 'กำลังโต - design system practitioners แนะนำเยอะ',
+      community_en: 'Growing - widely recommended by design-system practitioners',
       pros: [
         '114 tools ครอบคลุมที่สุด (นับจาก MCP ที่เชื่อมต่อจริง ก.ค. 2026)',
         'Target lock (v1.36): figma_navigate(lock:true) pin command target ต่อไฟล์ ป้องกัน multi-file parallel work เขียนผิดไฟล์; ตรวจ guard ได้จาก targetLocked',
-        'Figma Slots API (v1.35): 5 tool ใหม่ — สร้าง/populate/reset slot placeholder ใน component ผ่าน GA SlotNode, auto-layout จัดตำแหน่งให้เอง',
-        'Full bidirectional token sync (v1.34): import apply diff เต็ม — create collection/variable + alias re-target + delete (replace-gated) + DTCG 2025.10',
+        'Figma Slots API (v1.35): 5 tool ใหม่ - สร้าง/populate/reset slot placeholder ใน component ผ่าน GA SlotNode, auto-layout จัดตำแหน่งให้เอง',
+        'Full bidirectional token sync (v1.34): import apply diff เต็ม - create collection/variable + alias re-target + delete (replace-gated) + DTCG 2025.10',
         'figma_create_component_set (v1.34): สร้าง variant matrix → component set จบใน call เดียว',
-        'Plugin debugging ผ่าน WebSocket Desktop Bridge — unique feature',
+        'Plugin debugging ผ่าน WebSocket Desktop Bridge - unique feature',
         'v1.33 connection overhaul: /health auto-discovery + version handshake + status pill ที่บอกความจริง',
         'Design System Dashboard (Lighthouse-style scorecard 0-100) + version diff/changelog',
         'จัดการ variables/tokens + shared library inspection ได้บน Free plan',
         'Version tools จัดการ rate limit ดีสุดในกลุ่ม: 429 retry ×3 + honor Retry-After (cap 30s) + snapshot cache LRU 50; blame ใช้ binary search ~log2(N) calls ไม่ยิงทุก version'
       ],
       pros_en: [
-        '114 tools — most comprehensive (counted from the live connected MCP, Jul 2026)',
+        '114 tools - most comprehensive (counted from the live connected MCP, Jul 2026)',
         'Target lock (v1.36): figma_navigate(lock:true) pins the per-file command target, preventing writes landing in the wrong file during multi-file parallel work; verify with targetLocked',
-        'Figma Slots API (v1.35): 5 new tools — create/populate/reset slot placeholders inside a component via the GA SlotNode API, auto-layout handles positioning',
-        'Full bidirectional token sync (v1.34): import applies the complete diff — create collections/variables + alias re-target + replace-gated delete + DTCG 2025.10 dialect',
+        'Figma Slots API (v1.35): 5 new tools - create/populate/reset slot placeholders inside a component via the GA SlotNode API, auto-layout handles positioning',
+        'Full bidirectional token sync (v1.34): import applies the complete diff - create collections/variables + alias re-target + replace-gated delete + DTCG 2025.10 dialect',
         'figma_create_component_set (v1.34): build a full variant matrix → component set in one call',
-        'Plugin debugging via WebSocket Desktop Bridge — a unique feature',
+        'Plugin debugging via WebSocket Desktop Bridge - a unique feature',
         'v1.33 connection overhaul: /health auto-discovery + version handshake + a status pill that tells the truth',
         'Design System Dashboard (Lighthouse-style scorecard 0-100) + version diff/changelog',
         'Manage variables/tokens + shared library inspection on the Free plan',
@@ -1656,12 +1656,12 @@
         'Every tool goes over WebSocket → Figma plugin (local); it never calls the Figma REST API → no Figma REST rate limit'
       ],
       cons: [
-        'Setup ซับซ้อน — ต้องรัน WebSocket server + ติด plugin เอง',
+        'Setup ซับซ้อน - ต้องรัน WebSocket server + ติด plugin เอง',
         'ยังไม่มี HTTP transport native',
         'เป็น fork ที่ adapt จาก cursor-talk-to-figma-mcp'
       ],
       cons_en: [
-        'Complex setup — run a WebSocket server + install the plugin yourself',
+        'Complex setup - run a WebSocket server + install the plugin yourself',
         'No native HTTP transport yet',
         'A fork adapted from cursor-talk-to-figma-mcp'
       ],
@@ -1742,8 +1742,8 @@
         'Install the Figma Plugin (real-time mode) or Dev Mode Bridge',
         'Configure your MCP client'
       ],
-      community: 'เล็กที่สุด (~35 stars) — ผู้ดูแลเองยอมรับว่ายัง buggy',
-      community_en: 'Smallest (~35 stars) — the maintainer admits it is still buggy',
+      community: 'เล็กที่สุด (~35 stars) - ผู้ดูแลเองยอมรับว่ายัง buggy',
+      community_en: 'Smallest (~35 stars) - the maintainer admits it is still buggy',
       pros: [
         'Multi-framework code gen ครบ React/Vue/Angular/TS',
         'Styling options: CSS Modules, Tailwind, inline, styled-components',
@@ -1757,14 +1757,14 @@
         'Token-aware (detects conflicts + suggests fixes)'
       ],
       cons: [
-        'Community เล็กที่สุด — feedback ยังจำกัด',
+        'Community เล็กที่สุด - feedback ยังจำกัด',
         'License เป็น proprietary (commercial ต้องติดต่อ Umut TAN)',
         'ผู้ดูแลระบุว่ายัง buggy + อยู่ระหว่างพัฒนา',
         'ไม่มี write capability',
         'ส่วน get_figma_data ยิง Figma REST → ติด rate limit; fetchWithRetry แค่ลอง 1 ครั้งแล้ว fallback เป็น curl ไม่ honor Retry-After จริง (Dev Mode tools วิ่ง local 127.0.0.1:3845 ไม่ติด)'
       ],
       cons_en: [
-        'Smallest community — limited feedback so far',
+        'Smallest community - limited feedback so far',
         'Proprietary license (commercial use requires contacting Umut TAN)',
         'Maintainer notes it is still buggy + under active development',
         'No write capability',
@@ -1830,13 +1830,13 @@
       community: 'Local-first alternative; GitHub signal loads live',
       community_en: 'Local-first alternative; GitHub signal loads live',
       pros: [
-        'เขียน Figma Desktop โดยตรงผ่าน CDP — ไม่ผ่าน Figma REST API',
+        'เขียน Figma Desktop โดยตรงผ่าน CDP - ไม่ผ่าน Figma REST API',
         'ไม่ใช้ API key, ไม่ใช้ MCP transport และไม่ติด API rate limit',
         'import/export DESIGN.md และ token sources (Tailwind, CSS, DTCG) เหมาะกับ Design System workflow',
         'รองรับ Claude Code และ Cursor พร้อม real editable Figma objects'
       ],
       pros_en: [
-        'Writes directly to Figma Desktop via CDP — not the Figma REST API',
+        'Writes directly to Figma Desktop via CDP - not the Figma REST API',
         'No API key, MCP transport, or Figma API rate limit',
         'DESIGN.md and token-source import/export fit Design System workflows',
         'Works with Claude Code and Cursor using real editable Figma objects'
@@ -1844,12 +1844,12 @@
       cons: [
         'ไม่ใช่ MCP server จึงไม่เข้ากับ MCP client ทุกตัว',
         'ต้องพึ่ง Figma Desktop ที่เปิดอยู่และ local Desktop/CDP access',
-        'Yolo mode patch แอป Figma แม้ reversible — ต้องผ่าน IT policy ก่อนใช้ในองค์กร'
+        'Yolo mode patch แอป Figma แม้ reversible - ต้องผ่าน IT policy ก่อนใช้ในองค์กร'
       ],
       cons_en: [
         'Not an MCP server, so it does not fit every MCP client',
         'Requires an open Figma Desktop and local Desktop/CDP access',
-        'Yolo mode patches the Figma app, although reversibly — validate against enterprise IT policy first'
+        'Yolo mode patches the Figma app, although reversibly - validate against enterprise IT policy first'
       ],
       install: 'git clone https://github.com/silships/figma-cli\n# then ask Claude Code / Cursor: set up figma-cli and connect it to my Figma',
       install_en: 'git clone https://github.com/silships/figma-cli\n# then ask Claude Code / Cursor: set up figma-cli and connect it to my Figma',
@@ -1890,29 +1890,29 @@
   })();
 
   // =========================================================
-  // Compare table — column views
+  // Compare table - column views
   // =========================================================
   const COLUMN_VIEWS = {
     features: [
       { key: 'name', label: 'Integration', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
       { key: 'tools', label: 'Tools', sortable: true, render: row => `<strong>${row.tools}+</strong>` },
-      { key: 'writeCapability', label: 'Write canvas', sortable: true, render: row => row.writeCapability === 'yes' ? '<span class="check">✓</span>' : '<span class="x">—</span>' },
-      { key: 'codeConnect', label: 'Code Connect', sortable: true, render: row => row.codeConnect ? '<span class="check">✓</span>' : '<span class="x">—</span>' },
-      { key: 'pluginDebug', label: 'Plugin debug', sortable: true, render: row => row.pluginDebug ? '<span class="check">✓</span>' : '<span class="x">—</span>' },
-      { key: 'tokenMgmt', label: 'Token mgmt', sortable: true, render: row => row.tokenMgmt === 'yes' ? '<span class="check">✓</span>' : (row.tokenMgmt === 'partial' ? '<span class="partial">⚠</span>' : '<span class="x">—</span>') }
+      { key: 'writeCapability', label: 'Write canvas', sortable: true, render: row => row.writeCapability === 'yes' ? '<span class="check">✓</span>' : '<span class="x">-</span>' },
+      { key: 'codeConnect', label: 'Code Connect', sortable: true, render: row => row.codeConnect ? '<span class="check">✓</span>' : '<span class="x">-</span>' },
+      { key: 'pluginDebug', label: 'Plugin debug', sortable: true, render: row => row.pluginDebug ? '<span class="check">✓</span>' : '<span class="x">-</span>' },
+      { key: 'tokenMgmt', label: 'Token mgmt', sortable: true, render: row => row.tokenMgmt === 'yes' ? '<span class="check">✓</span>' : (row.tokenMgmt === 'partial' ? '<span class="partial">⚠</span>' : '<span class="x">-</span>') }
     ],
     ops: [
       { key: 'name', label: 'Integration', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
       { key: 'opsFit', label: 'DesignOps fit', sortable: true, render: row => `<span class="badge ${row.opsFit >= 9 ? 'badge-success' : (row.opsFit >= 7 ? '' : 'badge-warn')}">${row.opsFit}/10</span>` },
-      { key: 'codeConnect', label: 'Code Connect', sortable: true, render: row => row.codeConnect ? '<span class="check">✓</span>' : '<span class="x">—</span>' },
-      { key: 'tokenMgmt', label: 'Variable / Token mgmt', sortable: true, render: row => row.tokenMgmt === 'yes' ? '<span class="check">✓</span>' : (row.tokenMgmt === 'partial' ? '<span class="partial">⚠</span>' : '<span class="x">—</span>') },
-      { key: 'pluginDebug', label: 'Plugin debug + parity', sortable: true, render: row => row.pluginDebug ? '<span class="check">✓</span>' : '<span class="x">—</span>' },
+      { key: 'codeConnect', label: 'Code Connect', sortable: true, render: row => row.codeConnect ? '<span class="check">✓</span>' : '<span class="x">-</span>' },
+      { key: 'tokenMgmt', label: 'Variable / Token mgmt', sortable: true, render: row => row.tokenMgmt === 'yes' ? '<span class="check">✓</span>' : (row.tokenMgmt === 'partial' ? '<span class="partial">⚠</span>' : '<span class="x">-</span>') },
+      { key: 'pluginDebug', label: 'Plugin debug + parity', sortable: true, render: row => row.pluginDebug ? '<span class="check">✓</span>' : '<span class="x">-</span>' },
       { key: 'depth', label: 'Tool depth', sortable: true, render: row => `<span class="badge">${row.depth}/10</span>` }
     ],
     community: [
       { key: 'name', label: 'Integration', sortable: true, render: row => `<div class="row-name">${row.name}<span class="sub">${row.sub}</span></div>` },
       { key: 'stars', label: 'GitHub stars', sortable: true, render: row => `<strong>${row.starsLabel}</strong>` },
-      { key: 'npmWeekly', label: 'npm weekly', sortable: true, render: row => row.npmWeekly ? `${(row.npmWeekly/1000).toFixed(1)}K` : '<span class="muted">—</span>' },
+      { key: 'npmWeekly', label: 'npm weekly', sortable: true, render: row => row.npmWeekly ? `${(row.npmWeekly/1000).toFixed(1)}K` : '<span class="muted">-</span>' },
       { key: 'lastUpdated', label: 'Last updated', sortable: true, render: row => row.lastUpdated },
       { key: 'maturity', label: 'Maturity', sortable: true, render: row => `<span class="badge">${row.maturity}/10</span>` },
       { key: 'community', label: 'Signal', sortable: false, render: row => `<span class="muted" style="font-size:12px;">${(window.LANG === 'en' && row.community_en) ? row.community_en : row.community}</span>` }
@@ -2057,8 +2057,8 @@
                 <li><span class="k">Latest version</span><span class="v">${m.latestVersion}</span></li>
                 <li><span class="k">Last updated</span><span class="v">${m.lastUpdated}</span></li>
                 <li><span class="k">GitHub stars</span><span class="v">${m.starsLabel}</span></li>
-                <li><span class="k">npm weekly</span><span class="v">${m.npmWeekly ? (m.npmWeekly.toLocaleString() + ' /wk') : '—'}</span></li>
-                <li><span class="k">Dev seat</span><span class="v">${m.devSeat ? (en ? '⚠ required' : '⚠ ต้องใช้') : (en ? '— not needed' : '— ไม่ต้องใช้')}</span></li>
+                <li><span class="k">npm weekly</span><span class="v">${m.npmWeekly ? (m.npmWeekly.toLocaleString() + ' /wk') : '-'}</span></li>
+                <li><span class="k">Dev seat</span><span class="v">${m.devSeat ? (en ? '⚠ required' : '⚠ ต้องใช้') : (en ? '- not needed' : '- ไม่ต้องใช้')}</span></li>
                 <li><span class="k">Setup</span><span class="v">${m.setupComplexity}</span></li>
                 <li><span class="k">Community signal</span><span class="v">${pick(m,'community')}</span></li>
               </ul>
@@ -2136,7 +2136,7 @@
           { label: 'Token change impact analysis', since:'2026-05', desc:'วิเคราะห์ว่าถ้าแก้ token นี้จะกระทบ component ไหนบ้าง', eg:'ดูว่าเปลี่ยน color/primary แล้วกระทบ 38 component', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['analyze_token_change_impact','list_token_simulations'], figmacli:[] },
           { label: 'Generate migration code',      since:'2026-05', desc:'สร้าง code สำหรับย้าย token เก่าไปค่าใหม่ใน codebase', eg:'gen find-replace script เปลี่ยนชื่อ token ทั้งโปรเจกต์', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['generate_migration_code'], figmacli:[] },
           { label: 'Export tokens (CSS/SCSS/JSON/Tailwind + DTCG 2025.10)', since:'2026-07', desc:'ส่งออก token หลายฟอร์แมต + รองรับ DTCG 2025.10 (object color/dimension) สำหรับ Style Dictionary v5+', eg:'export เป็น CSS variables + Tailwind + DTCG 2025 พร้อมใช้', official:[], framelink:[], console:['figma_export_tokens'], claudetalk:[], sunnyside:[], figmacli:['export','dtcg','tokens'] },
-          { label: 'Import tokens — full apply (create/alias/delete)', since:'2026-07', desc:'v1.34: import apply diff เต็ม — สร้าง collection/variable ที่ขาด, เขียน alias จริง, ลบ (gate ด้วย strategy:replace), รองรับ DTCG 2 dialect', eg:'sync tokens.json จาก repo กลับ Figma แบบสองทางครบ ไม่ใช่แค่ update ค่า', official:[], framelink:[], console:['figma_import_tokens'], claudetalk:[], sunnyside:[], figmacli:['import','import-design-md','apply'] },
+          { label: 'Import tokens - full apply (create/alias/delete)', since:'2026-07', desc:'v1.34: import apply diff เต็ม - สร้าง collection/variable ที่ขาด, เขียน alias จริง, ลบ (gate ด้วย strategy:replace), รองรับ DTCG 2 dialect', eg:'sync tokens.json จาก repo กลับ Figma แบบสองทางครบ ไม่ใช่แค่ update ค่า', official:[], framelink:[], console:['figma_import_tokens'], claudetalk:[], sunnyside:[], figmacli:['import','import-design-md','apply'] },
           { label: 'Variable definitions (full schema)', since:'2026-05', desc:'ดึงนิยาม variable แบบเต็มทั้ง type/scope/alias', eg:'ดู schema ของ token เพื่อ gen TypeScript type ที่ตรง', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['extract_design_tokens'], figmacli:['var list','bindings'] },
         ]},
         { cat: 'Write Canvas', features: [
@@ -2164,13 +2164,13 @@
           { label: 'Delete component property', since:'2026-05', desc:'ลบ property ที่ไม่ใช้ออกจาก component', eg:'ลบ prop legacy ที่เลิกใช้แล้วออกจาก Button', official:[], framelink:[], console:['figma_delete_component_property'], claudetalk:[], sunnyside:[], figmacli:[] },
           { label: 'Arrange component set',     since:'2026-05', desc:'จัดเรียง variant ใน component set ให้เป็นระเบียบ', eg:'เรียง variant เป็นตาราง size × state อัตโนมัติ', official:[], framelink:[], console:['figma_arrange_component_set'],     claudetalk:[], sunnyside:[], figmacli:['arrange'] },
           { label: 'Create component set (variant matrix)', since:'2026-07', desc:'สร้าง component set จาก matrix ของ variant axes จบใน call เดียว (combine + grid + คืน variant keys)', eg:'สร้าง Button variant { State: [default,hover,disabled] × Size: [sm,lg] } รวดเดียว', official:[], framelink:[], console:['figma_create_component_set'], claudetalk:[], sunnyside:[], figmacli:['variants','combos','combine','sizes'] },
-          { label: 'Component slots (GA SlotNode)', since:'2026-07', desc:'สร้าง/อ่าน/populate/reset "slot" — placeholder ที่ตั้งกฎล่วงหน้าใน component ให้ instance ยัด content เข้าไปแทน โดย auto-layout จัดตำแหน่งให้เอง', eg:'สร้าง slot ชื่อ icon ใน Button แล้วให้แต่ละ instance สลับไอคอนได้โดยไม่หลุด layout', official:[], framelink:[], console:['figma_create_slot','figma_get_slots','figma_append_to_slot','figma_reset_slot','figma_add_slot_property'], claudetalk:[], sunnyside:[], figmacli:['slot','slots'] },
+          { label: 'Component slots (GA SlotNode)', since:'2026-07', desc:'สร้าง/อ่าน/populate/reset "slot" - placeholder ที่ตั้งกฎล่วงหน้าใน component ให้ instance ยัด content เข้าไปแทน โดย auto-layout จัดตำแหน่งให้เอง', eg:'สร้าง slot ชื่อ icon ใน Button แล้วให้แต่ละ instance สลับไอคอนได้โดยไม่หลุด layout', official:[], framelink:[], console:['figma_create_slot','figma_get_slots','figma_append_to_slot','figma_reset_slot','figma_add_slot_property'], claudetalk:[], sunnyside:[], figmacli:['slot','slots'] },
           { label: 'Get component details',     since:'2026-05', desc:'ดึงรายละเอียดเต็มของ component', eg:'ดู prop/variant/description ทั้งหมดของ Input', official:[], framelink:[], console:['figma_get_component_details'],     claudetalk:[], sunnyside:[], figmacli:['component','info'] },
           { label: 'Get component image',       since:'2026-05', desc:'render รูป preview ของ component', eg:'ดึงภาพ Button ทุก variant ไปทำ doc', official:[], framelink:[], console:['figma_get_component_image'],       claudetalk:[], sunnyside:[], figmacli:['screenshot'] },
           { label: 'Get / set instance overrides', since:'2026-05', desc:'อ่านหรือเขียน override ของ instance', eg:'copy override จาก card ต้นแบบไปทุก instance', official:[], framelink:[], console:[], claudetalk:['set_instance_variant','detach_instance'], sunnyside:[], figmacli:['set','instantiate'] },
         ]},
         { cat: 'Auto Layout', features: [
-          { label: 'Set auto layout (unified)', since:'2026-06', desc:'ตั้ง auto layout ครบในคำสั่งเดียว — mode, padding, alignment, sizing, gap (v1.0.0 รวม 5 tools เดิมเป็นตัวเดียว)', eg:'ตั้ง frame เมนูให้ horizontal + padding 16 + gap 8 + center รวดเดียว', official:[], framelink:[], console:[], claudetalk:['set_auto_layout'],  sunnyside:[], figmacli:['autolayout','sizing','hug','gap'] },
+          { label: 'Set auto layout (unified)', since:'2026-06', desc:'ตั้ง auto layout ครบในคำสั่งเดียว - mode, padding, alignment, sizing, gap (v1.0.0 รวม 5 tools เดิมเป็นตัวเดียว)', eg:'ตั้ง frame เมนูให้ horizontal + padding 16 + gap 8 + center รวดเดียว', official:[], framelink:[], console:[], claudetalk:['set_auto_layout'],  sunnyside:[], figmacli:['autolayout','sizing','hug','gap'] },
         ]},
         { cat: 'Design System & Audit', features: [
           { label: 'Design system audit (scorecard)', since:'2026-05', desc:'ประเมินสุขภาพ design system เป็นคะแนน 0-100 แบบ Lighthouse', eg:'รัน audit แล้วได้ 72/100 พร้อมจุดที่ควรแก้', official:[],                 framelink:[], console:['figma_audit_design_system','figma_get_design_system_summary'], claudetalk:[], sunnyside:[], figmacli:['audit'] },
@@ -2242,7 +2242,7 @@
           { label: 'Set default connector',    since:'2026-05', desc:'ตั้งรูปแบบเส้น connector เริ่มต้น', eg:'ตั้ง connector เป็นเส้นโค้งหัวลูกศรทุกอัน', official:[], framelink:[], console:[], claudetalk:[],   sunnyside:[], figmacli:[] },
         ]},
         { cat: 'Web Capture', features: [
-          { label: 'Capture webpage to Figma', since:'2026-05', desc:'ดึง live UI / หน้าเว็บจริงเข้ามาเป็น design layer ใน Figma (generate_figma_design — กำลัง rolling out)', eg:'capture หน้า landing คู่แข่งมาเป็น frame แก้ต่อ', official:['generate_figma_design'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:['analyze-url','screenshot-url','link'] },
+          { label: 'Capture webpage to Figma', since:'2026-05', desc:'ดึง live UI / หน้าเว็บจริงเข้ามาเป็น design layer ใน Figma (generate_figma_design - กำลัง rolling out)', eg:'capture หน้า landing คู่แข่งมาเป็น frame แก้ต่อ', official:['generate_figma_design'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:['analyze-url','screenshot-url','link'] },
         ]},
         { cat: 'Motion & Media', features: [
           { label: 'Motion context → code',    since:'2026-06', desc:'ดึง keyframe/easing ของ animation แล้ว pre-compute เป็น CSS @keyframes + motion.dev snippet', eg:'แปลง animation ของ hero เป็น @keyframes + motion.dev โค้ดพร้อมใช้', official:['get_motion_context'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:['motion','timeline','stagger'] },
@@ -2299,9 +2299,9 @@
   // English translations for feature desc/eg, keyed by (unique) label
   const FEAT_TR = {
     'โครงสร้าง layout / nodes': { d:"Read the whole file as a tree of frames/groups/layers so the AI grasps the hierarchy before editing or gen code", e:"Pull the Login screen nodes to see how inputs/buttons nest, then convert to React" },
-    'Screenshot / export image': { d:"Capture a node or export it as an image — for QA or attaching visuals for the AI", e:"Export the CTA button as PNG @2x for a PR, or have the AI check alignment" },
+    'Screenshot / export image': { d:"Capture a node or export it as an image - for QA or attaching visuals for the AI", e:"Export the CTA button as PNG @2x for a PR, or have the AI check alignment" },
     'Metadata (file / node)': { d:"Pull lightweight node info (size, position, name, type) without loading the whole tree", e:"Check a frame is 375px wide per the mobile spec before handoff" },
-    'Components & library': { d:"Read components and linked libraries — see which variants/instances are available", e:"List every button variant in the design system, then place Primary/Large" },
+    'Components & library': { d:"Read components and linked libraries - see which variants/instances are available", e:"List every button variant in the design system, then place Primary/Large" },
     'Styles (color / text)': { d:"Read color/text styles defined in the file and their actual values", e:"Pull Primary/500 and the Heading style to compare with code tokens" },
     'Create new Figma file': { d:"Create a new Figma file from the AI without opening the app", e:"Create an empty file named Landing v2, then start gen layout" },
     'Design changes log': { d:"Forensic view of which properties changed per node during a session", e:"Check who changed the Hero background color and from what" },
@@ -2315,7 +2315,7 @@
     'App structure & flow mapping': { d:"Analyze the app structure and map connections between screens", e:"Auto-build a flow map from Home to Cart to Checkout" },
     'Dev mode history': { d:"View the history of code pulled in Dev Mode", e:"Look back at which components were already gen'd" },
     'Plugin project overview': { d:"Summarize the project via the plugin bridge", e:"See page/component counts and file size before starting" },
-    'Read variables / tokens': { d:"Read all variables/tokens in the file — colors, spacing, numbers", e:"Pull color/spacing tokens to compare with CSS variables" },
+    'Read variables / tokens': { d:"Read all variables/tokens in the file - colors, spacing, numbers", e:"Pull color/spacing tokens to compare with CSS variables" },
     'Create / update variable': { d:"Create, edit, rename or delete a variable one at a time", e:"Create token color/brand = #0D99FF and tweak it later" },
     'Batch create variables (10+)': { d:"Create many variables at once in one pass, no rate limit", e:"Import a 50-value color scale from JSON into tokens at once" },
     'Batch update variables': { d:"Update many variables at once in a single call", e:"Bump every spacing value by +2px across the collection at once" },
@@ -2444,7 +2444,7 @@
     }
     function buildCell(cmds, since, mk) {
       const colAttr = mk ? ' data-col="' + mk + '"' : '';
-      if (!cmds || !cmds.length) return '<td class="matrix-td"' + colAttr + '><span class="cmd-none">—</span></td>';
+      if (!cmds || !cmds.length) return '<td class="matrix-td"' + colAttr + '><span class="cmd-none">-</span></td>';
       const isPartial = cmds[0] === 'partial';
       const isYes     = cmds[0] === 'yes';
       const icon = isPartial ? '<span class="cmd-partial">⚠</span>' : '<span class="cmd-yes">✓</span>';
@@ -2677,7 +2677,7 @@
     });
     if (!parts.length) { el.hidden = true; return; }
     el.hidden = false;
-    el.innerHTML = '<span class="mcp-diff-summary">🔄 Tool changes detected — ' + parts.join('   ') + '</span>'
+    el.innerHTML = '<span class="mcp-diff-summary">🔄 Tool changes detected - ' + parts.join('   ') + '</span>'
       + '<button class="mcp-diff-force-refresh" onclick="localStorage.removeItem(\'mcp-tools-cache-v1\');location.reload()">Force refresh</button>';
     var panel = document.getElementById('mcpDiffPanel');
     if (panel) panel.hidden = false;
@@ -2713,7 +2713,7 @@
       html += '</div></div>';
     });
     body.innerHTML = html || '<p style="font-size:12px;color:var(--muted-foreground);margin:0">No changes found.</p>';
-    if (summaryEl) summaryEl.textContent = '🔍 ' + totalAdded + ' added · ' + totalRemoved + ' removed — click to expand';
+    if (summaryEl) summaryEl.textContent = '🔍 ' + totalAdded + ' added · ' + totalRemoved + ' removed - click to expand';
   }
 
   (async function() {
@@ -2849,18 +2849,18 @@
     var I18N_EN = {
       'hero.eyebrow': '<span class="dot"></span> Updated May 2026 · For BCIF Design Team',
       'hero.h1': 'Compare Figma MCP Servers 2026',
-      'hero.lead': 'In-depth analysis of 5 Figma MCP servers and 1 local Desktop CLI — covering features, tool commands, update cadence, community feedback, design-system compatibility and DesignOps workflow. Built to help the BCIF team pick the right stack.',
+      'hero.lead': 'In-depth analysis of 5 Figma MCP servers and 1 local Desktop CLI - covering features, tool commands, update cadence, community feedback, design-system compatibility and DesignOps workflow. Built to help the BCIF team pick the right stack.',
       'hero.stat4label': 'First-party (write canvas beta)',
       'hero.stat4trend': 'Figma Official shipped use_figma',
-      'whatsnew.title': "What's new — update of Jul 19, 2026",
-      'whatsnew.desc': 'Compared against the Jun 17, 2026 snapshot — tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos.',
-      'whatsnew.motion': 'Six new tools (verified against the live connected MCP on Jun 17, 2026) that <strong>no other server in the table can do</strong>: <code>get_motion_context</code> — pull a node’s keyframe/easing data and pre-compute it into CSS <code>@keyframes</code> + motion.dev snippets (use after <code>get_design_context</code> for motion-aware code gen); <code>export_video</code> — render a timeline node to MP4 server-side, async (presigned URL, poll via jobId); and a 4-tool shader library — <code>list/get_shader_effects</code> (post-effects sampling a raster) + <code>list/get_shader_fills</code> (generate pixels directly), reading source from the account library. This moves Official from pure design-to-code to also covering <strong>motion + video + shader</strong>.',
-      'whatsnew.slides': 'Per the <a href="https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/" target="_blank" rel="noopener">Figma blog (Jun 16, 2026)</a>, the MCP server now works across <strong>Figma Slides, FigJam, Figma Make, and the Figma agent</strong> via the <code>use_figma</code> tool plus the new <code>/figma-use-slides</code> skill — you can create or refresh decks from a prompt (e.g. "update my AI deck, pull from Slack/Drive/blog"), with custom-font support (renders your uploaded typefaces, not web-safe approximations). The Slides → Write tab now shows <code>use_figma</code> in the Official column. <em>Note:</em> the <code>tools-and-prompts</code> docs page does not yet list Slides under <code>use_figma</code>’s supported file types — capability shipped ahead of the docs.',
-      'whatsnew.official': 'Added <code>download_assets</code> — batch-download assets (images/icons) from a Figma file. Closes the gap where only inbound <code>upload_assets</code> existed; assets now flow both ways — directly useful for design-to-code handoff when pulling icon sets / illustrations into a repo.',
-      'whatsnew.slots': "Five new tools in one release — <code>figma_create_slot</code>, <code>figma_get_slots</code>, <code>figma_append_to_slot</code>, <code>figma_reset_slot</code>, <code>figma_add_slot_property</code> — via the Desktop Bridge, built on Figma's newly-GA SlotNode Plugin API (closes issue #29 upstream). A slot is a pre-constrained placeholder inside a component/component-set: AI populates it with an instance/content and Figma auto-layout/resizing enforces the rule, no manual position math needed (includes an auto-snap fix so clones no longer land outside NONE-layout slots). Slot creation now works on variant components inside a COMPONENT_SET (GA lifted the old beta restriction), and renaming the node renames the linked slot property key directly. Live-validated against Figma on Jul 9, 2026.",
+      'whatsnew.title': "What's new - update of Jul 19, 2026",
+      'whatsnew.desc': 'Compared against the Jun 17, 2026 snapshot - tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos.',
+      'whatsnew.motion': 'Six new tools (verified against the live connected MCP on Jun 17, 2026) that <strong>no other server in the table can do</strong>: <code>get_motion_context</code> - pull a node’s keyframe/easing data and pre-compute it into CSS <code>@keyframes</code> + motion.dev snippets (use after <code>get_design_context</code> for motion-aware code gen); <code>export_video</code> - render a timeline node to MP4 server-side, async (presigned URL, poll via jobId); and a 4-tool shader library - <code>list/get_shader_effects</code> (post-effects sampling a raster) + <code>list/get_shader_fills</code> (generate pixels directly), reading source from the account library. This moves Official from pure design-to-code to also covering <strong>motion + video + shader</strong>.',
+      'whatsnew.slides': 'Per the <a href="https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/" target="_blank" rel="noopener">Figma blog (Jun 16, 2026)</a>, the MCP server now works across <strong>Figma Slides, FigJam, Figma Make, and the Figma agent</strong> via the <code>use_figma</code> tool plus the new <code>/figma-use-slides</code> skill - you can create or refresh decks from a prompt (e.g. "update my AI deck, pull from Slack/Drive/blog"), with custom-font support (renders your uploaded typefaces, not web-safe approximations). The Slides → Write tab now shows <code>use_figma</code> in the Official column. <em>Note:</em> the <code>tools-and-prompts</code> docs page does not yet list Slides under <code>use_figma</code>’s supported file types - capability shipped ahead of the docs.',
+      'whatsnew.official': 'Added <code>download_assets</code> - batch-download assets (images/icons) from a Figma file. Closes the gap where only inbound <code>upload_assets</code> existed; assets now flow both ways - directly useful for design-to-code handoff when pulling icon sets / illustrations into a repo.',
+      'whatsnew.slots': "Five new tools in one release - <code>figma_create_slot</code>, <code>figma_get_slots</code>, <code>figma_append_to_slot</code>, <code>figma_reset_slot</code>, <code>figma_add_slot_property</code> - via the Desktop Bridge, built on Figma's newly-GA SlotNode Plugin API (closes issue #29 upstream). A slot is a pre-constrained placeholder inside a component/component-set: AI populates it with an instance/content and Figma auto-layout/resizing enforces the rule, no manual position math needed (includes an auto-snap fix so clones no longer land outside NONE-layout slots). Slot creation now works on variant components inside a COMPONENT_SET (GA lifted the old beta restriction), and renaming the node renames the linked slot property key directly. Live-validated against Figma on Jul 9, 2026.",
       'whatsnew.targetlock': "<code>figma_navigate</code> adds <code>lock: true</code> to pin the Figma file an agent is working in as the command target: plugin connections/reconnects and selection or page changes in other files cannot silently switch a write into the wrong file. This makes real parallel work safe: an agent can update a Design System in file A while a designer works in file B. Check <code>figma_list_open_files.targetLocked</code> before a write batch. The lock is opt-in and releases when the pinned file disconnects or navigates away, or when navigating to another file / passing <code>lock: false</code>; it adds no MCP tool and requires no Desktop Bridge re-import.",
-      'whatsnew.console': "A big round — 4 minor releases (v1.32 → v1.34). <strong>One new tool:</strong> <code>figma_create_component_set</code> (v1.34) builds a component set from a variant-axes matrix (e.g. <code>{State:[default,hover,disabled] × Size:[sm,lg]}</code>) in a single call, replacing the old <code>figma_execute</code> + <code>combineAsVariants</code> pattern. <strong>Major features:</strong> (1) <em>full bidirectional token sync</em> — <code>figma_import_tokens</code> now applies the complete diff: creates missing collections/variables, writes real VARIABLE_ALIAS references, and deletes (gated behind <code>strategy:replace</code>), with per-item error isolation; (2) <em>DTCG 2025.10 dialect</em> on export/import for Style Dictionary v5+ (default stays legacy, byte-identical); (3) the v1.33 <em>connection overhaul</em> — <code>/health</code> auto-discovery, a version handshake (the plugin banners itself when stale), an honest status pill, and a CSWSH origin fix. Plus <code>figma_lint_design</code> split into <code>wcag</code> / <code>best-practice</code> groups (v1.32), cutting WCAG 1.4.12 false positives. <em>Re-import the plugin manifest.</em> Verified against the live connected MCP on Jul 4, 2026: Official 24 · Console 109 · Sunnyside 27.",
-      'whatsnew.others': 'Re-checked the upstream repos — all three unchanged since the last round: Framelink still <strong>v0.12.0 / 2 tools</strong> (stars ~14,984) · ClaudeTalk still <strong>v1.0.0 / 93 tools</strong> (no release since Apr) · Sunnyside still <strong>v0.4.4 / 27 tools</strong> (latest commit 0.4.4, nothing new). Every new capability this round is concentrated in Figma Console MCP.',
+      'whatsnew.console': "A big round - 4 minor releases (v1.32 → v1.34). <strong>One new tool:</strong> <code>figma_create_component_set</code> (v1.34) builds a component set from a variant-axes matrix (e.g. <code>{State:[default,hover,disabled] × Size:[sm,lg]}</code>) in a single call, replacing the old <code>figma_execute</code> + <code>combineAsVariants</code> pattern. <strong>Major features:</strong> (1) <em>full bidirectional token sync</em> - <code>figma_import_tokens</code> now applies the complete diff: creates missing collections/variables, writes real VARIABLE_ALIAS references, and deletes (gated behind <code>strategy:replace</code>), with per-item error isolation; (2) <em>DTCG 2025.10 dialect</em> on export/import for Style Dictionary v5+ (default stays legacy, byte-identical); (3) the v1.33 <em>connection overhaul</em> - <code>/health</code> auto-discovery, a version handshake (the plugin banners itself when stale), an honest status pill, and a CSWSH origin fix. Plus <code>figma_lint_design</code> split into <code>wcag</code> / <code>best-practice</code> groups (v1.32), cutting WCAG 1.4.12 false positives. <em>Re-import the plugin manifest.</em> Verified against the live connected MCP on Jul 4, 2026: Official 24 · Console 109 · Sunnyside 27.",
+      'whatsnew.others': 'Re-checked the upstream repos - all three unchanged since the last round: Framelink still <strong>v0.12.0 / 2 tools</strong> (stars ~14,984) · ClaudeTalk still <strong>v1.0.0 / 93 tools</strong> (no release since Apr) · Sunnyside still <strong>v0.4.4 / 27 tools</strong> (latest commit 0.4.4, nothing new). Every new capability this round is concentrated in Figma Console MCP.',
       'compare.title': 'Filterable + sortable comparison table',
       'compare.desc': 'Filter by the Figma plan your team uses, write-back capability, and the view you care about. Click a column header to re-sort.',
       'filter.plan': 'Figma plan:',
@@ -2876,11 +2876,11 @@
       'filter.setup.complex': 'Complex',
       'filter.view': 'View:',
       'filter.reset': 'Reset filter',
-      'compare.note': '<strong>Note:</strong> ✓ = supported, ⚠ = partial / conditional, — = not supported. Switch <em>View</em> to see other column sets (Features, DesignOps, Community, Cost)',
+      'compare.note': '<strong>Note:</strong> ✓ = supported, ⚠ = partial / conditional, - = not supported. Switch <em>View</em> to see other column sets (Features, DesignOps, Community, Cost)',
       'deepdive.title': 'Deep dive into each MCP',
       'deepdive.desc': 'Each tab covers overview, key tools, install snippet, community feedback and notable quirks',
       'commands.title': 'Compare commands across all MCPs, grouped',
-      'commands.desc': 'Grouped by Figma product surface — click a tab to switch between Figma Design, FigJam and Figma Slides. Each cell shows the actual command name used',
+      'commands.desc': 'Grouped by Figma product surface - click a tab to switch between Figma Design, FigJam and Figma Slides. Each cell shows the actual command name used',
       'legend.yes': 'supported',
       'legend.partial': 'partial / conditional',
       'legend.none': 'not supported',
@@ -2900,7 +2900,7 @@
       'radar.ops': 'Fit for DesignOps team workflow / handoff',
       'radar.maturity': 'Completeness, stability, docs, community',
       'radar.freeTier': 'Whether it works on the Figma Free/Starter plan',
-      'footer.credit': '<strong>Figma MCP — Comparison 2026</strong> · Built for BCIF Design Team · 2026'
+      'footer.credit': '<strong>Figma MCP - Comparison 2026</strong> · Built for BCIF Design Team · 2026'
     };
     var snapTh = {};
     document.querySelectorAll('[data-i18n]').forEach(function(el) {
@@ -3049,7 +3049,7 @@
       if (state.plan === 'free') { primary = 'claudetalk'; reasons.push(TL('Write canvas ทำงานบน Free plan + bidirectional ผ่าน WebSocket', 'Write canvas works on the Free plan, bidirectional via WebSocket')); }
       else { primary = 'official'; reasons.push(TL('use_figma (write canvas) เป็น first-party + Code Connect ผูก codebase', 'use_figma (write canvas) is first-party + Code Connect links the codebase')); }
     } else if (state.goal === 'd2c') {
-      if (state.cost === 'high') { primary = 'framelink'; reasons.push(TL('Token compression ~90% เหมาะกับงานที่เรียก AI บ่อย — cost ต่ำที่สุด', 'Token compression ~90% suits frequent AI calls — lowest cost')); }
+      if (state.cost === 'high') { primary = 'framelink'; reasons.push(TL('Token compression ~90% เหมาะกับงานที่เรียก AI บ่อย - cost ต่ำที่สุด', 'Token compression ~90% suits frequent AI calls - lowest cost')); }
       else if (state.plan === 'free') { primary = 'framelink'; reasons.push(TL('Free plan ใช้ได้, descriptive JSON ทำให้ AI ใช้ component เดิมในโปรเจกต์', 'Works on Free plan; descriptive JSON helps AI reuse existing project components')); }
       else { primary = 'official'; reasons.push(TL('Code Connect ผูก components กับ codebase + Write canvas', 'Code Connect links components to the codebase + Write canvas')); }
     }
@@ -3058,7 +3058,7 @@
     if (state.setup === 'easy' && primary === 'claudetalk') {
       const old = primary;
       primary = state.plan === 'free' ? 'framelink' : 'official';
-      reasons.push(TL(`เลี่ยง Claude Talk to Figma เพราะ setup ซับซ้อน (WebSocket + plugin) — เปลี่ยนเป็น ${primary === 'framelink' ? 'Framelink' : 'Official'} แทน`, `Avoiding Claude Talk to Figma due to complex setup (WebSocket + plugin) — switched to ${primary === 'framelink' ? 'Framelink' : 'Official'} instead`));
+      reasons.push(TL(`เลี่ยง Claude Talk to Figma เพราะ setup ซับซ้อน (WebSocket + plugin) - เปลี่ยนเป็น ${primary === 'framelink' ? 'Framelink' : 'Official'} แทน`, `Avoiding Claude Talk to Figma due to complex setup (WebSocket + plugin) - switched to ${primary === 'framelink' ? 'Framelink' : 'Official'} instead`));
     }
 
     // Plan constraint check
@@ -3077,9 +3077,9 @@
     // Pair recommendation
     let pair = null;
     if (state.goal === 'ds' && (state.plan === 'pro' || state.plan === 'org')) {
-      pair = TL('ใช้คู่ Official MCP (Code Connect) + Figma Console MCP (audit/parity) — TJ Pitre confirm ว่า pattern นี้ทำงานจริง', 'Pair Official MCP (Code Connect) + Figma Console MCP (audit/parity) — TJ Pitre confirms this pattern works in practice');
+      pair = TL('ใช้คู่ Official MCP (Code Connect) + Figma Console MCP (audit/parity) - TJ Pitre confirm ว่า pattern นี้ทำงานจริง', 'Pair Official MCP (Code Connect) + Figma Console MCP (audit/parity) - TJ Pitre confirms this pattern works in practice');
     } else if (state.goal === 'd2c' && state.cost === 'high' && state.plan !== 'free') {
-      pair = TL('ใช้คู่ Framelink (efficient extraction) + Official MCP (Code Connect) — ได้ทั้ง token efficiency และ component fidelity', 'Pair Framelink (efficient extraction) + Official MCP (Code Connect) — get both token efficiency and component fidelity');
+      pair = TL('ใช้คู่ Framelink (efficient extraction) + Official MCP (Code Connect) - ได้ทั้ง token efficiency และ component fidelity', 'Pair Framelink (efficient extraction) + Official MCP (Code Connect) - get both token efficiency and component fidelity');
     }
 
     return { rec: recObj, reasons, alts, pair };
@@ -3225,7 +3225,7 @@
   renderRadar(); renderBar();
 
   // =========================================================
-  // Live data — GitHub API + npm registry (client-side fetch)
+  // Live data - GitHub API + npm registry (client-side fetch)
   // =========================================================
   function setBadge(loading, timeStr) {
     const badge = document.getElementById('liveBadge');
