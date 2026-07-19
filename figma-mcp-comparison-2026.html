@@ -907,7 +907,7 @@
       <div class="stat">
         <div class="stat-label">Most tools</div>
         <div class="stat-value">114+</div>
-        <div class="stat-trend">Figma Console MCP v1.35.0</div>
+        <div class="stat-trend">Figma Console MCP v1.36.0</div>
       </div>
       <div class="stat">
         <div class="stat-label">npm weekly downloads</div>
@@ -929,12 +929,20 @@
 <section id="whatsnew">
   <div class="container">
     <div class="section-eyebrow">Changelog</div>
-    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ — รอบอัปเดต 12 ก.ค. 2026</h2>
+    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ — รอบอัปเดต 19 ก.ค. 2026</h2>
     <p class="section-desc" data-i18n="whatsnew.desc">
       เทียบกับรอบ 17 มิ.ย. 2026 — ตัวเลข tool ของ Official / Console / Sunnyside ยึดจาก MCP ที่เชื่อมต่อจริง
       ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง
     </p>
     <div style="display:grid; gap:12px; margin-top:16px;">
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
+        <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP: v1.36.0 Target lock สำหรับ multi-file parallel work</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.targetlock">
+          <code>figma_navigate</code> เพิ่ม <code>lock: true</code> เพื่อ pin ไฟล์ Figma ที่ agent กำลังทำงานไว้เป็น command target: การเชื่อมต่อ/reconnect ของ plugin และ selection/page change ในไฟล์อื่นจะไม่สลับปลายทางจนคำสั่ง write หลุดไปผิดไฟล์.
+          ใช้ทำงานคู่กันได้จริง: agent แก้ Design System ในไฟล์ A ขณะ designer ทำงานในไฟล์ B. ตรวจ guard ก่อน batch write ได้จาก <code>figma_list_open_files.targetLocked</code>.
+          lock เป็น opt-in และปลดเองเมื่อไฟล์ที่ pin disconnect/เปลี่ยนไฟล์ หรือเมื่อ navigate ไปไฟล์อื่น/ส่ง <code>lock: false</code>; ไม่มี MCP tool ใหม่และไม่ต้อง re-import Desktop Bridge plugin.
+        </p>
+      </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.57 0.19 25 / 0.5);">
         <strong style="color:oklch(0.57 0.19 25);">⭐ API Rate Limits — ทำไม version-history/blame ถึงติด limit (verified จาก Figma docs, ก.ค. 2026)</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;">
@@ -1461,8 +1469,8 @@
       sub: 'southleft · Plugin debugging + DS audit',
       maintainer: 'TJ Pitre / SouthLeft',
       logoColor: 'oklch(0.62 0.2 145)',
-      latestVersion: 'v1.35.0 (Jul 2026)',
-      lastUpdated: '2026-07-09',
+      latestVersion: 'v1.36.0 (Jul 2026)',
+      lastUpdated: '2026-07-16',
       stars: 1700,
       starsLabel: '~1,700',
       npmWeekly: null,
@@ -1528,6 +1536,7 @@
       community_en: 'Growing — widely recommended by design-system practitioners',
       pros: [
         '114 tools ครอบคลุมที่สุด (นับจาก MCP ที่เชื่อมต่อจริง ก.ค. 2026)',
+        'Target lock (v1.36): figma_navigate(lock:true) pin command target ต่อไฟล์ ป้องกัน multi-file parallel work เขียนผิดไฟล์; ตรวจ guard ได้จาก targetLocked',
         'Figma Slots API (v1.35): 5 tool ใหม่ — สร้าง/populate/reset slot placeholder ใน component ผ่าน GA SlotNode, auto-layout จัดตำแหน่งให้เอง',
         'Full bidirectional token sync (v1.34): import apply diff เต็ม — create collection/variable + alias re-target + delete (replace-gated) + DTCG 2025.10',
         'figma_create_component_set (v1.34): สร้าง variant matrix → component set จบใน call เดียว',
@@ -1539,6 +1548,7 @@
       ],
       pros_en: [
         '114 tools — most comprehensive (counted from the live connected MCP, Jul 2026)',
+        'Target lock (v1.36): figma_navigate(lock:true) pins the per-file command target, preventing writes landing in the wrong file during multi-file parallel work; verify with targetLocked',
         'Figma Slots API (v1.35): 5 new tools — create/populate/reset slot placeholders inside a component via the GA SlotNode API, auto-layout handles positioning',
         'Full bidirectional token sync (v1.34): import applies the complete diff — create collections/variables + alias re-target + replace-gated delete + DTCG 2025.10 dialect',
         'figma_create_component_set (v1.34): build a full variant matrix → component set in one call',
@@ -2212,6 +2222,7 @@
           { label: 'Focus / select node',          since:'2026-05', desc:'เลื่อนไปโฟกัสหรือเลือก node บน canvas', eg:'สั่งให้ Figma เลื่อนไปที่ปุ่ม CTA แล้วเลือกไว้', official:[], framelink:[], console:['figma_navigate'], claudetalk:['get_selection','set_current_page'], sunnyside:[], figmacli:['focus','select'] },
           { label: 'Set node description',         desc:'ตั้งคำอธิบายให้ node/component', eg:'ใส่ description บอกวิธีใช้ Badge component', official:[], framelink:[], console:['figma_set_description'], claudetalk:[], sunnyside:[], figmacli:['set'] },
           { label: 'Navigate to node',             desc:'พา view ไปยัง node ที่ระบุ', eg:'jump ไปที่ frame Checkout ทันทีจาก AI', official:[], framelink:[], console:['figma_navigate'], claudetalk:[], sunnyside:[], figmacli:['focus'] },
+          { label: 'Target lock (multi-file pin)', since:'2026-07', desc:'ล็อกไฟล์ที่ agent กำลังทำงานไว้ ไม่ให้ user สลับไฟล์อื่นแล้วคำสั่งหลุดไปผิดไฟล์', eg:'agent แก้ token ในไฟล์ A ขณะ user เปิดไฟล์ B ทำงานคู่กันได้ไม่ชนกัน', official:[], framelink:[], console:['figma_navigate(lock:true)'], claudetalk:[], sunnyside:[], figmacli:[] },
         ]},
         { cat: 'Code Generation', features: [
           { label: 'Design → code (general)',      desc:'แปลงดีไซน์เป็น code ทั่วไปให้ AI นำไปต่อ', eg:'ดึงหน้า Pricing มาเป็นโครง markup พร้อม style', official:['get_design_context'], framelink:['get_figma_data'], console:['partial'], claudetalk:['yes'], sunnyside:['yes'], figmacli:['extract','export-jsx','css'] },
@@ -2841,12 +2852,13 @@
       'hero.lead': 'In-depth analysis of 5 Figma MCP servers and 1 local Desktop CLI — covering features, tool commands, update cadence, community feedback, design-system compatibility and DesignOps workflow. Built to help the BCIF team pick the right stack.',
       'hero.stat4label': 'First-party (write canvas beta)',
       'hero.stat4trend': 'Figma Official shipped use_figma',
-      'whatsnew.title': "What's new — update of Jul 12, 2026",
+      'whatsnew.title': "What's new — update of Jul 19, 2026",
       'whatsnew.desc': 'Compared against the Jun 17, 2026 snapshot — tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos.',
       'whatsnew.motion': 'Six new tools (verified against the live connected MCP on Jun 17, 2026) that <strong>no other server in the table can do</strong>: <code>get_motion_context</code> — pull a node’s keyframe/easing data and pre-compute it into CSS <code>@keyframes</code> + motion.dev snippets (use after <code>get_design_context</code> for motion-aware code gen); <code>export_video</code> — render a timeline node to MP4 server-side, async (presigned URL, poll via jobId); and a 4-tool shader library — <code>list/get_shader_effects</code> (post-effects sampling a raster) + <code>list/get_shader_fills</code> (generate pixels directly), reading source from the account library. This moves Official from pure design-to-code to also covering <strong>motion + video + shader</strong>.',
       'whatsnew.slides': 'Per the <a href="https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/" target="_blank" rel="noopener">Figma blog (Jun 16, 2026)</a>, the MCP server now works across <strong>Figma Slides, FigJam, Figma Make, and the Figma agent</strong> via the <code>use_figma</code> tool plus the new <code>/figma-use-slides</code> skill — you can create or refresh decks from a prompt (e.g. "update my AI deck, pull from Slack/Drive/blog"), with custom-font support (renders your uploaded typefaces, not web-safe approximations). The Slides → Write tab now shows <code>use_figma</code> in the Official column. <em>Note:</em> the <code>tools-and-prompts</code> docs page does not yet list Slides under <code>use_figma</code>’s supported file types — capability shipped ahead of the docs.',
       'whatsnew.official': 'Added <code>download_assets</code> — batch-download assets (images/icons) from a Figma file. Closes the gap where only inbound <code>upload_assets</code> existed; assets now flow both ways — directly useful for design-to-code handoff when pulling icon sets / illustrations into a repo.',
       'whatsnew.slots': "Five new tools in one release — <code>figma_create_slot</code>, <code>figma_get_slots</code>, <code>figma_append_to_slot</code>, <code>figma_reset_slot</code>, <code>figma_add_slot_property</code> — via the Desktop Bridge, built on Figma's newly-GA SlotNode Plugin API (closes issue #29 upstream). A slot is a pre-constrained placeholder inside a component/component-set: AI populates it with an instance/content and Figma auto-layout/resizing enforces the rule, no manual position math needed (includes an auto-snap fix so clones no longer land outside NONE-layout slots). Slot creation now works on variant components inside a COMPONENT_SET (GA lifted the old beta restriction), and renaming the node renames the linked slot property key directly. Live-validated against Figma on Jul 9, 2026.",
+      'whatsnew.targetlock': "<code>figma_navigate</code> adds <code>lock: true</code> to pin the Figma file an agent is working in as the command target: plugin connections/reconnects and selection or page changes in other files cannot silently switch a write into the wrong file. This makes real parallel work safe: an agent can update a Design System in file A while a designer works in file B. Check <code>figma_list_open_files.targetLocked</code> before a write batch. The lock is opt-in and releases when the pinned file disconnects or navigates away, or when navigating to another file / passing <code>lock: false</code>; it adds no MCP tool and requires no Desktop Bridge re-import.",
       'whatsnew.console': "A big round — 4 minor releases (v1.32 → v1.34). <strong>One new tool:</strong> <code>figma_create_component_set</code> (v1.34) builds a component set from a variant-axes matrix (e.g. <code>{State:[default,hover,disabled] × Size:[sm,lg]}</code>) in a single call, replacing the old <code>figma_execute</code> + <code>combineAsVariants</code> pattern. <strong>Major features:</strong> (1) <em>full bidirectional token sync</em> — <code>figma_import_tokens</code> now applies the complete diff: creates missing collections/variables, writes real VARIABLE_ALIAS references, and deletes (gated behind <code>strategy:replace</code>), with per-item error isolation; (2) <em>DTCG 2025.10 dialect</em> on export/import for Style Dictionary v5+ (default stays legacy, byte-identical); (3) the v1.33 <em>connection overhaul</em> — <code>/health</code> auto-discovery, a version handshake (the plugin banners itself when stale), an honest status pill, and a CSWSH origin fix. Plus <code>figma_lint_design</code> split into <code>wcag</code> / <code>best-practice</code> groups (v1.32), cutting WCAG 1.4.12 false positives. <em>Re-import the plugin manifest.</em> Verified against the live connected MCP on Jul 4, 2026: Official 24 · Console 109 · Sunnyside 27.",
       'whatsnew.others': 'Re-checked the upstream repos — all three unchanged since the last round: Framelink still <strong>v0.12.0 / 2 tools</strong> (stars ~14,984) · ClaudeTalk still <strong>v1.0.0 / 93 tools</strong> (no release since Apr) · Sunnyside still <strong>v0.4.4 / 27 tools</strong> (latest commit 0.4.4, nothing new). Every new capability this round is concentrated in Figma Console MCP.',
       'compare.title': 'Filterable + sortable comparison table',
