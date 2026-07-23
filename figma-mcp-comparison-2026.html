@@ -936,6 +936,15 @@
     </p>
     <div style="display:grid; gap:12px; margin-top:16px;">
       <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
+        <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP: v1.37.0 — 22 ก.ค. 2026</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Added:</strong> <code>figma_audit_design_system_report</code> เป็น audit report tool ที่เรียกได้เสมอสำหรับ MCP client ทุกแบบ; default <code>summary</code> จำกัดขนาด output, ดึงรายละเอียดราย category ได้, และ cache raw audit data 5 นาที.
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Changed / Fixed:</strong> audit component data เปลี่ยนเป็น live-first ผ่าน Desktop Bridge พร้อม fileKey verification และ fallback ไป REST published-library; report ระบุ remediation ว่า finding ใดแก้ได้ด้วย MCP, ต้องตัดสินใจร่วม, หรือทำเอง และ tool นี้ไม่ถูก gate ด้วย <code>ENABLE_MCP_APPS</code> แล้ว.
+        </p>
+      </div>
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
         <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP: v1.36.0 Target lock สำหรับ multi-file parallel work</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;" data-i18n="whatsnew.targetlock">
           <code>figma_navigate</code> เพิ่ม <code>lock: true</code> เพื่อ pin ไฟล์ Figma ที่ agent กำลังทำงานไว้เป็น command target: การเชื่อมต่อ/reconnect ของ plugin และ selection/page change ในไฟล์อื่นจะไม่สลับปลายทางจนคำสั่ง write หลุดไปผิดไฟล์.
