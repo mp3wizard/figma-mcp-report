@@ -936,6 +936,15 @@
     </p>
     <div style="display:grid; gap:12px; margin-top:16px;">
       <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
+        <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP: v1.37.1 — 22 ก.ค. 2026</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Changed:</strong> calibration ของ design-system audit ทั้ง 6 category ให้สะท้อน architecture ที่ healthy system ทำได้จริง: วัด alias usage นอก primitive tier, resolve alias chain สำหรับ color contrast, แยก convention ของ component กับ variable, และตรวจ mode naming ตาม concept.
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Fixed:</strong> <code>figma_audit_design_system_report</code> เมื่อใช้ <code>forceRefresh</code> จะ bypass ทั้ง audit cache และ variables cache จึงไม่ค้าง alias count เก่านานถึง TTL 5 นาที.
+        </p>
+      </div>
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
         <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP: v1.37.0 — 22 ก.ค. 2026</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;">
           <strong>Added:</strong> <code>figma_audit_design_system_report</code> เป็น audit report tool ที่เรียกได้เสมอสำหรับ MCP client ทุกแบบ; default <code>summary</code> จำกัดขนาด output, ดึงรายละเอียดราย category ได้, และ cache raw audit data 5 นาที.
