@@ -929,12 +929,21 @@
 <section id="whatsnew">
   <div class="container">
     <div class="section-eyebrow">Changelog</div>
-    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ - รอบอัปเดต 23 ก.ค. 2026</h2>
+    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ - รอบอัปเดต 25 ก.ค. 2026</h2>
     <p class="section-desc" data-i18n="whatsnew.desc">
       เทียบกับรอบ 17 มิ.ย. 2026 - ตัวเลข tool ของ Official / Console / Sunnyside ยึดจาก MCP ที่เชื่อมต่อจริง
       ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง
     </p>
     <div style="display:grid; gap:12px; margin-top:16px;">
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.15 305 / 0.48);">
+        <strong style="color:oklch(0.52 0.18 305);">⭐ figma-cli: Unreleased</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>New:</strong> <code>figma-cli connect --browser</code> เป็น Browser Mode ที่เปิด Chromium-based browser พร้อม remote debugging และ persistent profile เพื่อเชื่อม Figma ผ่าน CDP โดยไม่ patch หรือแก้ Figma Desktop; Yolo Mode และ Safe Mode ยังคงเดิม.
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>New:</strong> Claude Code plugin + marketplace พร้อม <code>figma-cli</code> skill; ตัว Node CLI ไม่เปลี่ยนแปลง.
+        </p>
+      </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
         <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP: v1.37.1 — 22 ก.ค. 2026</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;">
@@ -2212,7 +2221,7 @@
           { label: 'Reload plugin',               desc:'รีโหลด plugin โดยไม่ต้องปิดเปิด Figma', eg:'reload หลังแก้ code plugin เพื่อเห็นผลทันที', official:[], framelink:[], console:['figma_reload_plugin'],    claudetalk:[], sunnyside:[], figmacli:[] },
           { label: 'Execute arbitrary plugin code',desc:'รัน script ใดๆ ใน context ของ Figma plugin', eg:'รัน snippet หาทุก node ที่ซ่อนอยู่แล้วลบ', official:[], framelink:[], console:['figma_execute'],         claudetalk:[], sunnyside:[], figmacli:['eval','run'] },
           { label: 'Get plugin status',           desc:'เช็กสถานะการเชื่อมต่อ plugin/bridge', eg:'ดูว่า bridge ยังต่ออยู่ไหมก่อนสั่ง debug', official:[], framelink:[], console:['figma_get_status'],           claudetalk:[], sunnyside:[], figmacli:['status','diagnose'] },
-          { label: 'Reconnect to Figma',          since:'2026-05', desc:'เชื่อมต่อ Figma ใหม่เมื่อ session หลุด', eg:'reconnect หลัง console ถูก clear แล้ว monitor หลุด', official:[], framelink:[], console:['figma_reconnect'],        claudetalk:[], sunnyside:[], figmacli:['connect','daemon','restart'] },
+          { label: 'Reconnect to Figma',          since:'2026-05', desc:'เชื่อมต่อ Figma ใหม่เมื่อ session หลุด', eg:'reconnect หลัง console ถูก clear แล้ว monitor หลุด', official:[], framelink:[], console:['figma_reconnect'],        claudetalk:[], sunnyside:[], figmacli:['connect','connect --browser','daemon','restart'] },
           { label: 'Get file for plugin',         since:'2026-05', desc:'ดึงข้อมูลไฟล์ในรูปแบบที่ plugin ใช้ต่อได้', eg:'ดึง file data ดิบไปประมวลผลใน plugin เอง', official:[], framelink:[], console:['figma_get_file_for_plugin'], claudetalk:[], sunnyside:[], figmacli:[] },
           { label: 'Diagnose plugin health',       since:'2026-05', desc:'ตรวจสุขภาพการเชื่อมต่อ plugin/dev bridge', eg:'รัน diagnose เจอว่า bridge plugin ไม่ได้เปิด', official:[], framelink:[], console:['figma_diagnose'], claudetalk:[], sunnyside:['check_figma_dev_connection'], figmacli:['diagnose'] },
           { label: 'Pair plugin (Desktop auth)',   since:'2026-05', desc:'จับคู่/ยืนยันตัวตนกับ Figma Desktop plugin', eg:'pair ครั้งแรกเพื่อให้ MCP คุย Desktop ได้', official:[], framelink:[], console:['figma_reconnect'], claudetalk:[], sunnyside:[], figmacli:['setup','connect'] },
@@ -2870,7 +2879,7 @@
       'hero.lead': 'In-depth analysis of 5 Figma MCP servers and 1 local Desktop CLI - covering features, tool commands, update cadence, community feedback, design-system compatibility and DesignOps workflow. Built to help the BCIF team pick the right stack.',
       'hero.stat4label': 'First-party (write canvas beta)',
       'hero.stat4trend': 'Figma Official shipped use_figma',
-      'whatsnew.title': "What's new - update of Jul 23, 2026",
+      'whatsnew.title': "What's new - update of Jul 25, 2026",
       'whatsnew.desc': 'Compared against the Jun 17, 2026 snapshot - tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos.',
       'whatsnew.motion': 'Six new tools (verified against the live connected MCP on Jun 17, 2026) that <strong>no other server in the table can do</strong>: <code>get_motion_context</code> - pull a node’s keyframe/easing data and pre-compute it into CSS <code>@keyframes</code> + motion.dev snippets (use after <code>get_design_context</code> for motion-aware code gen); <code>export_video</code> - render a timeline node to MP4 server-side, async (presigned URL, poll via jobId); and a 4-tool shader library - <code>list/get_shader_effects</code> (post-effects sampling a raster) + <code>list/get_shader_fills</code> (generate pixels directly), reading source from the account library. This moves Official from pure design-to-code to also covering <strong>motion + video + shader</strong>.',
       'whatsnew.slides': 'Per the <a href="https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/" target="_blank" rel="noopener">Figma blog (Jun 16, 2026)</a>, the MCP server now works across <strong>Figma Slides, FigJam, Figma Make, and the Figma agent</strong> via the <code>use_figma</code> tool plus the new <code>/figma-use-slides</code> skill - you can create or refresh decks from a prompt (e.g. "update my AI deck, pull from Slack/Drive/blog"), with custom-font support (renders your uploaded typefaces, not web-safe approximations). The Slides → Write tab now shows <code>use_figma</code> in the Official column. <em>Note:</em> the <code>tools-and-prompts</code> docs page does not yet list Slides under <code>use_figma</code>’s supported file types - capability shipped ahead of the docs.',
