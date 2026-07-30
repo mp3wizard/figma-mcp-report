@@ -993,27 +993,104 @@
       </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.57 0.19 25 / 0.5);">
         <strong style="color:oklch(0.57 0.19 25);">⭐ API Rate Limits - ทำไม version-history/blame ถึงติด limit (verified จาก Figma docs, ก.ค. 2026)</strong>
-        <p class="muted" style="margin:6px 0 0; font-size:14px;">
-          <strong>Figma REST API</strong> = leaky bucket, เกิน limit → HTTP <code>429</code> + header <code>Retry-After</code>. แบ่ง 3 tier ตาม seat/plan
+
+        <p style="margin:10px 0 0; font-size:14px;">
+          <strong>สรุปสั้น:</strong> ที่ติด limit ไม่ใช่เพราะ tool ยิงถี่ แต่เพราะ <strong>seat ของบัญชีคุณ</strong>.
+          ถ้าใช้ seat <strong>View / Collab</strong> โควตาแทบไม่พอทำอะไรเลย — บาง API ได้ <strong>6 ครั้งต่อเดือน</strong>.
+          ย้ายไป seat <strong>Dev / Full</strong> ปัญหาส่วนใหญ่หายไปเอง.
+        </p>
+
+        <p class="muted" style="margin:14px 0 0; font-size:13px; text-transform:uppercase; letter-spacing:0.06em; font-weight:600;">1 · โควตาทำงานยังไง</p>
+        <p class="muted" style="margin:4px 0 0; font-size:14px;">
+          Figma REST API ใช้ระบบถังรั่ว (leaky bucket): ยิงเกินโควตา → ได้ HTTP <code>429</code> พร้อม header <code>Retry-After</code> บอกว่าให้รอกี่วินาที.
+          โควตาแบ่งเป็น 3 tier ตามชนิด API และคิดตาม seat + plan
           (<a href="https://developers.figma.com/docs/rest-api/rate-limits/" target="_blank" rel="noopener">docs</a>):
         </p>
-        <ul class="muted" style="margin:8px 0 0; padding-left:1.1rem; font-size:13.5px; line-height:1.7;">
-          <li><strong>Tier 1</strong> (get file / nodes / image): <strong>View/Collab seat = แค่ 6 ครั้ง/เดือน</strong> · Dev/Full = 10/15/20 ต่อนาที (Starter/Pro/Org)</li>
-          <li><strong>Tier 2</strong> (<strong>Version History</strong>, variables, comments, dev resources): View/Collab = 5/นาที · Dev/Full = 25/50/100 ต่อนาที</li>
-          <li><strong>Tier 3</strong> (file metadata, components/styles, POST variables): View/Collab = 10/นาที · Dev/Full = 50/100/150 ต่อนาที</li>
+        <div class="table-wrap" style="margin-top:10px;">
+          <div class="table-scroll">
+            <table class="compare" style="font-size:13px;">
+              <thead>
+                <tr>
+                  <th style="min-width:190px;">Tier / ใช้ทำอะไร</th>
+                  <th style="min-width:150px;">View · Collab seat</th>
+                  <th style="min-width:200px;">Dev · Full seat<br /><span class="muted" style="font-weight:400;">Starter / Pro / Org</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Tier 1</strong><br /><span class="muted">อ่านไฟล์ · nodes · export รูป</span></td>
+                  <td><span class="badge badge-danger">6 ครั้ง / เดือน</span></td>
+                  <td>10 / 15 / 20 ต่อนาที</td>
+                </tr>
+                <tr>
+                  <td><strong>Tier 2</strong><br /><span class="muted">Version History · variables · comments · dev resources</span></td>
+                  <td><span class="badge badge-warn">5 ครั้ง / นาที</span></td>
+                  <td>25 / 50 / 100 ต่อนาที</td>
+                </tr>
+                <tr>
+                  <td><strong>Tier 3</strong><br /><span class="muted">file metadata · components/styles · POST variables</span></td>
+                  <td><span class="badge badge-warn">10 ครั้ง / นาที</span></td>
+                  <td>50 / 100 / 150 ต่อนาที</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="muted" style="margin:8px 0 0; font-size:13.5px;">
+          <strong>Figma MCP server ตัวทางการ</strong> นับโควตาแยกจาก REST และมี <strong>เพดานรายวัน</strong> เพิ่มอีกชั้น:
+          Starter / View / Collab = 6 ครั้ง/เดือน · Dev–Full บน Pro = <strong>200/วัน และ 10/นาที</strong> · Org–Enterprise = 600/วัน และ 20/นาที
+          (<a href="https://developers.figma.com/docs/figma-mcp-server/rate-limits-access/" target="_blank" rel="noopener">docs</a>).
+          ยกเว้นไม่นับโควตา: <code>add_code_connect_map</code>, <code>generate_figma_design</code>, <code>whoami</code>.
+        </p>
+
+        <p class="muted" style="margin:14px 0 0; font-size:13px; text-transform:uppercase; letter-spacing:0.06em; font-weight:600;">2 · ตัวไหนติด ตัวไหนไม่ติด</p>
+        <p class="muted" style="margin:4px 0 0; font-size:14px;">
+          กฎง่าย ๆ: <strong>ตัวที่ยิง <code>api.figma.com</code> ด้วย token ของคุณ = ติด</strong> · <strong>ตัวที่คุยกับ Figma Desktop ในเครื่อง = ไม่ติด</strong> (ตรวจจาก source ใน repo)
+        </p>
+        <div style="display:grid; gap:8px; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); margin-top:10px;">
+          <div style="border:1px solid color-mix(in oklch, var(--destructive) 30%, transparent); background:color-mix(in oklch, var(--destructive) 7%, transparent); border-radius:calc(var(--radius) - 2px); padding:10px 12px;">
+            <div style="font-size:12.5px; font-weight:600; color:var(--destructive);">ติด REST limit</div>
+            <ul class="muted" style="margin:6px 0 0; padding-left:1.1rem; font-size:13px; line-height:1.65;">
+              <li><strong>Console</strong> — ฝั่ง version / diff / blame</li>
+              <li><strong>Framelink</strong> — ทุก tool</li>
+              <li><strong>Sunnyside</strong> — เฉพาะ <code>get_figma_data</code></li>
+            </ul>
+          </div>
+          <div style="border:1px solid color-mix(in oklch, var(--success) 30%, transparent); background:color-mix(in oklch, var(--success) 7%, transparent); border-radius:calc(var(--radius) - 2px); padding:10px 12px;">
+            <div style="font-size:12.5px; font-weight:600; color:var(--success);">ไม่ติดเลย</div>
+            <ul class="muted" style="margin:6px 0 0; padding-left:1.1rem; font-size:13px; line-height:1.65;">
+              <li><strong>figma-cli</strong> — Desktop/CDP ไม่ใช้ API key</li>
+              <li><strong>ClaudeTalk</strong> — WebSocket → plugin</li>
+              <li><strong>Console</strong> ฝั่ง write — Desktop Bridge</li>
+              <li><strong>Sunnyside</strong> Dev Mode tools — local <code>127.0.0.1:3845</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="muted" style="margin:14px 0 0; font-size:13px; text-transform:uppercase; letter-spacing:0.06em; font-weight:600;">3 · เข้าใจผิดกันบ่อย: blame ไม่ใช่ตัวการ</p>
+        <p class="muted" style="margin:4px 0 0; font-size:14px;">
+          หลายคนคิดว่า <code>blame</code> ยิง API ทุก version — <strong>ไม่จริง</strong>. มันใช้ binary search คือ <strong>ประมาณ log₂(N) ครั้ง</strong>
+          (1,000 version ≈ 10 ครั้ง). ตัวที่กินโควตาหนักกว่าคือ:
+        </p>
+        <ul class="muted" style="margin:6px 0 0; padding-left:1.1rem; font-size:13.5px; line-height:1.7;">
+          <li><code>get_file_versions</code> — ไล่ page <code>/versions</code> ทีละ 50 สูงสุด 20 page (= 1,000 version → 20 ครั้ง)</li>
+          <li><code>diff</code> — 2 ครั้งต่อการเทียบ บวกอีก 2 ครั้งต่อ component</li>
         </ul>
-        <p class="muted" style="margin:8px 0 0; font-size:14px;">
-          <strong>Figma MCP server (Official)</strong> มี limit แยก + มี daily cap: Starter/View/Collab = 6/เดือน · Dev/Full บน Pro = <strong>200/วัน · 10/นาที</strong> · Org/Ent = 600/วัน · 20/นาที
-          (<a href="https://developers.figma.com/docs/figma-mcp-server/rate-limits-access/" target="_blank" rel="noopener">docs</a>). Write tools ยกเว้น: <code>add_code_connect_map</code>, <code>generate_figma_design</code>, <code>whoami</code>.
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          แต่ถึงจะยิงน้อยแค่ไหน ถ้า seat เป็น View/Collab ก็ตันอยู่ดี เพราะ Tier 1 มีแค่ 6 ครั้ง<em>ต่อเดือน</em> และ Version History 5 ครั้ง/นาที.
         </p>
-        <p class="muted" style="margin:8px 0 0; font-size:14px;">
-          <strong>ใครติด / ไม่ติด</strong> (ตรวจจาก source ใน repo): ติด REST limit = <strong>Console</strong> (version/diff/blame tools), <strong>Framelink</strong>, <strong>Sunnyside</strong> (เฉพาะ <code>get_figma_data</code>) - เพราะยิง <code>api.figma.com</code> ด้วย token ของ user.
-          ไม่ติด = <strong>figma-cli</strong> (Desktop/CDP, ไม่มี API key), <strong>ClaudeTalk</strong> (WebSocket → plugin), และฝั่ง write ของ Console (Desktop Bridge) + Dev Mode tools ของ Sunnyside (local 127.0.0.1:3845).
-        </p>
-        <p class="muted" style="margin:8px 0 0; font-size:14px;">
-          <strong>แก้ความเข้าใจ blame:</strong> Console <code>blame</code> <em>ไม่ได้</em> ยิงทุก version - ใช้ <strong>binary search ≈ log₂(N) calls</strong>. ตัวที่ยิงหนักกว่าคือ <code>get_file_versions</code> (paginate <code>/versions</code> ทีละ 50, สูงสุด 20 page = 1,000 version) และ <code>diff</code> (2 calls + 2 ต่อ component). ต้นตอที่ทำให้ติดจริงคือ <strong>seat</strong>: ถ้าเป็น View/Collab → Tier 1 มีแค่ 6 ครั้ง/<em>เดือน</em> และ Version History 5/นาที ยิงไม่กี่ทีก็หมด.
-          <strong>การจัดการ 429:</strong> Console retry ×3 + honor Retry-After (cap 30s) + snapshot cache (LRU 50) - ดีสุดในกลุ่ม. Framelink/Sunnyside อ่าน Retry-After แต่ <strong>ไม่ retry/backoff จริง</strong> → เจอ 429 เด้ง error.
-          <strong>ทางแก้:</strong> ใช้ Dev/Full seat บน Pro+ · ลด scope (component เดียว / ช่วง version แคบ) · หรือใช้ local channel (figma-cli/ClaudeTalk) สำหรับงานที่ไม่ต้อง REST.
+
+        <p class="muted" style="margin:14px 0 0; font-size:13px; text-transform:uppercase; letter-spacing:0.06em; font-weight:600;">4 · เจอ 429 แล้วแต่ละตัวรับมือยังไง</p>
+        <ul class="muted" style="margin:4px 0 0; padding-left:1.1rem; font-size:13.5px; line-height:1.7;">
+          <li><strong>Console</strong> — retry 3 ครั้ง + รอตาม <code>Retry-After</code> (สูงสุด 30 วิ) + cache snapshot ไว้ 50 รายการ <span class="badge badge-success">ดีสุดในกลุ่ม</span></li>
+          <li><strong>Framelink / Sunnyside</strong> — อ่าน <code>Retry-After</code> แต่ <strong>ไม่ retry จริง</strong> → เด้ง error ทันที</li>
+        </ul>
+
+        <p style="margin:14px 0 0; font-size:14px; padding:10px 12px; border:1px solid var(--border); border-radius:calc(var(--radius) - 2px); background:var(--muted);">
+          <strong>ทางแก้ เรียงตามผลลัพธ์:</strong><br />
+          <strong>1.</strong> เปลี่ยนไปใช้ seat <strong>Dev หรือ Full</strong> บน plan Pro ขึ้นไป — แก้ได้ตรงจุดที่สุด<br />
+          <strong>2.</strong> ลด scope งาน — เทียบทีละ component เดียว หรือจำกัดช่วง version ให้แคบ<br />
+          <strong>3.</strong> งานที่ไม่จำเป็นต้องผ่าน REST ให้ย้ายไปช่องทาง local (figma-cli หรือ ClaudeTalk) ซึ่งไม่มีโควตา
         </p>
       </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.18 250 / 0.5);">
