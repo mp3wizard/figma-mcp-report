@@ -723,23 +723,6 @@
   .month-legend { display:flex; flex-wrap:wrap; gap:0.375rem; }
 
   /* =========================================================
-     Live data badge
-     ========================================================= */
-  .live-badge {
-    display: inline-flex; align-items: center; gap: 0.375rem;
-    font-size: 11px; color: var(--muted-foreground);
-    padding: 0.25rem 0.625rem; border-radius: 999px;
-    background: var(--secondary); border: 1px solid var(--border);
-    white-space: nowrap;
-  }
-  .live-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--success); flex: none;
-  }
-  .live-dot.pulse { animation: livePulse 1.4s ease-in-out infinite; }
-  @keyframes livePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-  /* =========================================================
      Reduced Motion - respect user preference (WCAG 2.3.3)
      ========================================================= */
   @media (prefers-reduced-motion: reduce) {
@@ -869,9 +852,6 @@
       <a class="nav-link" href="#picker">Picker</a>
       <a class="nav-link" href="#charts">Charts</a>
     </nav>
-    <span id="liveBadge" class="live-badge" style="display:none;" aria-live="polite">
-      <span id="liveDot" class="live-dot"></span><span id="liveText"></span>
-    </span>
     <button class="lang-toggle" id="langToggle" aria-label="Switch language" title="Switch language / สลับภาษา"><span id="langLabel">EN</span></button>
     <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
       <svg class="sun" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg>
@@ -3368,24 +3348,7 @@
   // =========================================================
   // Live data - GitHub API + npm registry (client-side fetch)
   // =========================================================
-  function setBadge(loading, timeStr) {
-    const badge = document.getElementById('liveBadge');
-    const dot = document.getElementById('liveDot');
-    const text = document.getElementById('liveText');
-    badge.style.display = 'inline-flex';
-    var en = window.LANG === 'en';
-    if (loading) {
-      dot.className = 'live-dot pulse';
-      text.textContent = en ? ' Loading latest data…' : ' กำลังโหลดข้อมูลล่าสุด…';
-    } else {
-      dot.className = 'live-dot';
-      text.textContent = (en ? ' Live · updated ' : ' Live · อัปเดต ') + timeStr;
-    }
-  }
-
   async function fetchLiveData() {
-    setBadge(true);
-
     await Promise.allSettled(
       MCPS.filter(m => m.githubRepo || m.npmPkg).map(async (mcp) => {
         const fetches = [];
@@ -3451,7 +3414,6 @@
       renderRadar(); renderBar();
     }
 
-    setBadge(false, new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }));
   }
 
   // Scroll-spy: update aria-current on nav links
@@ -3472,13 +3434,7 @@
     sections.forEach(function(s) { if (s) observer.observe(s); });
   })();
 
-  fetchLiveData().catch(function() {
-    setBadge(false, null);
-    var dot = document.getElementById('liveDot');
-    var txt = document.getElementById('liveText');
-    if (dot) dot.style.background = 'var(--warning)';
-    if (txt) txt.textContent = window.LANG === 'en' ? 'Could not load live data' : 'ไม่สามารถโหลดข้อมูล live ได้';
-  });
+  fetchLiveData().catch(function() {});
 </script>
 </body>
 </html>
