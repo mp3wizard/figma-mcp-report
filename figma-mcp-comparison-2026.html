@@ -924,17 +924,32 @@
 </section>
 
 <!-- =========================================================
-     WHAT'S NEW (30 Jul 2026)
+     WHAT'S NEW (2 Aug 2026)
      ========================================================= -->
 <section id="whatsnew">
   <div class="container">
     <div class="section-eyebrow">Changelog</div>
-    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ - รอบอัปเดต 30 ก.ค. 2026</h2>
+    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ - รอบอัปเดต 2 ส.ค. 2026</h2>
     <p class="section-desc" data-i18n="whatsnew.desc">
       เทียบกับรอบ 17 มิ.ย. 2026 - ตัวเลข tool ของ Official / Console / Sunnyside ยึดจาก MCP ที่เชื่อมต่อจริง
       ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง
     </p>
     <div style="display:grid; gap:12px; margin-top:16px;">
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
+        <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP: v1.39.1: 2 ส.ค. 2026</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Fixed:</strong> แก้ Desktop Bridge ที่แจ้ง re-import plugin ซ้ำแม้ plugin ใหม่กว่า server โดยตรวจ direction ของ version; server เก่าจะไม่แจ้งเตือนอีก ส่วน version ที่ parse ไม่ได้และ plugin ที่ไม่รายงาน version ยังคง fallback เดิม.
+        </p>
+      </div>
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
+        <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP: v1.39.0: 2 ส.ค. 2026</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Added:</strong> <code>figma_execute_across_files</code> รัน script เดียวกับหลาย connected files แบบ concurrent ใน Local Mode; <code>figma_execute</code> รองรับ <code>fileKey</code> เพื่อระบุไฟล์เดียวโดยไม่เปลี่ยน active file.
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Fixed:</strong> Desktop Bridge ส่ง <code>resultAnalysis</code> และ <code>fileContext</code> จาก <code>figma_execute</code> ครบถ้วนหลัง re-import <code>manifest.json</code>; files ที่ไม่มี file key จะถูกข้ามแทนการ redirect ไป active file.
+        </p>
+      </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
         <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP: v1.38.2: 29 ก.ค. 2026</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;">
@@ -1594,8 +1609,8 @@
       sub: 'southleft · Plugin debugging + DS audit',
       maintainer: 'TJ Pitre / SouthLeft',
       logoColor: 'oklch(0.62 0.2 145)',
-      latestVersion: 'v1.36.0 (Jul 2026)',
-      lastUpdated: '2026-07-16',
+      latestVersion: 'v1.39.1 (Aug 2026)',
+      lastUpdated: '2026-08-02',
       stars: 1700,
       starsLabel: '~1,700',
       npmWeekly: null,
@@ -1603,6 +1618,7 @@
       toolsList: [
         'figma_get_console_logs',
         'figma_watch_console',
+        'figma_execute_across_files',
         'figma_take_screenshot (bridge-first, ทุก plan) ✦',
         'figma_audit_component_accessibility',
         'figma_scan_code_accessibility (+ text-spacing 1.4.12) ✦',
@@ -2977,7 +2993,7 @@
       'hero.lead': 'In-depth analysis of 5 Figma MCP servers and 1 local Desktop CLI - covering features, tool commands, update cadence, community feedback, design-system compatibility and DesignOps workflow. Built to help the BCIF team pick the right stack.',
       'hero.stat4label': 'First-party (write canvas beta)',
       'hero.stat4trend': 'Figma Official shipped use_figma',
-      'whatsnew.title': "What's new - update of Jul 30, 2026",
+      'whatsnew.title': "What's new - update of Aug 2, 2026",
       'whatsnew.desc': 'Compared against the Jun 17, 2026 snapshot - tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos.',
       'whatsnew.motion': 'Six new tools (verified against the live connected MCP on Jun 17, 2026) that <strong>no other server in the table can do</strong>: <code>get_motion_context</code> - pull a node’s keyframe/easing data and pre-compute it into CSS <code>@keyframes</code> + motion.dev snippets (use after <code>get_design_context</code> for motion-aware code gen); <code>export_video</code> - render a timeline node to MP4 server-side, async (presigned URL, poll via jobId); and a 4-tool shader library - <code>list/get_shader_effects</code> (post-effects sampling a raster) + <code>list/get_shader_fills</code> (generate pixels directly), reading source from the account library. This moves Official from pure design-to-code to also covering <strong>motion + video + shader</strong>.',
       'whatsnew.slides': 'Per the <a href="https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/" target="_blank" rel="noopener">Figma blog (Jun 16, 2026)</a>, the MCP server now works across <strong>Figma Slides, FigJam, Figma Make, and the Figma agent</strong> via the <code>use_figma</code> tool plus the new <code>/figma-use-slides</code> skill - you can create or refresh decks from a prompt (e.g. "update my AI deck, pull from Slack/Drive/blog"), with custom-font support (renders your uploaded typefaces, not web-safe approximations). The Slides → Write tab now shows <code>use_figma</code> in the Official column. <em>Note:</em> the <code>tools-and-prompts</code> docs page does not yet list Slides under <code>use_figma</code>’s supported file types - capability shipped ahead of the docs.',
