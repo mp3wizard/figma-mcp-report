@@ -912,7 +912,7 @@
     <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ - รอบอัปเดต 3 ต.ค. 2026</h2>
     <p class="section-desc" data-i18n="whatsnew.desc">
       เทียบกับรอบ 17 ส.ค. 2026 - ตัวเลข tool ของ Official / Console / Sunnyside ยึดจาก MCP ที่เชื่อมต่อจริง
-      ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง (รอบนี้เช็คซ้ำเฉพาะ Official + Console)
+      ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง (รอบนี้เช็คซ้ำเฉพาะ Official + Console + figma-cli)
     </p>
     <div style="display:grid; gap:12px; margin-top:16px;">
       <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.18 250 / 0.5);">
@@ -951,6 +951,25 @@
         <p class="muted" style="margin:6px 0 0; font-size:14px;">
           <em>ยังไม่เห็นใน connector นี้ (gated / กำลัง rollout ไม่ใช่ถูกถอด):</em> <code>generate_figma_design</code>, <code>generate_deck</code> (สร้างเด็คจาก template ในคำสั่งเดียว - skill บอกให้ใช้ <code>use_figma</code> เป็นค่าเริ่มต้น)
           และ <code>html_to_figma</code> (guidance เพิ่งเข้า skill 1 ต.ค. 2026: แปลง HTML ที่มีอยู่/ที่ agent เขียนขึ้นเป็น design layer).
+        </p>
+      </div>
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.15 305 / 0.48);">
+        <strong style="color:oklch(0.52 0.18 305);">⭐ figma-cli: v2.1.2 → v2.2.5 (25-26 ก.ย. 2026) - agent ทำงานเสร็จในคำสั่งน้อยลง</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>v2.2.0:</strong> <code>render --page "Name"</code> render ลงหน้าที่ระบุ (สร้างให้ถ้ายังไม่มี) แล้วพิมพ์โครงสร้างที่สร้างจริงกลับมา (ขนาด, layout, padding, variable ที่ bind, component ของแต่ละ instance) ไม่ต้องยิง inspect ซ้ำ;
+          <code>&lt;Instance component="Button" variant="size=large" text="Save" /&gt;</code> หา component จากทุกหน้า เลือก variant และเปลี่ยน label ในคำสั่งเดียว;
+          <code>render-batch --variant-set Button</code> รวม frame ชื่อ <code>prop=value</code> เป็น component set; <code>effectStyle</code> / <code>textStyle</code> บน frame/text;
+          helper ใน <code>eval</code> (<code>$page $var $bind $style $component $instance $fontSafe $describe</code>); font ที่ไม่มีในเครื่องสลับเป็น Inter อัตโนมัติ.
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>v2.2.1 - v2.2.3:</strong> แจ้งเวอร์ชันใหม่วันละครั้ง (stderr) และ <code>connect</code> เขียน <code>AGENTS.md</code> ให้โปรเจกต์ที่ยังไม่มี;
+          รูปจาก URL ใน <code>render</code> (<code>image="https://..."</code>, <code>&lt;Image src&gt;</code>) โหลดผ่าน CLI จึงใช้ได้แม้มี plugin จำกัด network เปิดอยู่;
+          <code>render --file ui.jsx</code> อ่าน JSX จากไฟล์; <code>&lt;Instance tint&gt;</code> เปลี่ยนสี icon ตาม state; Text/Instance วางแบบ absolute ได้;
+          icon cache บน disk และถ้าโหลดไม่ได้จะบอกใน <code>note:</code> แทนการวาดสี่เหลี่ยมเงียบๆ.
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>v2.2.4 - v2.2.5 + fix 3 ต.ค.:</strong> daemon ที่เก่ากว่า CLI restart เองหลังอัปเดต (เดิมรันโค้ดเวอร์ชันเก่าจน idle);
+          <code>connect</code> รอจน Plugin API พร้อม (<code>figma.root</code>) แก้ error <code>figma is not defined</code> ตอนเพิ่งเปิด Figma. ไม่มี command ใหม่ระดับ top-level - ของใหม่เป็น flag/JSX prop ของ <code>render</code> / <code>eval</code>.
         </p>
       </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
@@ -1031,7 +1050,7 @@
         </p>
       </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.15 305 / 0.48);">
-        <strong style="color:oklch(0.52 0.18 305);">⭐ figma-cli: Unreleased</strong>
+        <strong style="color:oklch(0.52 0.18 305);">⭐ figma-cli: v2.1.1 / v2.1.2 - 12 ส.ค. 2026</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;">
           <strong>New:</strong> <code>figma-cli connect --browser</code> เป็น Browser Mode ที่เปิด Chromium-based browser พร้อม remote debugging และ persistent profile เพื่อเชื่อม Figma ผ่าน CDP โดยไม่ patch หรือแก้ Figma Desktop; Yolo Mode และ Safe Mode ยังคงเดิม.
         </p>
@@ -1997,8 +2016,8 @@
       sub: 'Local Figma Desktop/CDP · not an MCP server',
       maintainer: 'Sil Bormüller / Into Design Systems',
       logoColor: 'oklch(0.58 0.18 305)',
-      latestVersion: 'v2.1.0 (local source snapshot)',
-      lastUpdated: '2026-07-11',
+      latestVersion: 'v2.2.5 (Sep 2026)',
+      lastUpdated: '2026-10-03',
       stars: 0,
       starsLabel: 'Live on load',
       npmWeekly: null,
@@ -2009,7 +2028,9 @@
         'Import & export DESIGN.md',
         'Import Tailwind / CSS / DTCG tokens',
         'Design-system component reuse',
-        'Figma Motion & asset export'
+        'Figma Motion & asset export',
+        'JSX render / render-batch (--page, --file, --variant-set, <Instance variant>) ✦ v2.2',
+        'Browser Mode (connect --browser) - ไม่ patch Figma Desktop ✦ v2.1.1'
       ],
       planRequired: 'free',
       planLabel: 'Figma Desktop; no API key / no MCP transport',
@@ -2045,23 +2066,25 @@
         'เขียน Figma Desktop โดยตรงผ่าน CDP - ไม่ผ่าน Figma REST API',
         'ไม่ใช้ API key, ไม่ใช้ MCP transport และไม่ติด API rate limit',
         'import/export DESIGN.md และ token sources (Tailwind, CSS, DTCG) เหมาะกับ Design System workflow',
-        'รองรับ Claude Code และ Cursor พร้อม real editable Figma objects'
+        'รองรับ Claude Code และ Cursor พร้อม real editable Figma objects',
+        'v2.2: render คืนโครงสร้างที่สร้างจริง + Instance/variant/รูปจาก URL ในคำสั่งเดียว ลดรอบเรียกของ agent; Browser Mode ไม่ต้อง patch Desktop'
       ],
       pros_en: [
         'Writes directly to Figma Desktop via CDP - not the Figma REST API',
         'No API key, MCP transport, or Figma API rate limit',
         'DESIGN.md and token-source import/export fit Design System workflows',
-        'Works with Claude Code and Cursor using real editable Figma objects'
+        'Works with Claude Code and Cursor using real editable Figma objects',
+        'v2.2: render returns the built structure + instance/variant/URL images in one command, so agents need fewer calls; Browser Mode needs no Desktop patch'
       ],
       cons: [
         'ไม่ใช่ MCP server จึงไม่เข้ากับ MCP client ทุกตัว',
         'ต้องพึ่ง Figma Desktop ที่เปิดอยู่และ local Desktop/CDP access',
-        'Yolo mode patch แอป Figma แม้ reversible - ต้องผ่าน IT policy ก่อนใช้ในองค์กร'
+        'Yolo mode patch แอป Figma แม้ reversible - ต้องผ่าน IT policy ก่อนใช้ในองค์กร (หรือใช้ Browser Mode ตั้งแต่ v2.1.1 แทน)'
       ],
       cons_en: [
         'Not an MCP server, so it does not fit every MCP client',
         'Requires an open Figma Desktop and local Desktop/CDP access',
-        'Yolo mode patches the Figma app, although reversibly - validate against enterprise IT policy first'
+        'Yolo mode patches the Figma app, although reversibly - validate against enterprise IT policy first (or use Browser Mode, since v2.1.1)'
       ],
       install: 'git clone https://github.com/silships/figma-cli\n# then ask Claude Code / Cursor: set up figma-cli and connect it to my Figma',
       install_en: 'git clone https://github.com/silships/figma-cli\n# then ask Claude Code / Cursor: set up figma-cli and connect it to my Figma',
@@ -2352,8 +2375,8 @@
           { label: 'Variable definitions (full schema)', since:'2026-05', desc:'ดึงนิยาม variable แบบเต็มทั้ง type/scope/alias', eg:'ดู schema ของ token เพื่อ gen TypeScript type ที่ตรง', official:[], framelink:[], console:[], claudetalk:[], sunnyside:['extract_design_tokens'], figmacli:['var list','bindings'] },
         ]},
         { cat: 'Write Canvas', features: [
-          { label: 'Create element (rect/frame/text)',since:'2026-05', desc:'สร้าง element ใหม่บน canvas เช่น สี่เหลี่ยม frame หรือ text', eg:'สั่ง AI สร้าง frame การ์ดสินค้า พร้อม text ราคาข้างใน', official:['partial'],        framelink:[], console:['figma_create_child'], claudetalk:['create_rectangle','create_frame','create_text','create_ellipse','create_polygon','create_star'], sunnyside:[], figmacli:['create','create-batch'] },
-          { label: 'Create instance node',        since:'2026-05', desc:'วาง instance ของ component ที่มีอยู่ลงบน canvas', eg:'วางปุ่ม Primary จาก DS ลง 3 จุดในหน้า form', official:['partial'],           framelink:[], console:['figma_instantiate_component'], claudetalk:['create_component_instance'], sunnyside:[], figmacli:['instantiate'] },
+          { label: 'Create element (rect/frame/text)',since:'2026-05', desc:'สร้าง element ใหม่บน canvas เช่น สี่เหลี่ยม frame หรือ text', eg:'สั่ง AI สร้าง frame การ์ดสินค้า พร้อม text ราคาข้างใน', official:['partial'],        framelink:[], console:['figma_create_child'], claudetalk:['create_rectangle','create_frame','create_text','create_ellipse','create_polygon','create_star'], sunnyside:[], figmacli:['create','create-batch','render','render-batch'] },
+          { label: 'Create instance node',        since:'2026-05', desc:'วาง instance ของ component ที่มีอยู่ลงบน canvas', eg:'วางปุ่ม Primary จาก DS ลง 3 จุดในหน้า form', official:['partial'],           framelink:[], console:['figma_instantiate_component'], claudetalk:['create_component_instance'], sunnyside:[], figmacli:['instantiate','render <Instance>'] },
           { label: 'Resize / move node',           since:'2026-05', desc:'ปรับขนาดหรือย้ายตำแหน่ง node', eg:'ย้าย CTA ไปกึ่งกลางและขยายกว้างเป็น 320px', official:['partial'],           framelink:[], console:['figma_resize_node','figma_move_node'], claudetalk:['resize_node','move_node'], sunnyside:[], figmacli:['move','scale','canvas'] },
           { label: 'Clone / delete node',          since:'2026-05', desc:'ทำสำเนาหรือลบ node ทีละตัว/หลายตัว', eg:'clone การ์ดตัวอย่างไป 5 ใบ แล้วลบใบที่เกิน', official:['partial'],           framelink:[], console:['figma_clone_node','figma_delete_node'], claudetalk:['clone_node','delete_node'], sunnyside:[], figmacli:['duplicate','delete','delete-batch'] },
           { label: 'Set fills / colors',           since:'2026-05', desc:'กำหนดสีพื้น/fill ให้ node', eg:'เปลี่ยนสีพื้น Hero เป็น token color/brand', official:['partial'],           framelink:[], console:['figma_set_fills'], claudetalk:['set_fill_color'], sunnyside:[], figmacli:['fill','gradient'] },
@@ -2361,7 +2384,7 @@
           { label: 'Set text content',             since:'2026-05', desc:'แก้ข้อความใน text node ทีละจุดหรือหลายจุด', eg:'แทนที่ Lorem ipsum ทั้งหน้าด้วย copy จริง', official:['partial'],           framelink:[], console:['figma_set_text'], claudetalk:['set_text_content','set_multiple_text_contents'], sunnyside:[], figmacli:['text','set'] },
           { label: 'Scan text nodes',              since:'2026-05', desc:'สแกนหา text node ทั้งหมดในขอบเขตที่เลือก', eg:'หาทุก text ในหน้าเพื่อทำ i18n รวดเดียว', official:[],                  framelink:[], console:[], claudetalk:['scan_text_nodes'], sunnyside:[], figmacli:['find'] },
           { label: 'Set corner radius',            since:'2026-05', desc:'ปรับความโค้งมุมของ node', eg:'ตั้ง radius การ์ดทุกใบเป็น 12px ให้เท่ากัน', official:['partial'],          framelink:[], console:[], claudetalk:['set_corner_radius'], sunnyside:[], figmacli:['set'] },
-          { label: 'Image fill',                   desc:'ใส่รูปเป็น fill ของ node', eg:'วางรูปสินค้าเป็นพื้นหลังของ thumbnail frame', official:[],                    framelink:[], console:['figma_set_image_fill'], claudetalk:['set_image'], sunnyside:[], figmacli:['image'] },
+          { label: 'Image fill',                   desc:'ใส่รูปเป็น fill ของ node', eg:'วางรูปสินค้าเป็นพื้นหลังของ thumbnail frame', official:[],                    framelink:[], console:['figma_set_image_fill'], claudetalk:['set_image'], sunnyside:[], figmacli:['image','render image=URL'] },
           { label: 'SVG import / export',          desc:'นำเข้า/ส่งออก vector เป็น SVG', eg:'import โลโก้ SVG เข้า canvas หรือ export ไอคอนออก', official:[],                    framelink:['download_figma_images'], console:[], claudetalk:['set_svg','get_svg'], sunnyside:['partial'], figmacli:['icon','export'] },
           { label: 'Boolean operations',           desc:'รวม/ตัด/ซ้อน vector ด้วย union, subtract ฯลฯ', eg:'subtract วงกลมออกจากสี่เหลี่ยมเพื่อทำไอคอนแหวน', official:[],                    framelink:[], console:[], claudetalk:['boolean_operation'], sunnyside:[], figmacli:[] },
           { label: 'Grid / guides',                desc:'ตั้ง layout grid และเส้น guide ช่วยจัดวาง', eg:'วาง 12-column grid ให้หน้า desktop', official:[],                    framelink:[], console:[], claudetalk:['set_grid','get_grid','set_guide'], sunnyside:[], figmacli:['grid'] },
@@ -2375,7 +2398,7 @@
           { label: 'Edit component property',   since:'2026-05', desc:'แก้ไขนิยาม property ของ component', eg:'เปลี่ยนค่า default ของ prop size จาก M เป็น L', official:[], framelink:[], console:['figma_edit_component_property'],   claudetalk:[], sunnyside:[], figmacli:['edit','prop'] },
           { label: 'Delete component property', since:'2026-05', desc:'ลบ property ที่ไม่ใช้ออกจาก component', eg:'ลบ prop legacy ที่เลิกใช้แล้วออกจาก Button', official:[], framelink:[], console:['figma_delete_component_property'], claudetalk:[], sunnyside:[], figmacli:[] },
           { label: 'Arrange component set',     since:'2026-05', desc:'จัดเรียง variant ใน component set ให้เป็นระเบียบ', eg:'เรียง variant เป็นตาราง size × state อัตโนมัติ', official:[], framelink:[], console:['figma_arrange_component_set'],     claudetalk:[], sunnyside:[], figmacli:['arrange'] },
-          { label: 'Create component set (variant matrix)', since:'2026-07', desc:'สร้าง component set จาก matrix ของ variant axes จบใน call เดียว (combine + grid + คืน variant keys)', eg:'สร้าง Button variant { State: [default,hover,disabled] × Size: [sm,lg] } รวดเดียว', official:[], framelink:[], console:['figma_create_component_set'], claudetalk:[], sunnyside:[], figmacli:['variants','combos','combine','sizes'] },
+          { label: 'Create component set (variant matrix)', since:'2026-07', desc:'สร้าง component set จาก matrix ของ variant axes จบใน call เดียว (combine + grid + คืน variant keys)', eg:'สร้าง Button variant { State: [default,hover,disabled] × Size: [sm,lg] } รวดเดียว', official:[], framelink:[], console:['figma_create_component_set'], claudetalk:[], sunnyside:[], figmacli:['variants','combos','combine','sizes','render-batch --variant-set'] },
           { label: 'Component slots (GA SlotNode)', since:'2026-07', desc:'สร้าง/อ่าน/populate/reset "slot" - placeholder ที่ตั้งกฎล่วงหน้าใน component ให้ instance ยัด content เข้าไปแทน โดย auto-layout จัดตำแหน่งให้เอง', eg:'สร้าง slot ชื่อ icon ใน Button แล้วให้แต่ละ instance สลับไอคอนได้โดยไม่หลุด layout', official:[], framelink:[], console:['figma_create_slot','figma_get_slots','figma_append_to_slot','figma_reset_slot','figma_add_slot_property'], claudetalk:[], sunnyside:[], figmacli:['slot','slots'] },
           { label: 'Get component details',     since:'2026-05', desc:'ดึงรายละเอียดเต็มของ component', eg:'ดู prop/variant/description ทั้งหมดของ Input', official:[], framelink:[], console:['figma_get_component_details'],     claudetalk:[], sunnyside:[], figmacli:['component','info'] },
           { label: 'Get component image',       since:'2026-05', desc:'render รูป preview ของ component', eg:'ดึงภาพ Button ทุก variant ไปทำ doc', official:[], framelink:[], console:['figma_get_component_image'],       claudetalk:[], sunnyside:[], figmacli:['screenshot'] },
@@ -3087,7 +3110,7 @@
       'hero.stat4label': 'First-party (write canvas beta)',
       'hero.stat4trend': 'Figma Official shipped use_figma',
       'whatsnew.title': "What's new - update of Oct 3, 2026",
-      'whatsnew.desc': 'Compared against the Aug 17, 2026 snapshot - tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos (this round re-checked Official + Console only).',
+      'whatsnew.desc': 'Compared against the Aug 17, 2026 snapshot - tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos (this round re-checked Official + Console + figma-cli only).',
       'whatsnew.motion': 'Six new tools (verified against the live connected MCP on Jun 17, 2026) that <strong>no other server in the table can do</strong>: <code>get_motion_context</code> - pull a node’s keyframe/easing data and pre-compute it into CSS <code>@keyframes</code> + motion.dev snippets (use after <code>get_design_context</code> for motion-aware code gen); <code>export_video</code> - render a timeline node to MP4 server-side, async (presigned URL, poll via jobId); and a 4-tool shader library - <code>list/get_shader_effects</code> (post-effects sampling a raster) + <code>list/get_shader_fills</code> (generate pixels directly), reading source from the account library. This moves Official from pure design-to-code to also covering <strong>motion + video + shader</strong>.',
       'whatsnew.slides': 'Per the <a href="https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/" target="_blank" rel="noopener">Figma blog (Jun 16, 2026)</a>, the MCP server now works across <strong>Figma Slides, FigJam, Figma Make, and the Figma agent</strong> via the <code>use_figma</code> tool plus the new <code>/figma-use-slides</code> skill - you can create or refresh decks from a prompt (e.g. "update my AI deck, pull from Slack/Drive/blog"), with custom-font support (renders your uploaded typefaces, not web-safe approximations). The Slides → Write tab now shows <code>use_figma</code> in the Official column. <em>Note:</em> the <code>tools-and-prompts</code> docs page does not yet list Slides under <code>use_figma</code>’s supported file types - capability shipped ahead of the docs.',
       'whatsnew.official': 'Added <code>download_assets</code> - batch-download assets (images/icons) from a Figma file. Closes the gap where only inbound <code>upload_assets</code> existed; assets now flow both ways - directly useful for design-to-code handoff when pulling icon sets / illustrations into a repo.',

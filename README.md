@@ -51,6 +51,9 @@
 - Shaders: 4 tool เดิมรวมเป็น `list_shaders` / `get_shader` และเพิ่ม `create_shader` / `update_shader` / `list_file_shaders`
 - `get_figma_skill`, ส่วน `generate_figma_design` / `generate_deck` / `html_to_figma` ยังไม่โผล่ใน connector นี้ (gated/rollout)
 
+**figma-cli — v2.1.0 → v2.2.5 (+ fix 3 ต.ค.)**
+อ่านจาก `mcp-sources/figma-cli` หลัง merge upstream 8 commits: v2.1.1/2.1.2 (12 ส.ค.) ปล่อย Browser Mode (`connect --browser`, ไม่ patch Figma Desktop) + Claude Code plugin; v2.2.0–2.2.5 (25–26 ก.ย.) เน้นให้ agent ทำงานจบในคำสั่งน้อยลง — `render --page/--file`, `render-batch --variant-set`, `<Instance component variant text>`, รูปจาก URL, helper ใน `eval`, daemon restart เองเมื่อเก่ากว่า CLI. ไม่มี top-level command ใหม่ (Commands matrix เพิ่ม render mapping ใน 4 แถว)
+
 **Figma Console MCP — v1.40.0 → v1.40.9 (114 → 121 tools, Cloud 96)**
 อ่านจาก local repo ที่ routine `check-figma-console-mcp` sync ไว้: v1.40.0 เพิ่ม 7 tool `figma_ds_*` (Design System Extraction), v1.40.1–v1.40.9 ไม่มี tool ใหม่ แต่แก้ data loss ใน `figma_export_tokens`, รองรับ extended collections และ composed colors, min/max sizing ครบทุกเส้นทาง extract และ component doc แม่นขึ้น. แก้ label การ์ดเดิมจาก "v1.40.1" → v1.40.0 (เลข fork ชนกับ upstream) และระบุว่า stored-XSS fix เป็นของ fork `@mp3wizard`
 
