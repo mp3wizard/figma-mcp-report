@@ -865,7 +865,7 @@
      ========================================================= -->
 <section class="hero" id="overview">
   <div class="container">
-    <div class="hero-eyebrow" data-i18n="hero.eyebrow"><span class="dot"></span> Updated 2 Aug 2026 · For BCIF Design Team</div>
+    <div class="hero-eyebrow" data-i18n="hero.eyebrow"><span class="dot"></span> Updated 3 Oct 2026 · For BCIF Design Team</div>
     <h1 data-i18n="hero.h1">เปรียบเทียบ Figma MCP Servers ปี 2026</h1>
     <p class="lead" data-i18n="hero.lead">
       วิเคราะห์เชิงลึก 5 Figma MCP servers และ 1 local Desktop CLI ครอบคลุม features, tools commands, update cadence,
@@ -886,8 +886,8 @@
       </div>
       <div class="stat">
         <div class="stat-label">Most tools</div>
-        <div class="stat-value">114+</div>
-        <div class="stat-trend">Figma Console MCP v1.36.0</div>
+        <div class="stat-value">121+</div>
+        <div class="stat-trend">Figma Console MCP v1.40.9</div>
       </div>
       <div class="stat">
         <div class="stat-label">npm weekly downloads</div>
@@ -904,17 +904,96 @@
 </section>
 
 <!-- =========================================================
-     WHAT'S NEW (2 Aug 2026)
+     WHAT'S NEW (3 Oct 2026)
      ========================================================= -->
 <section id="whatsnew">
   <div class="container">
     <div class="section-eyebrow">Changelog</div>
-    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ - รอบอัปเดต 2 ส.ค. 2026</h2>
+    <h2 class="section-title" data-i18n="whatsnew.title">มีอะไรใหม่ - รอบอัปเดต 3 ต.ค. 2026</h2>
     <p class="section-desc" data-i18n="whatsnew.desc">
-      เทียบกับรอบ 17 มิ.ย. 2026 - ตัวเลข tool ของ Official / Console / Sunnyside ยึดจาก MCP ที่เชื่อมต่อจริง
-      ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง
+      เทียบกับรอบ 17 ส.ค. 2026 - ตัวเลข tool ของ Official / Console / Sunnyside ยึดจาก MCP ที่เชื่อมต่อจริง
+      ส่วน Framelink / ClaudeTalk ยึดจาก GitHub repo ต้นทาง (รอบนี้เช็คซ้ำเฉพาะ Official + Console)
     </p>
     <div style="display:grid; gap:12px; margin-top:16px;">
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.18 250 / 0.5);">
+        <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Slides: Official MCP ใส่ Presenter notes (speaker notes) ได้ - Console MCP ยังทำไม่ได้</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          ผ่าน <code>use_figma</code> + skill <code>/figma-use-slides</code>: อ่าน/เขียน property <code>slide.speakerNotes</code> บน <code>SlideNode</code> เป็น markdown string
+          (รองรับ bullet, numbered list, <strong>bold</strong>, <em>italic</em>, strikethrough) - agent สร้างเด็คพร้อมบทพูดครบในรอบเดียว หรือเติม notes ให้เด็คเดิมทีหลังได้
+          (มีใน reference <code>slide-properties.md</code> ของ <a href="https://github.com/figma/mcp-server-guide/" target="_blank" rel="noopener">figma/mcp-server-guide</a> ตั้งแต่ skill v2.2.10, 18 พ.ค. 2026 - รอบก่อนเราตกไป).
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>ทำไม Console ทำไม่ได้:</strong> Console มี Slides tools 16 ตัวแต่ไม่มีตัวไหนแตะ notes และ <code>speakerNotes</code> <strong>ไม่อยู่ใน public Plugin API</strong>
+          (ไม่มีใน <code>@figma/plugin-typings</code> 1.140.0 ล่าสุด 30 ก.ย. 2026 - มีแค่ใน runtime ของ <code>use_figma</code>) ซึ่ง Desktop Bridge plugin ของ Console ใช้อยู่;
+          feature request ให้เปิด presenter notes ใน Plugin API บน <a href="https://forum.figma.com/suggest-a-feature-11/feature-request-plugin-api-read-write-access-to-figma-slides-presenter-notes-52428" target="_blank" rel="noopener">Figma forum</a> ยังเปิดอยู่.
+          <em>หมายเหตุ:</em> เช็คจาก typings + source เท่านั้น ยังไม่ได้ลองยิง <code>figma_execute</code> ตรงๆ - ถ้า Figma เปิด property นี้ใน public API เมื่อไร Console จะทำได้ผ่าน <code>figma_execute</code> ทันที.
+        </p>
+      </div>
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.6 0.18 250 / 0.5);">
+        <strong style="color:oklch(0.6 0.18 250);">⭐ Figma Official MCP: 25 → 40 tools - generative plugins, Weave, shader เขียนได้ (guide v2.2.78 → v2.2.126)</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          นับจาก remote connector ที่เชื่อมต่อจริงของบัญชีนี้ (3 ต.ค. 2026) ได้ <strong>40 tools</strong> - ตรงกับที่ docs ของ Console repo เองเขียนไว้ว่า official server "~40 tools" (commit 30 ก.ย.).
+          ของใหม่มาพร้อม skills v2.2.106 (1 ก.ย. 2026):
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Generative plugins (4):</strong> <code>create_generative_plugin</code> / <code>update_generative_plugin</code> / <code>get_generative_plugin</code> / <code>list_generative_plugins</code>
+          - ให้ agent เขียน Figma plugin (มี UI) ลง account library ของทีมเอง เริ่มจาก scaffold แล้วแทน source ด้วย behavior ที่สั่ง (ต้องโหลด skill <code>figma-generative-plugins</code> ก่อน).
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Weave (9):</strong> <code>weave_list_tools</code>, <code>weave_get_tool_inputs</code>, <code>weave_run_tool</code>, <code>weave_find_model</code>, <code>weave_run_model</code>, <code>weave_upload_asset</code>
+          + poll/cancel 3 ตัว - รัน Weave workflow หรือ AI model (ภาพ/วิดีโอ) ตรงจาก agent; <strong>กิน Weave credits</strong> จึงมี cost gate: เรียกครั้งแรกได้แค่ quote ราคา ต้องให้ผู้ใช้กด approve ก่อนรันจริงทุกครั้ง.
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Shaders (5) - เปลี่ยนชื่อ + เขียนได้แล้ว:</strong> 4 tool เดิม (<code>list/get_shader_effects</code>, <code>list/get_shader_fills</code>) ถูกรวมเป็น <code>list_shaders</code> / <code>get_shader</code>
+          + ใหม่ <code>create_shader</code> / <code>update_shader</code> (kind = effect หรือ fill) และ <code>list_file_shaders</code> อ่าน shader ที่ใช้ในไฟล์ (pin ตาม version).
+          อีกตัวคือ <code>get_figma_skill</code> อ่าน skill:// resource สำหรับ client ที่ไม่มี Figma plugin ติดตั้ง.
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <em>ยังไม่เห็นใน connector นี้ (gated / กำลัง rollout ไม่ใช่ถูกถอด):</em> <code>generate_figma_design</code>, <code>generate_deck</code> (สร้างเด็คจาก template ในคำสั่งเดียว - skill บอกให้ใช้ <code>use_figma</code> เป็นค่าเริ่มต้น)
+          และ <code>html_to_figma</code> (guidance เพิ่งเข้า skill 1 ต.ค. 2026: แปลง HTML ที่มีอยู่/ที่ agent เขียนขึ้นเป็น design layer).
+        </p>
+      </div>
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
+        <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP: v1.40.1 → v1.40.9 (18 ก.ย. - 2 ต.ค. 2026) - tools คงที่ 121 (Cloud 96)</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          ไม่มี tool ใหม่ ทุก release เป็น server-only <strong>ไม่ต้อง re-import plugin</strong>. ไฮไลต์:
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>v1.40.9 (2 ต.ค.):</strong> รองรับ <em>composed colors</em> ของ Figma (color variable = สีอื่น + opacity เช่น "grey/900 at 50%") -
+          <code>figma_export_tokens</code> เดิม drop token หรือเขียน <code>[object Object]</code>; ตอนนี้ออกเป็น <code>color-mix()</code> (CSS/Tailwind v4), <code>rgba()</code> (SCSS), alpha modifier (Tokens Studio)
+          และ DTCG เก็บ composition ใน <code>$extensions</code>; <code>figma_import_tokens</code> เขียนกลับเป็น color + opacity ที่ยังผูก primitive. แก้ summary ที่เคยแปลง alias สีทุกตัวเป็น <code>#000000</code>.
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>v1.40.8 (30 ก.ย.):</strong> min/max width/height รอดทุกเส้นทาง extract JSON (design system kit, reconstruction, <code>figma_get_file_data</code>);
+          <code>figma_check_design_parity</code> เทียบ min/max แล้ว; reconstruction format เลิกคืน geometry 50×50 ปลอม; <code>figma_diagnose</code> ใช้ได้บน Cloud Mode <code>/mcp</code>.
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>v1.40.6 - v1.40.7 (24-27 ก.ย.):</strong> เห็น override ใน <strong>extended variable collections</strong> แล้ว (เดิมรายงานว่า "ไม่มี override");
+          <code>figma_generate_component_doc</code> อ่าน radius token ราย corner, เทียบ boolean prop ใน Design-Code Parity, link source ผูก commit และ Color Tokens table อ่านง่ายขึ้น.
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>v1.40.3 - v1.40.5 (21-23 ก.ย.):</strong> component doc แม่นขึ้นบน component ยาก (hidden layer, border ด้านเดียว, typography ข้าม variant, gradient/shadow ไม่หายเงียบ, list <code>SLOT</code> properties);
+          tool ที่รับ <code>fileUrl</code> อ่านจากไฟล์นั้นจริงไม่ใช่ active file; result เกิน 16 MB ไม่ทำ server หลุดทั้ง session;
+          npm package audit 0 vulnerabilities (ย้าย dependency ฝั่ง Worker ออก ขนาดติดตั้ง 173 → 64 MB).
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>v1.40.1 - v1.40.2 (18 ก.ย.):</strong> ⚠️ แก้ <strong>data loss</strong> ใน <code>figma_export_tokens</code> - ถ้า active file ใน Figma Desktop ไม่ใช่ไฟล์ที่ตั้งใจ
+          export เดิมเขียนทับ token file จริงด้วยไฟล์ว่าง (หรือ token ของไฟล์อื่น) แล้วรายงาน success; ตอนนี้ปฏิเสธและบอกเหตุผล, <code>strategy: "merge"</code> ปลอดภัยจริง และ response มี <code>source</code> บอกไฟล์ที่อ่าน.
+          <code>outputPath</code> ชี้ไปที่ไฟล์ได้แล้ว.
+        </p>
+      </div>
+      <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
+        <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP: v1.40.0: 16 ส.ค. 2026 (114 → 121 tools)</strong>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Added:</strong> Design System Extraction — เครื่องมือใหม่ 7 ตัว <code>figma_ds_*</code> (Local Mode เท่านั้น) แปลงโค้ดแอปจริงเป็น design system: <code>figma_ds_analyze</code> สแกน component พร้อมจัดระดับ "UI kit vs design system"; <code>figma_ds_extract_tokens</code> ขุด token จาก CSS/SCSS/Tailwind เป็น DTCG พร้อม provenance — import เข้า Figma variables ได้ตรงผ่าน <code>figma_import_tokens</code>; <code>figma_ds_scaffold</code> / <code>figma_ds_setup_storybook</code> สร้าง package และเชื่อม Storybook เข้ากับ theme จริง; <code>figma_ds_extract_component</code> ดึง manifest ต่อ component สำหรับ port; <code>figma_ds_verify</code> เช็ค fidelity ก่อนส่งมอบ; <code>figma_ds_status</code> ติดตามความคืบหน้าข้าม session.
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Fixed:</strong> token formatter (css-vars/scss/tailwind-v4) เคย quote CSS functional expression ผิด เช่น <code>cubic-bezier(...)</code> กลายเป็น string ทำให้ transition ที่ใช้ token นั้นพังเงียบๆ ไม่มี error — กระทบ <code>figma_export_tokens</code> ด้วย ถ้าเคย export token ที่มี easing/duration/calc ควร re-export ใหม่; <code>figma_lint_design</code> description อัปเดตให้ครบ 5 rules (เพิ่ม token-misuse rule ที่มีอยู่จริงแต่ description เดิมไม่ได้ระบุ).
+        </p>
+        <p class="muted" style="margin:6px 0 0; font-size:14px;">
+          <strong>Security (พบและแก้ใน fork <code>@mp3wizard</code> ตอน merge - ไม่ได้อยู่ใน release ของ upstream):</strong> พบและแก้ stored XSS (High) — <code>figma_ds_scaffold</code> เคย inline raw SVG จาก codebase ที่สแกนลง Storybook docs ผ่าน <code>dangerouslySetInnerHTML</code> โดยไม่กรอง repo ที่ถูกยึดครองสามารถฝัง <code>&lt;script&gt;</code>/<code>onload</code> รันในเบราว์เซอร์ผู้ใช้ได้ แก้ด้วย allowlist sanitizer พร้อม regression test 12 เคส; รวมถึงแพตช์ npm dependency 7 รายการ (ip-address SSRF, hono, js-yaml, undici, nanoid, wrangler).
+        </p>
+      </div>
       <div class="card" style="padding:16px 20px; border-color:oklch(0.62 0.2 145 / 0.5);">
         <strong style="color:oklch(0.62 0.2 145);">⭐ Figma Console MCP: v1.39.1: 2 ส.ค. 2026</strong>
         <p class="muted" style="margin:6px 0 0; font-size:14px;">
@@ -1411,12 +1490,12 @@
       sub: 'First-party · Figma + Anthropic',
       maintainer: 'Figma',
       logoColor: 'oklch(0.6 0.18 250)',
-      latestVersion: 'v2.2.78 (guide repo)',
-      lastUpdated: '2026-06-17',
-      stars: 1069,
-      starsLabel: '~1,069 (guide repo)',
+      latestVersion: 'v2.2.126 (guide repo)',
+      lastUpdated: '2026-10-01',
+      stars: 2042,
+      starsLabel: '~2,042 (guide repo)',
       npmWeekly: null,
-      tools: 25,
+      tools: 40,
       toolsList: [
         'get_design_context',
         'get_variable_defs',
@@ -1429,7 +1508,7 @@
         'get_figjam',
         'get_libraries ✦',
         'search_design_system ✦',
-        'use_figma (write canvas: Design · FigJam · Slides ✦)',
+        'use_figma (write canvas: Design · FigJam · Slides + speaker notes ✦)',
         'create_new_file',
         'generate_diagram (Mermaid → FigJam)',
         'upload_assets ✦',
@@ -1439,10 +1518,15 @@
         'whoami ✦',
         'get_motion_context - keyframe/easing → CSS @keyframes + motion.dev ✦',
         'export_video - timeline node → MP4 (async render) ✦',
-        'list_shader_effects ✦',
-        'get_shader_effect ✦',
-        'list_shader_fills ✦',
-        'get_shader_fill ✦'
+        'list_shaders / get_shader (effect + fill) ✦',
+        'list_file_shaders ✦',
+        'create_shader / update_shader (write) ✦',
+        'create_generative_plugin / update_generative_plugin ✦',
+        'get_generative_plugin / list_generative_plugins ✦',
+        'weave_list_tools / weave_get_tool_inputs / weave_run_tool ✦',
+        'weave_find_model / weave_run_model / weave_upload_asset ✦',
+        'weave_get_tool_run_output / weave_get_model_run_output / weave_cancel_tool_run ✦',
+        'get_figma_skill ✦'
       ],
       planRequired: 'pro',
       planLabel: 'Starter (6 calls/mo) → Professional+ (Dev/Full seat)',
@@ -1472,7 +1556,9 @@
         'Code Connect ผูก components ↔ codebase ได้ (+ list_file_components_for_code_connect ดึง component ในไฟล์มา map)',
         'Write to Canvas (use_figma) ขยายข้าม surface - รองรับ Figma Design + FigJam + Slides (มิ.ย. 2026)',
         'Make + MCP integration - ดึง context จาก Make project (MCP resources capability) มา extend prototype เป็น production code (คนละทางกับ use_figma)',
-        'Motion-to-code (get_motion_context) + export MP4 (export_video) + shader library - ไม่มีใน server อื่น',
+        'Motion-to-code (get_motion_context) + export MP4 (export_video) + shader สร้าง/แก้ได้ (create/update_shader) - ไม่มีใน server อื่น',
+        'Generative plugins (agent เขียน Figma plugin ลง account library) + Weave AI models/workflows (มี cost gate) - ก.ย. 2026',
+        'Slides: เขียน presenter notes (slide.speakerNotes) ได้ - Console ทำไม่ได้เพราะไม่อยู่ใน public Plugin API',
         'มี Agent Skills พร้อมใช้ (design-to-code, generate-design/-library/-diagram, code-connect) + workflow skills เดี่ยว: video-interaction-mapper, generate-project-plan',
         'รองรับ Mermaid → FigJam diagram generation · Setup ผ่าน OAuth ใน 5 นาที'
       ],
@@ -1480,7 +1566,9 @@
         'Code Connect links components ↔ codebase (+ list_file_components_for_code_connect pulls a file’s components to map)',
         'Write to Canvas (use_figma) spans surfaces - supports Figma Design + FigJam + Slides (Jun 2026)',
         'Make + MCP integration - fetch context from a Make project (MCP resources capability) to extend prototypes into production code (distinct from use_figma)',
-        'Motion-to-code (get_motion_context) + MP4 export (export_video) + shader library - unique to Official',
+        'Motion-to-code (get_motion_context) + MP4 export (export_video) + shaders you can create/edit (create/update_shader) - unique to Official',
+        'Generative plugins (agent writes a Figma plugin into the account library) + Weave AI models/workflows (cost-gated) - Sep 2026',
+        'Slides: writes presenter notes (slide.speakerNotes) - Console cannot, the property is not in the public Plugin API',
         'Bundled Agent Skills (design-to-code, generate-design/-library/-diagram, code-connect) + standalone workflow skills: video-interaction-mapper, generate-project-plan',
         'Supports Mermaid → FigJam diagram generation · Setup via OAuth in 5 minutes'
       ],
@@ -1500,7 +1588,7 @@
       bestFor_en: 'Teams on Professional+ who want first-party Code Connect + Write canvas',
       links: [
         { label: 'Developer Docs', url: 'https://developers.figma.com/docs/figma-mcp-server/' },
-        { label: 'Guide repo (server.json v2.2.78)', url: 'https://github.com/figma/mcp-server-guide/' },
+        { label: 'Guide repo (server.json v2.2.126)', url: 'https://github.com/figma/mcp-server-guide/' },
         { label: 'Plans & Permissions', url: 'https://developers.figma.com/docs/figma-mcp-server/plans-access-and-permissions/' },
         { label: 'Blog: 4 ways we use MCP (Slides/FigJam/Make)', url: 'https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/' }
       ]
@@ -1589,12 +1677,12 @@
       sub: 'southleft · Plugin debugging + DS audit',
       maintainer: 'TJ Pitre / SouthLeft',
       logoColor: 'oklch(0.62 0.2 145)',
-      latestVersion: 'v1.39.1 (Aug 2026)',
-      lastUpdated: '2026-08-02',
+      latestVersion: 'v1.40.9 (Oct 2026)',
+      lastUpdated: '2026-10-02',
       stars: 1700,
       starsLabel: '~1,700',
       npmWeekly: null,
-      tools: 114,
+      tools: 121,
       toolsList: [
         'figma_get_console_logs',
         'figma_watch_console',
@@ -1625,7 +1713,10 @@
         'figma_get_library_variables',
         'figma_import_library_variable',
         'figma_diff_versions',
-        'figma_diagnose'
+        'figma_diagnose',
+        'figma_ds_analyze / figma_ds_extract_tokens (code → DS, Local only) ✦ NEW v1.40',
+        'figma_ds_scaffold / figma_ds_setup_storybook ✦ NEW v1.40',
+        'figma_ds_extract_component / figma_ds_verify / figma_ds_status ✦ NEW v1.40'
       ],
       planRequired: 'free',
       planLabel: 'Free, Pro, Enterprise - ทุก plan',
@@ -1656,7 +1747,7 @@
       community: 'กำลังโต - design system practitioners แนะนำเยอะ',
       community_en: 'Growing - widely recommended by design-system practitioners',
       pros: [
-        '114 tools ครอบคลุมที่สุด (นับจาก MCP ที่เชื่อมต่อจริง ก.ค. 2026)',
+        '121 tools ครอบคลุมที่สุด (Local Mode, นับจาก repo v1.40.9 ต.ค. 2026; Cloud 96)',
         'Target lock (v1.36): figma_navigate(lock:true) pin command target ต่อไฟล์ ป้องกัน multi-file parallel work เขียนผิดไฟล์; ตรวจ guard ได้จาก targetLocked',
         'Figma Slots API (v1.35): 5 tool ใหม่ - สร้าง/populate/reset slot placeholder ใน component ผ่าน GA SlotNode, auto-layout จัดตำแหน่งให้เอง',
         'Full bidirectional token sync (v1.34): import apply diff เต็ม - create collection/variable + alias re-target + delete (replace-gated) + DTCG 2025.10',
@@ -1668,7 +1759,7 @@
         'Version tools จัดการ rate limit ดีสุดในกลุ่ม: 429 retry ×3 + honor Retry-After (cap 30s) + snapshot cache LRU 50; blame ใช้ binary search ~log2(N) calls ไม่ยิงทุก version'
       ],
       pros_en: [
-        '114 tools - most comprehensive (counted from the live connected MCP, Jul 2026)',
+        '121 tools - most comprehensive (Local Mode, counted from repo v1.40.9, Oct 2026; Cloud 96)',
         'Target lock (v1.36): figma_navigate(lock:true) pins the per-file command target, preventing writes landing in the wrong file during multi-file parallel work; verify with targetLocked',
         'Figma Slots API (v1.35): 5 new tools - create/populate/reset slot placeholders inside a component via the GA SlotNode API, auto-layout handles positioning',
         'Full bidirectional token sync (v1.34): import applies the complete diff - create collections/variables + alias re-target + replace-gated delete + DTCG 2025.10 dialect',
@@ -2308,6 +2399,13 @@
           { label: 'Analyze figma components',        since:'2026-05', desc:'วิเคราะห์ component ในไฟล์ว่าใช้งานยังไง', eg:'ดูว่าการ์ดไหนถูกใช้ซ้ำมากที่สุด', official:[],                framelink:[], console:[], claudetalk:[], sunnyside:['analyze_figma_components'], figmacli:['analyze','components'] },
           { label: 'Track design system health',      since:'2026-05', desc:'ติดตามสุขภาพ DS และสร้าง dependency graph', eg:'ดูว่าแก้ token นี้กระทบ component ลูกตัวไหนบ้าง', official:[],                framelink:[], console:[], claudetalk:[], sunnyside:['track_design_system_health','build_dependency_graph'], figmacli:['audit'] },
         ]},
+        { cat: 'Design System Extraction (code → DS)', features: [
+          { label: 'Analyze app codebase', since:'2026-08', desc:'สแกน codebase จริง: framework, styling, vendor UI lib, inventory component + จัดระดับ UI kit vs design system (Local Mode)', eg:'สแกน 2 แอปแล้วได้ list component ซ้ำ + primitive ที่ยังขาด', official:[], framelink:[], console:['figma_ds_analyze'], claudetalk:[], sunnyside:[], figmacli:[] },
+          { label: 'Extract tokens from code', since:'2026-08', desc:'ขุด token จาก CSS/SCSS/Tailwind เป็น DTCG พร้อม provenance (file:line) แล้ว import เข้า Figma variables ได้', eg:'ดึงสี/spacing ที่ใช้จริงในแอปมาเป็น tokens.json แล้วส่งเข้า Figma', official:[], framelink:[], console:['figma_ds_extract_tokens'], claudetalk:[], sunnyside:[], figmacli:[] },
+          { label: 'Scaffold DS package + Storybook', since:'2026-08', desc:'สร้าง package design system + showcase docs และเชื่อม Storybook ให้ใช้ theme/font จริงของแอป', eg:'gen package @team/ds พร้อม Storybook ที่หน้าตาเหมือนแอปจริง', official:[], framelink:[], console:['figma_ds_scaffold','figma_ds_setup_storybook'], claudetalk:[], sunnyside:[], figmacli:[] },
+          { label: 'Extract component for porting', since:'2026-08', desc:'ดึง manifest ราย component (source, props, variant ที่ใช้จริง) + story scaffold สำหรับ port เข้า DS', eg:'port ProductCard เข้า DS พร้อม story ทุก variant ที่ใช้อยู่', official:[], framelink:[], console:['figma_ds_extract_component'], claudetalk:[], sunnyside:[], figmacli:[] },
+          { label: 'Verify / track extraction', since:'2026-08', desc:'eval แบบ deterministic ก่อนส่งมอบ + บันทึกความคืบหน้าการ port ข้าม session', eg:'เช็ค alias resolve ครบ แล้วดูว่า port ไปแล้วกี่ component', official:[], framelink:[], console:['figma_ds_verify','figma_ds_status'], claudetalk:[], sunnyside:[], figmacli:[] },
+        ]},
         { cat: 'Plugin Debugging', features: [
           { label: 'Get console logs',             desc:'อ่าน log จาก plugin/console ของ Figma เพื่อ debug', eg:'ดู error ที่ plugin โยนออกมาตอน run script', official:[], framelink:[], console:['figma_get_console_logs'], claudetalk:[], sunnyside:[], figmacli:[] },
           { label: 'Watch console (live stream)',  desc:'สตรีม log แบบ real-time ขณะ plugin ทำงาน', eg:'ดู log ไหลสดตอนทดสอบ flow ใน plugin', official:[], framelink:[], console:['figma_watch_console'],    claudetalk:[], sunnyside:[], figmacli:[] },
@@ -2368,8 +2466,11 @@
         { cat: 'Motion & Media', features: [
           { label: 'Motion context → code',    since:'2026-06', desc:'ดึง keyframe/easing ของ animation แล้ว pre-compute เป็น CSS @keyframes + motion.dev snippet', eg:'แปลง animation ของ hero เป็น @keyframes + motion.dev โค้ดพร้อมใช้', official:['get_motion_context'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:['motion','timeline','stagger'] },
           { label: 'Export timeline → MP4',     since:'2026-06', desc:'render timeline node เป็นวิดีโอ MP4 ฝั่ง server (async, presigned URL)', eg:'export สไลด์ animation เป็น MP4 ไปแปะใน deck/LINE', official:['export_video'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:[] },
-          { label: 'Shader effects (library)',  since:'2026-06', desc:'list/อ่าน shader effect จาก account library (post-effect sample raster)', eg:'ดึง source ของ shader effect ที่ทีมทำไว้มา reuse', official:['list_shader_effects','get_shader_effect'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:[] },
-          { label: 'Shader fills (library)',    since:'2026-06', desc:'list/อ่าน shader fill จาก account library (generate pixel ตรง ๆ)', eg:'อ่าน shader fill gradient แบบ procedural มาดู source', official:['list_shader_fills','get_shader_fill'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:[] },
+          { label: 'Shader effects / fills (library)', since:'2026-06', desc:'list/อ่าน shader effect (sample raster) และ fill (generate pixel) จาก account library', eg:'ดึง source ของ shader effect ที่ทีมทำไว้มา reuse', official:['list_shaders','get_shader'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:[] },
+          { label: 'Create / edit shader', since:'2026-09', desc:'สร้าง shader effect/fill ใหม่ลง account library แล้วแก้ source ได้ (ต้องโหลด skill figma-shaders)', eg:'ให้ AI เขียน grain/noise fill แบบ procedural ใช้ทั้งทีม', official:['create_shader','update_shader'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:[] },
+          { label: 'Shaders used in a file', since:'2026-09', desc:'list shader ที่ไฟล์ใช้อยู่ พร้อม source pin ตาม version (อ่านได้แม้ไม่ใช่เจ้าของ)', eg:'ดูว่าไฟล์ hero ใช้ shader ตัวไหน version อะไร', official:['list_file_shaders'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:[] },
+          { label: 'Generative plugins', since:'2026-09', desc:'ให้ agent เขียน Figma plugin (มี UI) ลง account library ทีม แล้วแก้ต่อได้', eg:'สร้าง plugin เปลี่ยน spacing ทั้ง frame ตาม token ที่เลือก', official:['create_generative_plugin','update_generative_plugin','get_generative_plugin','list_generative_plugins'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:[] },
+          { label: 'Weave AI models / workflows', since:'2026-09', desc:'รัน Weave workflow หรือ AI model (ภาพ/วิดีโอ) จาก agent - กิน Weave credits ต้อง approve ราคาก่อนทุกครั้ง', eg:'gen ภาพ hero ด้วย model ที่ระบุแล้ววางลงไฟล์', official:['weave_run_tool','weave_run_model','weave_find_model','weave_list_tools'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:[] },
         ]},
       ]
     },
@@ -2412,6 +2513,7 @@
           { label: 'Set transition',           since:'2026-05', desc:'ตั้ง transition ระหว่างสไลด์', eg:'ตั้ง slide push เวลาเปลี่ยนหน้า', official:['use_figma'], framelink:[], console:['figma_set_slide_transition'], claudetalk:[], sunnyside:[], figmacli:[] },
           { label: 'Focus / skip slide',       since:'2026-05', desc:'โฟกัสหรือข้ามสไลด์ตอนนำเสนอ', eg:'ตั้งให้ข้ามสไลด์ backup ตอน present', official:[], framelink:[], console:['figma_focus_slide','figma_skip_slide'], claudetalk:[], sunnyside:[], figmacli:[] },
           { label: 'Set slides view mode',     since:'2026-05', desc:'สลับโหมดมุมมองของเด็ค เช่น grid/present', eg:'เปลี่ยนเป็น grid view เพื่อจัดลำดับเร็วๆ', official:[], framelink:[], console:['figma_set_slides_view_mode'], claudetalk:[], sunnyside:[], figmacli:[] },
+          { label: 'Speaker / presenter notes', since:'2026-05', desc:'อ่าน/เขียน presenter notes ของสไลด์ (slide.speakerNotes เป็น markdown) - ไม่อยู่ใน public Plugin API จึงทำได้เฉพาะ use_figma', eg:'เติมบทพูดให้ทุกสไลด์จาก outline เป็น bullet', official:['use_figma'], framelink:[], console:[], claudetalk:[], sunnyside:[], figmacli:[] },
         ]},
       ]
     }
@@ -2556,6 +2658,17 @@
     'Set background': { d:"Set a slide's background", e:"Change the cover background to the brand color" },
     'Set transition': { d:"Set the transition between slides", e:"Set a slide push when changing slides" },
     'Focus / skip slide': { d:"Focus or skip a slide during presentation", e:"Set a backup slide to be skipped while presenting" },
+    'Shader effects / fills (library)': { d:"List/read shader effects (sample a raster) and fills (generate pixels) from the account library", e:"Pull the source of a team shader effect to reuse" },
+    'Create / edit shader': { d:"Create a new shader effect/fill in the account library and edit its source (load the figma-shaders skill first)", e:"Have the AI write a procedural grain/noise fill for the whole team" },
+    'Shaders used in a file': { d:"List the shaders a file uses, with source pinned to the referenced version (readable even if you are not the owner)", e:"See which shader and version the hero file uses" },
+    'Generative plugins': { d:"Have the agent write a Figma plugin (with UI) into the team account library, then iterate on it", e:"Build a plugin that re-spaces a frame from a chosen token" },
+    'Weave AI models / workflows': { d:"Run a Weave workflow or AI model (image/video) from the agent - spends Weave credits, cost must be approved every run", e:"Generate a hero image with a named model and place it in the file" },
+    'Speaker / presenter notes': { d:"Read/write a slide's presenter notes (slide.speakerNotes, markdown) - not in the public Plugin API, so only use_figma can", e:"Add talking points to every slide from an outline as bullets" },
+    'Analyze app codebase': { d:"Scan a real codebase: framework, styling, vendor UI libs, component inventory + UI-kit-vs-design-system classification (Local Mode)", e:"Scan two apps and get duplicate components + the missing primitives" },
+    'Extract tokens from code': { d:"Mine tokens from CSS/SCSS/Tailwind into DTCG with provenance (file:line), importable into Figma variables", e:"Turn the colors/spacing the app really uses into tokens.json and push to Figma" },
+    'Scaffold DS package + Storybook': { d:"Generate a design-system package + showcase docs and wire Storybook to the app's real theme/fonts", e:"Generate @team/ds with a Storybook that looks like the real app" },
+    'Extract component for porting': { d:"Per-component manifest (source, props, variants actually used) + story scaffold for porting into the DS", e:"Port ProductCard into the DS with a story for every variant in use" },
+    'Verify / track extraction': { d:"Deterministic evals before hand-off + porting progress persisted across sessions", e:"Check every alias resolves, then see how many components are ported" },
     'Set slides view mode': { d:"Switch the deck's view mode, e.g. grid/present", e:"Switch to grid view to reorder quickly" }
   };
 
@@ -2968,13 +3081,13 @@
   // ── i18n: language toggle (static chrome + matrix labels) ──────────
   (function initLang() {
     var I18N_EN = {
-      'hero.eyebrow': '<span class="dot"></span> Updated 2 Aug 2026 · For BCIF Design Team',
+      'hero.eyebrow': '<span class="dot"></span> Updated 3 Oct 2026 · For BCIF Design Team',
       'hero.h1': 'Compare Figma MCP Servers 2026',
       'hero.lead': 'In-depth analysis of 5 Figma MCP servers and 1 local Desktop CLI - covering features, tool commands, update cadence, community feedback, design-system compatibility and DesignOps workflow. Built to help the BCIF team pick the right stack.',
       'hero.stat4label': 'First-party (write canvas beta)',
       'hero.stat4trend': 'Figma Official shipped use_figma',
-      'whatsnew.title': "What's new - update of Aug 2, 2026",
-      'whatsnew.desc': 'Compared against the Jun 17, 2026 snapshot - tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos.',
+      'whatsnew.title': "What's new - update of Oct 3, 2026",
+      'whatsnew.desc': 'Compared against the Aug 17, 2026 snapshot - tool counts for Official / Console / Sunnyside are taken from the live connected MCPs; Framelink / ClaudeTalk from their GitHub repos (this round re-checked Official + Console only).',
       'whatsnew.motion': 'Six new tools (verified against the live connected MCP on Jun 17, 2026) that <strong>no other server in the table can do</strong>: <code>get_motion_context</code> - pull a node’s keyframe/easing data and pre-compute it into CSS <code>@keyframes</code> + motion.dev snippets (use after <code>get_design_context</code> for motion-aware code gen); <code>export_video</code> - render a timeline node to MP4 server-side, async (presigned URL, poll via jobId); and a 4-tool shader library - <code>list/get_shader_effects</code> (post-effects sampling a raster) + <code>list/get_shader_fills</code> (generate pixels directly), reading source from the account library. This moves Official from pure design-to-code to also covering <strong>motion + video + shader</strong>.',
       'whatsnew.slides': 'Per the <a href="https://www.figma.com/blog/4-ways-were-using-our-mcp-server-at-figma/" target="_blank" rel="noopener">Figma blog (Jun 16, 2026)</a>, the MCP server now works across <strong>Figma Slides, FigJam, Figma Make, and the Figma agent</strong> via the <code>use_figma</code> tool plus the new <code>/figma-use-slides</code> skill - you can create or refresh decks from a prompt (e.g. "update my AI deck, pull from Slack/Drive/blog"), with custom-font support (renders your uploaded typefaces, not web-safe approximations). The Slides → Write tab now shows <code>use_figma</code> in the Official column. <em>Note:</em> the <code>tools-and-prompts</code> docs page does not yet list Slides under <code>use_figma</code>’s supported file types - capability shipped ahead of the docs.',
       'whatsnew.official': 'Added <code>download_assets</code> - batch-download assets (images/icons) from a Figma file. Closes the gap where only inbound <code>upload_assets</code> existed; assets now flow both ways - directly useful for design-to-code handoff when pulling icon sets / illustrations into a repo.',

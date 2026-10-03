@@ -40,6 +40,20 @@
 
 ## Changelog
 
+### อัปเดต 3 ต.ค. 2026 — Official 25 → 40 tools + Slides presenter notes + Console v1.40.9
+
+**Figma Slides — presenter notes เขียนได้เฉพาะ Official**
+`use_figma` + skill `/figma-use-slides` อ่าน/เขียน `slide.speakerNotes` (markdown: bullet, numbered, bold/italic, strikethrough) ได้ ส่วน Console ทำไม่ได้: ไม่มี Slides tool ตัวไหนแตะ notes และ `speakerNotes` ไม่อยู่ใน public `@figma/plugin-typings` 1.140.0 (feature request บน Figma forum ยังเปิดอยู่). เพิ่มแถว "Speaker / presenter notes" ใน Commands matrix → Slides
+
+**Figma Official MCP — 25 → 40 tools** (นับจาก remote connector ที่เชื่อมต่อจริง 3 ต.ค.; guide repo v2.2.78 → v2.2.126)
+- Generative plugins 4 ตัว: agent เขียน Figma plugin ลง account library ของทีม
+- Weave 9 ตัว: รัน Weave workflow / AI model จาก agent (กิน credits, ต้อง approve ราคาก่อนทุกครั้ง)
+- Shaders: 4 tool เดิมรวมเป็น `list_shaders` / `get_shader` และเพิ่ม `create_shader` / `update_shader` / `list_file_shaders`
+- `get_figma_skill`, ส่วน `generate_figma_design` / `generate_deck` / `html_to_figma` ยังไม่โผล่ใน connector นี้ (gated/rollout)
+
+**Figma Console MCP — v1.40.0 → v1.40.9 (114 → 121 tools, Cloud 96)**
+อ่านจาก local repo ที่ routine `check-figma-console-mcp` sync ไว้: v1.40.0 เพิ่ม 7 tool `figma_ds_*` (Design System Extraction), v1.40.1–v1.40.9 ไม่มี tool ใหม่ แต่แก้ data loss ใน `figma_export_tokens`, รองรับ extended collections และ composed colors, min/max sizing ครบทุกเส้นทาง extract และ component doc แม่นขึ้น. แก้ label การ์ดเดิมจาก "v1.40.1" → v1.40.0 (เลข fork ชนกับ upstream) และระบุว่า stored-XSS fix เป็นของ fork `@mp3wizard`
+
 ### อัปเดต 17 มิ.ย. 2026 — Figma Official ขยายข้าม surface + motion/video/shader
 
 เช็กซ้ำจาก MCP ที่เชื่อมต่อจริง (Official 18 · Console 108 · Sunnyside 27 ตรงกับตาราง):
